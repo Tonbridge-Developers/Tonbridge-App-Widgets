@@ -32,6 +32,8 @@ export 'src/widgets/form/autovalidatemode_extension.dart';
 export 'src/widgets/inputs/panoptic_checkbox_form_field.dart';
 export 'src/widgets/inputs/panoptic_colour_picker_form_field.dart';
 export 'src/widgets/inputs/panoptic_combobox_form_field.dart';
+export 'src/widgets/inputs/panoptic_date_form_field.dart';
+export 'src/widgets/inputs/panoptic_decimal_form_field.dart';
 export 'src/widgets/inputs/panoptic_dropdown_form_field.dart';
 export 'src/widgets/inputs/panoptic_file_upload_form_field.dart';
 export 'src/widgets/inputs/panoptic_form_field_view.dart';
