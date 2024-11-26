@@ -17,6 +17,7 @@ export 'src/widgets/actions/panoptic_large_button.dart';
 export 'src/widgets/actions/panoptic_large_button_action.dart';
 export 'src/widgets/actions/panoptic_split_button.dart';
 export 'src/widgets/actions/panoptic_split_button_action.dart';
+export 'src/widgets/actions/keyboard_action/keyboard_action.dart';
 
 //mvc
 export 'src/mvc/panoptic_page_controller.dart';
@@ -65,6 +66,7 @@ export 'src/widgets/interface/panoptic_http_photo.dart';
 export 'src/widgets/interface/panoptic_icon.dart';
 export 'src/widgets/interface/panoptic_indicator.dart';
 export 'src/widgets/interface/panoptic_info_card.dart';
+export 'src/widgets/interface/panoptic_loading.dart';
 export 'src/widgets/interface/panoptic_page_content.dart';
 export 'src/widgets/interface/panoptic_pager.dart';
 export 'src/widgets/interface/panoptic_progress.dart';
