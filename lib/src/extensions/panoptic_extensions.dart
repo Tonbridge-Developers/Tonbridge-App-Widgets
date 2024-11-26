@@ -612,6 +612,165 @@ extension DateTimeExtension on DateTime {
     return DateFormat(format).format(this);
   }
 
+  /// Add day
+  /// Generate a new DateTime using the constructor of
+  /// DateTime to account for daylight saving time
+  DateTime addDay(int v) {
+    return DateTime(year, month, day + v);
+  }
+
+  DateTime addDayWithTime(int v) {
+    return DateTime(year, month, day + v, hour, minute, second);
+  }
+
+  bool isMinimum(DateTime date, DateType dt, {bool equal = true}) {
+    bool operator(a, b) {
+      if (equal) {
+        return a <= b;
+      }
+      return a < b;
+    }
+
+    switch (dt) {
+      case DateType.year:
+        return operator(year, date.year);
+      case DateType.month:
+        if (year < date.year) return true;
+        return year <= date.year && operator(month, date.month);
+      case DateType.day:
+        if (year < date.year) return true;
+        if (year <= date.year && month < date.month) return true;
+        return year <= date.year &&
+            month <= date.month &&
+            operator(day, date.day);
+      case DateType.hour:
+        if (year < date.year) return true;
+        if (year <= date.year && month < date.month) return true;
+        if (year <= date.year && month <= date.month && day < date.day) {
+          return true;
+        }
+        return year <= date.year &&
+            month <= date.month &&
+            day <= date.day &&
+            operator(hour, date.hour);
+      case DateType.minute:
+        if (year < date.year) return true;
+        if (year <= date.year && month < date.month) return true;
+        if (year <= date.year && month <= date.month && day < date.day) {
+          return true;
+        }
+        if (year <= date.year &&
+            month <= date.month &&
+            day <= date.day &&
+            hour < date.hour) {
+          return true;
+        }
+        return year <= date.year &&
+            month <= date.month &&
+            day <= date.day &&
+            hour <= date.hour &&
+            operator(minute, date.minute);
+    }
+  }
+
+  bool isMaximum(DateTime date, DateType dt, {bool equal = true}) {
+    bool operator(a, b) {
+      if (equal) {
+        return a >= b;
+      }
+      return a > b;
+    }
+
+    switch (dt) {
+      case DateType.year:
+        return operator(year, date.year);
+      case DateType.month:
+        if (year > date.year) return true;
+        return year >= date.year && operator(month, date.month);
+      case DateType.day:
+        if (year > date.year) return true;
+        if (year >= date.year && month > date.month) return true;
+        return year >= date.year &&
+            month >= date.month &&
+            operator(day, date.day);
+      case DateType.hour:
+        if (year > date.year) return true;
+        if (year >= date.year && month > date.month) return true;
+        if (year >= date.year && month >= date.month && day > date.day) {
+          return true;
+        }
+        return year >= date.year &&
+            month >= date.month &&
+            day >= date.day &&
+            operator(hour, date.hour);
+      case DateType.minute:
+        if (year > date.year) return true;
+        if (year >= date.year && month > date.month) return true;
+        if (year >= date.year && month >= date.month && day > date.day) {
+          return true;
+        }
+        if (year >= date.year &&
+            month >= date.month &&
+            day >= date.day &&
+            hour > date.hour) {
+          return true;
+        }
+        return year >= date.year &&
+            month >= date.month &&
+            day >= date.day &&
+            hour >= date.hour &&
+            operator(minute, date.minute);
+    }
+  }
+
+  bool compareDate(DateTime d1) {
+    return d1.year == year && d1.month == month && d1.day == day;
+  }
+
+  DateTime calcMonth(int diff) {
+    DateTime date = this;
+    if (diff > 0) {
+      var nextYear = year;
+      var nextMonth = month + diff;
+
+      if (month >= 12) {
+        final x = nextMonth % 12;
+        nextYear += nextMonth ~/ 12;
+        nextMonth = x;
+      }
+      date = DateTime(nextYear, nextMonth, 1);
+    } else if (diff < 0) {
+      DateTime x0 = DateTime(date.year, date.month, 1);
+      for (var i = 0; i < diff.abs(); i++) {
+        final y = x0.addDay(-1);
+        x0 = DateTime(y.year, y.month, 1);
+      }
+      date = x0;
+    }
+    return date;
+  }
+
+  /// Check if the date is within the specified range
+  bool isWithinRange(DateTime minimum, DateTime maximum) {
+    return isAfter(minimum) && isBefore(maximum);
+  }
+
+  /// Obtain a value of a specified type from DateTime
+  int valFromType(DateType type) {
+    switch (type) {
+      case DateType.year:
+        return year;
+      case DateType.month:
+        return month;
+      case DateType.day:
+        return day;
+      case DateType.hour:
+        return hour;
+      case DateType.minute:
+        return minute;
+    }
+  }
+
   DateTime removeTime() {
     return DateTime(year, month, day);
   }
