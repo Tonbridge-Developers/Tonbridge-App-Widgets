@@ -3,6 +3,9 @@ library panoptic_widgets;
 export 'src/static/core_icons.dart';
 export 'src/static/core_enums.dart';
 export 'src/static/core_themes.dart';
+export 'src/static/core_base_file.dart';
+export 'src/static/core_file.dart';
+export 'src/static/core_upload_file.dart';
 //extensions
 export 'src/extensions/panoptic_extensions.dart';
 export 'src/extensions/panoptic_grid_extension.dart';
