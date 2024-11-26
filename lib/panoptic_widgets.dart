@@ -70,6 +70,7 @@ export 'src/widgets/interface/panoptic_icon.dart';
 export 'src/widgets/interface/panoptic_indicator.dart';
 export 'src/widgets/interface/panoptic_info_card.dart';
 export 'src/widgets/interface/panoptic_loading.dart';
+export 'src/widgets/interface/panoptic_list_view.dart';
 export 'src/widgets/interface/panoptic_page_content.dart';
 export 'src/widgets/interface/panoptic_pager.dart';
 export 'src/widgets/interface/panoptic_progress.dart';
