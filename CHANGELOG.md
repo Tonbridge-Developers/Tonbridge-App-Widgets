@@ -1,6 +1,6 @@
 ## 2024.11.7
 
-* Auto Build?
+* Auto Build with Tag
 
 ## 2024.11.6
 
