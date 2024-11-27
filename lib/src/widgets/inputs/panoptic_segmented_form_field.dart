@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:material_segmented_control/material_segmented_control.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_icon.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_responsive_layout.dart';
 
 class PanopticSegmentedFormField extends PanopticFormFieldDecoration<int> {
   PanopticSegmentedFormField({

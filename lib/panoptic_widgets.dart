@@ -83,3 +83,11 @@ export 'src/widgets/interface/panoptic_tab.dart';
 export 'src/widgets/interface/panoptic_table.dart';
 export 'src/widgets/interface/panoptic_theme_widget.dart';
 export 'src/widgets/interface/panoptic_wrap.dart';
+
+//html_image
+
+export 'src/widgets/html_network_image/core_data.dart';
+export 'src/widgets/html_network_image/core_helpers.dart';
+export 'src/widgets/html_network_image/core_html_widget.dart';
+export 'src/widgets/html_network_image/core_legacy.dart';
+export 'src/widgets/html_network_image/core_widget_factory.dart';

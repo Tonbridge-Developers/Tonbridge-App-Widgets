@@ -2,8 +2,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:panoptic_widgets/src/widgets/actions/panoptic_button.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_icon.dart';
 
 class PanopticEmptyState extends StatefulWidget {
   const PanopticEmptyState(

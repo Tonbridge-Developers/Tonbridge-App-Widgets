@@ -5,10 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:panoptic_widgets/src/widgets/actions/keyboard_action/keyboard_action.dart';
-import 'package:panoptic_widgets/src/widgets/form/panoptic_form_decoration.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_icon.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_responsive_layout.dart';
 
 class PanopticColourPickerFormField extends PanopticFormFieldDecoration<Color> {
   PanopticColourPickerFormField({

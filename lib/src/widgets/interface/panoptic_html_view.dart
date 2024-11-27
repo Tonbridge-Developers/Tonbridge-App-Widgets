@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 
 class PanopticHtmlView extends StatefulWidget {

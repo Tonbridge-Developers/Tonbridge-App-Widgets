@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
-import 'package:panoptic_widgets/src/widgets/actions/panoptic_large_button_action.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_card.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_grid_view.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_icon.dart';
 
 class PanopticLargeButton extends StatefulWidget {
   const PanopticLargeButton(
