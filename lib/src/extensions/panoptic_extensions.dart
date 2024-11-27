@@ -872,6 +872,19 @@ extension DeltaExtension on Delta {
   }
 }
 
+extension DataGridRowExtension on DataGridRow {
+  T getItem<T>() {
+    PanopticDataGridRow<T> row = this as PanopticDataGridRow<T>;
+    return row.item;
+  }
+}
+
+extension DataGridRowsExtension on List<DataGridRow> {
+  List<T> getItems<T>() {
+    return cast<PanopticDataGridRow<T>>().map((e) => e.item).toList();
+  }
+}
+
 extension StringExtension on String {
   bool get isWhiteSpace {
     return trim().isEmpty;

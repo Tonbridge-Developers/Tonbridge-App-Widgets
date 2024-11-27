@@ -9,6 +9,7 @@ export 'src/static/core_upload_file.dart';
 //extensions
 export 'src/extensions/panoptic_extensions.dart';
 export 'src/extensions/panoptic_grid_extension.dart';
+export 'src/extensions/panoptic_data_grid_row.dart';
 //widgets
 
 //actions
