@@ -12,6 +12,7 @@ class PanopticGridView extends StatefulWidget {
       this.mobileAspectRatio = 2.5,
       this.desktopAspectRatio = 1.5,
       this.physics = const NeverScrollableScrollPhysics(),
+      this.useSliver = false,
       this.columnCount});
   final double baseSize;
   final List<Widget> children;
@@ -21,6 +22,7 @@ class PanopticGridView extends StatefulWidget {
   final double desktopAspectRatio;
   final int? columnCount;
   final ScrollPhysics physics;
+  final bool useSliver;
 
   @override
   State<PanopticGridView> createState() => _PanopticGridViewState();
@@ -66,47 +68,72 @@ class _PanopticGridViewState extends State<PanopticGridView> {
               }
             },
           )
-        : GridView(
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: widget.columnCount ??
-                  PanopticExtension.calculateCrossAxisCount(context,
+        : widget.useSliver
+            ? SliverGrid(
+                key: widget.key,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: PanopticExtension.calculateCrossAxisCount(
+                      context,
                       baseSize: widget.baseSize),
-              crossAxisSpacing: 0,
-              // width / height: fixed for *all* items
-              childAspectRatio: PanopticExtension.calculateAspectRatio(context,
-                  mobile: widget.mobileAspectRatio,
-                  desktop: widget.desktopAspectRatio),
-            ),
-            physics: widget.physics,
-            children: [
-              for (var child in widget.children) ...{
-                if (child is Expanded) ...{
-                  Expanded(
-                    flex: child.flex,
-                    child: Container(
-                      margin: widget.padding,
-                      child: child.child,
-                    ),
-                  ),
-                } else if (child is PanopticExpanded) ...{
-                  PanopticExpanded(
-                    expandOnDesktop: child.expandOnDesktop,
-                    expandOnMobile: child.expandOnMobile,
-                    flex: child.flex,
-                    child: Container(
-                      margin: widget.padding,
-                      child: child.child,
-                    ),
-                  ),
-                } else ...{
-                  Container(
-                    margin: widget.padding,
-                    child: child,
-                  ),
-                }
-              }
-            ],
-          );
+                  crossAxisSpacing: 0,
+                  // width / height: fixed for *all* items
+                  childAspectRatio: PanopticExtension.calculateAspectRatio(
+                      context,
+                      mobile: widget.mobileAspectRatio,
+                      desktop: widget.desktopAspectRatio),
+                ),
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Padding(
+                      padding: widget.padding,
+                      child: widget.children[index],
+                    );
+                  },
+                  childCount: widget.children.length,
+                ),
+              )
+            : GridView(
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: widget.columnCount ??
+                      PanopticExtension.calculateCrossAxisCount(context,
+                          baseSize: widget.baseSize),
+                  crossAxisSpacing: 0,
+                  // width / height: fixed for *all* items
+                  childAspectRatio: PanopticExtension.calculateAspectRatio(
+                      context,
+                      mobile: widget.mobileAspectRatio,
+                      desktop: widget.desktopAspectRatio),
+                ),
+                physics: widget.physics,
+                children: [
+                  for (var child in widget.children) ...{
+                    if (child is Expanded) ...{
+                      Expanded(
+                        flex: child.flex,
+                        child: Container(
+                          margin: widget.padding,
+                          child: child.child,
+                        ),
+                      ),
+                    } else if (child is PanopticExpanded) ...{
+                      PanopticExpanded(
+                        expandOnDesktop: child.expandOnDesktop,
+                        expandOnMobile: child.expandOnMobile,
+                        flex: child.flex,
+                        child: Container(
+                          margin: widget.padding,
+                          child: child.child,
+                        ),
+                      ),
+                    } else ...{
+                      Container(
+                        margin: widget.padding,
+                        child: child,
+                      ),
+                    }
+                  }
+                ],
+              );
   }
 }

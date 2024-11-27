@@ -1,3 +1,7 @@
+## 2024.11.9
+
+* Added Slivers to GridView
+
 ## 2024.11.8
 
 * Updated Homepage
