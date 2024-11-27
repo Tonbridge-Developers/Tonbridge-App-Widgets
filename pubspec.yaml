@@ -1,7 +1,7 @@
 name: panoptic_widgets
 description: "A group of flutter widgets which are used in the Panoptic Family of Apps - created and maintained by Tonbridge School's Developers"
-version: 2024.11.7
-homepage: https://tonbridge.school
+version: 2024.11.8
+homepage: https://tonbridge-school.co.uk
 
 environment:
   sdk: ^3.5.4

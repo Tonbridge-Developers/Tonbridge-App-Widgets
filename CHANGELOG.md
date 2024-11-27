@@ -1,5 +1,9 @@
 ## 2024.11.7
 
+* Updated Homepage
+
+## 2024.11.7
+
 * Auto Build with Tag
 
 ## 2024.11.6
