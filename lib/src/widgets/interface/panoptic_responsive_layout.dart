@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_column.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_row.dart';
 
 class PanopticResponsiveLayout extends StatefulWidget {
   const PanopticResponsiveLayout({

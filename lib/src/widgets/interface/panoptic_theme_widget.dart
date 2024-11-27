@@ -1,15 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_icons/flutter_app_icons.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_card.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_grid_view.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_icon.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_info_card.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_row.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_slide_over.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_provider/theme_provider.dart';
 import 'package:android_dynamic_icon/android_dynamic_icon.dart';

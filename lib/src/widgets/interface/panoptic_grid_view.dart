@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_expanded.dart';
 
 class PanopticGridView extends StatefulWidget {
   const PanopticGridView(

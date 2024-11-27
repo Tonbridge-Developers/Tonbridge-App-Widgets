@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_strings.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_loading.dart';
 
 class PanopticBase64Photo extends StatefulWidget {
   const PanopticBase64Photo(

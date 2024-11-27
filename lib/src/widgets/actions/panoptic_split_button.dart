@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:panoptic_widgets/src/widgets/actions/panoptic_split_button_action.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_icon.dart';
 import 'package:theme_provider/theme_provider.dart';
 
 class PanopticSplitButton extends StatefulWidget {

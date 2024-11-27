@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:panoptic_widgets/src/widgets/form/panoptic_form_decoration.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_icon.dart';
 
 class PanopticCheckboxFormField extends PanopticFormFieldDecoration<bool> {
   PanopticCheckboxFormField({

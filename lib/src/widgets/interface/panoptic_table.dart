@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:measure_size_builder/measure_size_builder.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_pager.dart';
-import 'package:panoptic_widgets/src/widgets/interface/panoptic_slide_over.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
-import 'package:panoptic_widgets/src/extensions/panoptic_extensions.dart';
 
 class PanopticExpanded extends StatelessWidget {
   const PanopticExpanded(
