@@ -138,7 +138,7 @@ class PanopticDateFormField extends PanopticFormFieldDecoration<DateTime> {
                                         kIsWeb ? null : TooltipTriggerMode.tap,
                                     verticalOffset: 10,
                                     child: PanopticIcon(
-                                      icon: CoreIcons.infoRound,
+                                      icon: PanopticIcons.infoRound,
                                       size: 15,
                                       margin: const EdgeInsets.only(
                                           left: 5, top: 2),
@@ -255,7 +255,7 @@ class PanopticDateFormField extends PanopticFormFieldDecoration<DateTime> {
                                 const SizedBox(width: 10),
                                 !checkedEnabled
                                     ? PanopticIconButton(
-                                        icon: CoreIcons.edit,
+                                        icon: PanopticIcons.edit,
                                         size: 50,
                                         isDisabled: !enabled,
                                         onTap: () {
@@ -265,7 +265,7 @@ class PanopticDateFormField extends PanopticFormFieldDecoration<DateTime> {
                                         },
                                       )
                                     : PanopticIconButton(
-                                        icon: CoreIcons.cross,
+                                        icon: PanopticIcons.cross,
                                         size: 50,
                                         isDisabled: !enabled,
                                         onTap: () {

@@ -1,3 +1,7 @@
+## 2024.11.10
+
+* Renamed Icons to make easier to extend
+
 ## 2024.11.9
 
 * Added Slivers to GridView

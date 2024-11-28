@@ -61,7 +61,7 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
                           triggerMode: kIsWeb ? null : TooltipTriggerMode.tap,
                           verticalOffset: 10,
                           child: PanopticIcon(
-                            icon: CoreIcons.infoRound,
+                            icon: PanopticIcons.infoRound,
                             size: 15,
                             margin: const EdgeInsets.only(left: 5, top: 2),
                             color: Theme.of(state.context)
@@ -331,7 +331,7 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
                                       const SizedBox(width: 10),
                                       !checkedEnabled
                                           ? PanopticIconButton(
-                                              icon: CoreIcons.edit,
+                                              icon: PanopticIcons.edit,
                                               size: 50,
                                               isDisabled: !enabled,
                                               onTap: () {
@@ -341,7 +341,7 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
                                               },
                                             )
                                           : PanopticIconButton(
-                                              icon: CoreIcons.cross,
+                                              icon: PanopticIcons.cross,
                                               size: 50,
                                               isDisabled: !enabled,
                                               onTap: () {

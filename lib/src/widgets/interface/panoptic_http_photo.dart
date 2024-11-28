@@ -9,7 +9,7 @@ class PanopticHttpPhoto extends StatefulWidget {
       this.margin = EdgeInsets.zero,
       this.size = 50,
       this.borderRadius = BorderRadius.zero,
-      this.errorIcon = const PanopticIcon(icon: CoreIcons.person, size: 50),
+      this.errorIcon = const PanopticIcon(icon: PanopticIcons.person, size: 50),
       this.width,
       this.height,
       this.forceHttps = true});

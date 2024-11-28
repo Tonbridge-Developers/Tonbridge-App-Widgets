@@ -161,7 +161,7 @@ class PanopticDecimalFormField extends PanopticFormFieldDecoration<String> {
                                           ? null
                                           : TooltipTriggerMode.tap,
                                       child: PanopticIcon(
-                                        icon: CoreIcons.infoRound,
+                                        icon: PanopticIcons.infoRound,
                                         size: 15,
                                         margin: const EdgeInsets.only(
                                             left: 5, top: 2),

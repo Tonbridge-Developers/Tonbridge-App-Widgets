@@ -71,7 +71,7 @@ class PanopticColourPickerFormField extends PanopticFormFieldDecoration<Color> {
                         ),
                         const SizedBox(width: 10),
                         PanopticIconButton(
-                          icon: CoreIcons.paint,
+                          icon: PanopticIcons.paint,
                           size: 50,
                           onTap: () {
                             showDialog(
@@ -133,7 +133,7 @@ class PanopticColourPickerFormField extends PanopticFormFieldDecoration<Color> {
                                           ? null
                                           : TooltipTriggerMode.tap,
                                       child: PanopticIcon(
-                                        icon: CoreIcons.infoRound,
+                                        icon: PanopticIcons.infoRound,
                                         size: 15,
                                         margin: const EdgeInsets.only(
                                             left: 5, top: 2),
@@ -185,7 +185,7 @@ class PanopticColourPickerFormField extends PanopticFormFieldDecoration<Color> {
                                   ),
                                   const SizedBox(width: 10),
                                   PanopticIconButton(
-                                    icon: CoreIcons.paint,
+                                    icon: PanopticIcons.paint,
                                     size: 50,
                                     onTap: () {
                                       showDialog(

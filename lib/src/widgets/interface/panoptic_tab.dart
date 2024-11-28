@@ -3,7 +3,7 @@ import 'package:panoptic_widgets/panoptic_widgets.dart';
 
 class PanopticTab<T> extends StatelessWidget {
   final String? text;
-  final CoreIcons? coreIcon;
+  final PanopticIcons? coreIcon;
   final T? value;
   final EdgeInsetsGeometry padding;
   final EdgeInsetsGeometry iconMargin;

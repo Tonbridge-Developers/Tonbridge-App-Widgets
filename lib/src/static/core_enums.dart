@@ -258,16 +258,16 @@ enum UserType {
 
 enum ContactListType {
   @JsonValue(1)
-  year('Year', CoreIcons.students),
+  year('Year', PanopticIcons.students),
   @JsonValue(2)
-  house('House', CoreIcons.house),
+  house('House', PanopticIcons.house),
   @JsonValue(3)
-  seniorHouse('Senior House', CoreIcons.seniorhouse),
+  seniorHouse('Senior House', PanopticIcons.seniorhouse),
   @JsonValue(0)
-  none('None', CoreIcons.torin);
+  none('None', PanopticIcons.torin);
 
   final String printedName;
-  final CoreIcons icon;
+  final PanopticIcons icon;
   const ContactListType(this.printedName, this.icon);
 
   @override

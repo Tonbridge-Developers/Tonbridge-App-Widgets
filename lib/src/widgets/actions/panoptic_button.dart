@@ -7,7 +7,7 @@ import 'package:theme_provider/theme_provider.dart';
 class PanopticButton extends StatefulWidget {
   final ButtonType buttonType;
   final String? label;
-  final CoreIcons? icon;
+  final PanopticIcons? icon;
   final Widget? leading;
   final Widget? trailing;
   final VoidCallback? onPressed;

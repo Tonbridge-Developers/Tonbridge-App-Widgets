@@ -171,7 +171,7 @@ class PanopticGridExtension {
   static defaultButton(
     DataGridCell<dynamic> dataGridCell,
     Function()? onPressed,
-    CoreIcons icon, {
+    PanopticIcons icon, {
     Alignment alignment = Alignment.center,
     ButtonType buttonType = ButtonType.secondary,
     EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 16.0),
@@ -221,7 +221,7 @@ class PanopticGridExtension {
         padding: padding,
         child: PanopticIcon(
           margin: margin,
-          icon: CoreIcons.getIconForName(dataGridCell.value.toString()),
+          icon: PanopticIcons.getIconForName(dataGridCell.value.toString()),
           size: size,
         ),
       );
@@ -239,7 +239,9 @@ class PanopticGridExtension {
         child: PanopticIcon(
           margin: margin,
           bw: true,
-          icon: dataGridCell.value as bool ? CoreIcons.tick : CoreIcons.cross,
+          icon: dataGridCell.value as bool
+              ? PanopticIcons.tick
+              : PanopticIcons.cross,
           size: size,
         ),
       );
@@ -255,7 +257,7 @@ class PanopticGridExtension {
         padding: padding,
         child: PanopticIcon(
           margin: margin,
-          icon: dataGridCell.value as CoreIcons,
+          icon: dataGridCell.value as PanopticIcons,
           size: size,
         ),
       );
@@ -265,14 +267,14 @@ class PanopticGridExtension {
               const EdgeInsets.symmetric(horizontal: 16.0),
           EdgeInsetsGeometry margin = const EdgeInsets.only(right: 5),
           double size = 40,
-          CoreIcons? icon,
+          PanopticIcons? icon,
           Color? iconColor}) =>
       Container(
         alignment: alignment,
         padding: padding,
         child: PanopticIcon(
           margin: margin,
-          icon: icon ?? CoreIcons.tick,
+          icon: icon ?? PanopticIcons.tick,
           size: size,
           color: iconColor,
         ),

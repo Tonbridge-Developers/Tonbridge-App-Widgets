@@ -50,7 +50,7 @@ class PanopticCheckboxFormField extends PanopticFormFieldDecoration<bool> {
                                     kIsWeb ? null : TooltipTriggerMode.tap,
                                 verticalOffset: 10,
                                 child: PanopticIcon(
-                                  icon: CoreIcons.infoRound,
+                                  icon: PanopticIcons.infoRound,
                                   size: 15,
                                   margin:
                                       const EdgeInsets.only(left: 5, top: 2),

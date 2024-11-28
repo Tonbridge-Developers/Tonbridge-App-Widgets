@@ -7,7 +7,7 @@ import 'package:theme_provider/theme_provider.dart';
 class PanopticSplitButton extends StatefulWidget {
   final ButtonType buttonType;
   final String? label;
-  final CoreIcons? icon;
+  final PanopticIcons? icon;
   final Widget? leading;
   final Widget? trailing;
   final VoidCallback? onPressed;
@@ -214,7 +214,7 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
                       elevation: widget.elevation,
                       shape: _getRightShape(),
                       child: PanopticIcon(
-                        icon: CoreIcons.chevrondown,
+                        icon: PanopticIcons.chevrondown,
                         size: 20,
                         margin: EdgeInsets.zero,
                         color: _getTextColor(),

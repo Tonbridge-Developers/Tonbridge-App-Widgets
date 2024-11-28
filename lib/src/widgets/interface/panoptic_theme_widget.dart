@@ -37,7 +37,7 @@ class _PanopticThemeWidgetState extends State<PanopticThemeWidget> {
         PanopticCard(
           child: Column(
             children: [
-              const PanopticIcon(icon: CoreIcons.pallet, size: 80),
+              const PanopticIcon(icon: PanopticIcons.pallet, size: 80),
               Text(
                 "This is a demonstration of the different themes available in the app. Click on a theme to change the app's theme. The App Icon will also change to match the theme. Some themes look better on light mode, some on dark mode. ",
                 style: Theme.of(context).textTheme.titleMedium!,
@@ -142,7 +142,7 @@ class _PanopticThemeWidgetState extends State<PanopticThemeWidget> {
                                   textColor: theme.data.colorScheme.onPrimary,
                                 ),
                                 PanopticButton(
-                                  icon: CoreIcons.add,
+                                  icon: PanopticIcons.add,
                                   key: const Key("secondaryButton"),
                                   onPressed: () {},
                                   expanded: true,

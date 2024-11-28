@@ -5,7 +5,7 @@ import 'package:theme_provider/theme_provider.dart';
 
 class PanopticIconButton extends StatefulWidget {
   final VoidCallback? onTap;
-  final CoreIcons? icon;
+  final PanopticIcons? icon;
   final Widget? widget;
   final Color? color;
   final Color? foregroundColor;

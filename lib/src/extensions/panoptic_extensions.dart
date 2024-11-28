@@ -304,29 +304,29 @@ class PanopticExtension {
 
   static void showToast(String message, BuildContext context,
       {ToastType type = ToastType.success, String? subTitle}) {
-    CoreIcons icon = CoreIcons.success;
+    PanopticIcons icon = PanopticIcons.success;
 
     Color color = Colors.green;
     ToastificationType toastificationType = ToastificationType.success;
 
     switch (type) {
       case ToastType.success:
-        icon = CoreIcons.success;
+        icon = PanopticIcons.success;
         color = Colors.green;
         toastificationType = ToastificationType.success;
         break;
       case ToastType.error:
-        icon = CoreIcons.error;
+        icon = PanopticIcons.error;
         color = Colors.red;
         toastificationType = ToastificationType.error;
         break;
       case ToastType.warning:
-        icon = CoreIcons.warning;
+        icon = PanopticIcons.warning;
         color = Colors.orange;
         toastificationType = ToastificationType.warning;
         break;
       case ToastType.info:
-        icon = CoreIcons.info;
+        icon = PanopticIcons.info;
         color = Colors.blue;
         toastificationType = ToastificationType.info;
         break;

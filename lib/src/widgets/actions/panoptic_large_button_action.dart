@@ -5,7 +5,7 @@ class PanopticLargeButtonAction {
   final Key? key;
   final String title;
   final dynamic value;
-  final CoreIcons icon;
+  final PanopticIcons icon;
   final Widget? child;
   final String? subtitle;
 

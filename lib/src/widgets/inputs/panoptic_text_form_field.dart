@@ -171,7 +171,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
                                           ? null
                                           : TooltipTriggerMode.tap,
                                       child: PanopticIcon(
-                                        icon: CoreIcons.infoRound,
+                                        icon: PanopticIcons.infoRound,
                                         size: 15,
                                         margin: const EdgeInsets.only(
                                             left: 5, top: 2),
@@ -305,7 +305,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
                                     const SizedBox(width: 10),
                                     !checkedEnabled
                                         ? PanopticIconButton(
-                                            icon: CoreIcons.edit,
+                                            icon: PanopticIcons.edit,
                                             size: 50,
                                             isDisabled: !enabled,
                                             onTap: () {
@@ -315,7 +315,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
                                             },
                                           )
                                         : PanopticIconButton(
-                                            icon: CoreIcons.undo,
+                                            icon: PanopticIcons.undo,
                                             size: 50,
                                             isDisabled: !enabled,
                                             onTap: () {
@@ -459,7 +459,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
                                       ),
                                       const SizedBox(width: 10),
                                       PanopticIconButton(
-                                        icon: CoreIcons.copy,
+                                        icon: PanopticIcons.copy,
                                         size: 50,
                                         isDisabled: !enabled,
                                         onTap: () {

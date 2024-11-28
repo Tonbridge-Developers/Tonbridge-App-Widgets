@@ -16,7 +16,7 @@ class PanopticEmptyState extends StatefulWidget {
   final double? width;
   final double height;
   final String? message;
-  final CoreIcons? icon;
+  final PanopticIcons? icon;
   final EdgeInsetsGeometry? margin;
   final PanopticButton? action;
 
@@ -44,7 +44,7 @@ class _PanopticEmptyStateState extends State<PanopticEmptyState> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 PanopticIcon(
-                  icon: widget.icon ?? CoreIcons.empty,
+                  icon: widget.icon ?? PanopticIcons.empty,
                   size: 48,
                   color: Theme.of(context).colorScheme.primary,
                 ),

@@ -21,7 +21,7 @@ class PanopticChip extends StatefulWidget {
   final EdgeInsetsGeometry? margin;
   final Color? color;
   final ChipType type;
-  final CoreIcons? largeDeleteIcon;
+  final PanopticIcons? largeDeleteIcon;
   final bool expand;
 
   @override
@@ -110,7 +110,7 @@ class _PanopticChipState extends State<PanopticChip> {
             ),
             if (widget.onDelete != null) ...{
               PanopticIconButton(
-                icon: widget.largeDeleteIcon ?? CoreIcons.cross,
+                icon: widget.largeDeleteIcon ?? PanopticIcons.cross,
                 onTap: widget.onDelete,
                 size: 50,
               )
@@ -157,7 +157,7 @@ class _PanopticChipState extends State<PanopticChip> {
             ),
             if (widget.onDelete != null) ...{
               PanopticIconButton(
-                icon: widget.largeDeleteIcon ?? CoreIcons.cross,
+                icon: widget.largeDeleteIcon ?? PanopticIcons.cross,
                 onTap: widget.onDelete,
                 size: 50,
               )

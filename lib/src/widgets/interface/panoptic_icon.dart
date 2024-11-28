@@ -15,7 +15,7 @@ class PanopticIcon extends StatelessWidget {
     this.badgeOffset = const Offset(10, -10),
   });
 
-  final CoreIcons icon;
+  final PanopticIcons icon;
   final double size;
   final Color? color;
   final bool bw;

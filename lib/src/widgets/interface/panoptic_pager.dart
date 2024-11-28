@@ -202,16 +202,16 @@ class _PanopticPagerState extends State<PanopticPager> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        _buildButton<CoreIcons>(
-          value: CoreIcons.doubleleft,
+        _buildButton<PanopticIcons>(
+          value: PanopticIcons.doubleleft,
           selected: false,
           theme: theme,
           disabled: atStart || _loading,
           onPressed: () async =>
               await _handleButtonPress(-double.maxFinite.toInt()),
         ),
-        _buildButton<CoreIcons>(
-          value: CoreIcons.chevronleft,
+        _buildButton<PanopticIcons>(
+          value: PanopticIcons.chevronleft,
           selected: false,
           theme: theme,
           disabled: atStart || _loading,
@@ -235,14 +235,14 @@ class _PanopticPagerState extends State<PanopticPager> {
             },
           ),
         ),
-        _buildButton<CoreIcons>(
-            value: CoreIcons.chevronright,
+        _buildButton<PanopticIcons>(
+            value: PanopticIcons.chevronright,
             selected: false,
             theme: theme,
             disabled: atEnd || _loading,
             onPressed: () async => await _handleButtonPress(1)),
-        _buildButton<CoreIcons>(
-            value: CoreIcons.doubleright,
+        _buildButton<PanopticIcons>(
+            value: PanopticIcons.doubleright,
             selected: false,
             theme: theme,
             disabled: atEnd || _loading,
@@ -261,7 +261,7 @@ class _PanopticPagerState extends State<PanopticPager> {
   }) {
     Widget child;
     Color buttonColor;
-    if (value is CoreIcons) {
+    if (value is PanopticIcons) {
       child = PanopticIcon(
         icon: value,
         size: 20,

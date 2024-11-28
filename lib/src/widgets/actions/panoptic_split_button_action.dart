@@ -5,7 +5,7 @@ import 'package:panoptic_widgets/panoptic_widgets.dart';
 class PanopticSplitButtonAction {
   final VoidCallback onPressed;
   final VoidCallback? onLongPress;
-  final CoreIcons? icon;
+  final PanopticIcons? icon;
   final String label;
   final bool isDisabled;
 

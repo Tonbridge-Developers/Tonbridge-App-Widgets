@@ -67,7 +67,7 @@ class _KeyboardActionState extends State<KeyboardAction> {
                         ),
                         child: PanopticIcon(
                           margin: const EdgeInsets.all(7),
-                          icon: CoreIcons.keyboard,
+                          icon: PanopticIcons.keyboard,
                           size: 35,
                           color: Theme.of(context).colorScheme.onSecondary,
                         ),
