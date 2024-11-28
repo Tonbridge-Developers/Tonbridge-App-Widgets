@@ -1,7 +1,7 @@
 library panoptic_widgets;
 
-export 'src/static/core_icons.dart';
-export 'src/static/core_enums.dart';
+export 'src/static/panoptic_icons.dart';
+export 'src/static/panoptic_enums.dart';
 export 'src/static/core_themes.dart';
 export 'src/static/core_base_file.dart';
 export 'src/static/core_file.dart';
