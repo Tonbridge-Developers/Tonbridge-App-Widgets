@@ -1,3 +1,7 @@
+## 2024.11.12
+
+* Fixed annoyance with Table
+
 ## 2024.11.10
 
 * Renamed Icons to make easier to extend

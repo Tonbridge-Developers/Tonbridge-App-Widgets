@@ -463,7 +463,6 @@ class PanopticDataSource extends DataGridSource {
               fullWidth: true,
               onChanged: (value) {
                 newValue = value;
-                submitCell();
               },
               onFieldSubmitted: (value) => submitCell(),
             ),
