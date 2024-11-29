@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
@@ -75,7 +76,8 @@ class PanopticComboBoxFormField
                         ),
                         child: ListView(
                           children: [
-                            for (var item in items!)
+                            for (var item in items!.sortedBy<num>(
+                                (e) => state.value!.contains(e.value) ? 0 : 1))
                               if (item.child
                                       .toString()
                                       .toLowerCase()
@@ -223,7 +225,10 @@ class PanopticComboBoxFormField
                                   ),
                                   child: ListView(
                                     children: [
-                                      for (var item in items!)
+                                      for (var item in items!.sortedBy<num>(
+                                          (e) => state.value!.contains(e.value)
+                                              ? 0
+                                              : 1))
                                         if (item.child.toString().toLowerCase().contains(
                                                 searchValue!.toLowerCase()) ||
                                             item.value

@@ -1,3 +1,7 @@
+## 2024.11.13
+
+* Combo Box now shows selected item at the top
+
 ## 2024.11.12
 
 * Fixed annoyance with Table
