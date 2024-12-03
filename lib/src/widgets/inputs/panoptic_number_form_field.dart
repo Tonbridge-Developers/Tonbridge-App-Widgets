@@ -24,6 +24,7 @@ class PanopticNumberFormField extends PanopticFormFieldDecoration<int> {
     bool autofocus = false,
     bool readOnly = false,
     bool showCursor = true,
+    Widget? trailing,
     //Use the alternative bg color
     alternative = false,
     bool fullWidth = false,
@@ -60,6 +61,7 @@ class PanopticNumberFormField extends PanopticFormFieldDecoration<int> {
                       },
                       decoration: InputDecoration(
                         prefixIcon: icon,
+                        suffixIcon: trailing,
                         fillColor: (alternative
                                 ? Theme.of(state.context)
                                     .colorScheme
@@ -189,6 +191,7 @@ class PanopticNumberFormField extends PanopticFormFieldDecoration<int> {
                                 },
                                 decoration: InputDecoration(
                                   prefixIcon: icon,
+                                  suffixIcon: trailing,
                                   fillColor: (alternative
                                           ? Theme.of(state.context)
                                               .colorScheme

@@ -46,6 +46,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
     Function(String)? onFieldSubmitted,
     List<String> autoFillHints = const [],
     List<TextInputFormatter> inputFormatters = const [],
+    Widget? trailing,
     //Use the alternative bg color
     alternative = false,
   }) : super(
@@ -91,6 +92,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
                       decoration: InputDecoration(
                         prefixIcon: icon,
                         hintText: placeholder,
+                        suffixIcon: trailing,
                         fillColor: (alternative
                                 ? Theme.of(state.context)
                                     .colorScheme
@@ -221,6 +223,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
                                         decoration: InputDecoration(
                                           hintText: placeholder,
                                           prefixIcon: icon,
+                                          suffixIcon: trailing,
                                           fillColor: (alternative
                                                   ? Theme.of(state.context)
                                                       .colorScheme
@@ -366,6 +369,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
                                           decoration: InputDecoration(
                                             hintText: placeholder,
                                             prefixIcon: icon,
+                                            suffixIcon: trailing,
                                             fillColor: (alternative
                                                     ? Theme.of(state.context)
                                                         .colorScheme
@@ -512,6 +516,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
                                     decoration: InputDecoration(
                                       hintText: placeholder,
                                       prefixIcon: icon,
+                                      suffixIcon: trailing,
                                       fillColor: (alternative
                                               ? Theme.of(state.context)
                                                   .colorScheme

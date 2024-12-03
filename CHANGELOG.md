@@ -1,3 +1,7 @@
+## 2024.12.1
+
+* Added support for trailing icons in the various text boxes
+
 ## 2024.11.13
 
 * Combo Box now shows selected item at the top

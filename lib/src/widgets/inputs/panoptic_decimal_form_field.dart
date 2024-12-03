@@ -24,6 +24,7 @@ class PanopticDecimalFormField extends PanopticFormFieldDecoration<String> {
     bool autofocus = false,
     bool readOnly = false,
     bool showCursor = true,
+    Widget? trailing,
     EdgeInsetsGeometry contentPadding = const EdgeInsets.all(17),
     EdgeInsetsGeometry leadingPadding = const EdgeInsets.all(5),
     Function(double?)? onFieldSubmitted,
@@ -74,6 +75,8 @@ class PanopticDecimalFormField extends PanopticFormFieldDecoration<String> {
                       },
                       decoration: InputDecoration(
                         prefixIcon: icon,
+                        suffixIcon: trailing,
+
                         prefixText: currency, // Add currency prefix
                         fillColor: (alternative
                                 ? Theme.of(state.context)
@@ -213,6 +216,8 @@ class PanopticDecimalFormField extends PanopticFormFieldDecoration<String> {
                                 },
                                 decoration: InputDecoration(
                                   prefixIcon: icon,
+                                  suffixIcon: trailing,
+
                                   prefixText: currency, // Add currency prefix
                                   fillColor: (alternative
                                           ? Theme.of(state.context)
