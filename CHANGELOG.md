@@ -1,3 +1,7 @@
+## 2024.12.4
+
+* Added Tooltip to Chip and CollapsedLabel to Card
+
 ## 2024.12.1
 
 * Added support for trailing icons in the various text boxes
