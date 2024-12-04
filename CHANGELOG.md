@@ -1,4 +1,4 @@
-## 2024.12.4
+## 2024.12.2
 
 * Added Tooltip to Chip and CollapsedLabel to Card
 
