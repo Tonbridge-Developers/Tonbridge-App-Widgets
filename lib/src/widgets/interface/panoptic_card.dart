@@ -14,6 +14,7 @@ class PanopticCard extends StatefulWidget {
   final Widget? trailing;
   final bool? collapsible;
   late bool isCollapsed;
+  final String? collapsedLabel;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? labelPadding;
@@ -39,6 +40,7 @@ class PanopticCard extends StatefulWidget {
       this.leading,
       this.trailing,
       this.collapsible,
+      this.collapsedLabel,
       this.margin,
       this.padding,
       this.labelPadding,
@@ -167,11 +169,20 @@ class _PanopticCardState extends State<PanopticCard> {
                       widget.leading!,
                       const SizedBox(width: 10),
                     },
-                    if (widget.label != null)
-                      Expanded(
-                        child: Text(widget.label!,
-                            style: Theme.of(context).textTheme.titleMedium!),
-                      ),
+                    if (widget.label != null) ...{
+                      if (widget.isCollapsed &&
+                          widget.collapsedLabel != null) ...{
+                        Expanded(
+                          child: Text(widget.collapsedLabel!,
+                              style: Theme.of(context).textTheme.titleMedium!),
+                        ),
+                      } else ...{
+                        Expanded(
+                          child: Text(widget.label!,
+                              style: Theme.of(context).textTheme.titleMedium!),
+                        ),
+                      }
+                    },
                     if (widget.trailing != null) widget.trailing!,
                     widget.isCollapsed
                         ? const Icon(Icons.keyboard_arrow_right_rounded)

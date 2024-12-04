@@ -7,6 +7,7 @@ class PanopticChip extends StatefulWidget {
   const PanopticChip(
       {super.key,
       required this.label,
+      this.tooltip,
       this.leading,
       this.onDelete,
       this.color,
@@ -16,6 +17,7 @@ class PanopticChip extends StatefulWidget {
       this.expand = false});
 
   final String label;
+  final String? tooltip;
   final Widget? leading;
   final VoidCallback? onDelete;
   final EdgeInsetsGeometry? margin;
@@ -41,13 +43,15 @@ class _PanopticChipState extends State<PanopticChip> {
   Widget _buildSmallChip() => Padding(
         padding: widget.margin ?? const EdgeInsets.all(10),
         child: Chip(
-          label: Text(
-            widget.label,
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color:
-                      (widget.color ?? Theme.of(context).colorScheme.primary),
-                ),
-          ),
+          label: Tooltip(
+              message: widget.tooltip ?? '',
+              child: Text(
+                widget.label,
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: (widget.color ??
+                          Theme.of(context).colorScheme.primary),
+                    ),
+              )),
           backgroundColor: ThemeProvider.controllerOf(context)
                   .currentThemeId
                   .startsWith('white')
@@ -95,13 +99,17 @@ class _PanopticChipState extends State<PanopticChip> {
                     },
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: Text(
-                        textAlign: TextAlign.center,
-                        widget.label,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: (widget.color ??
-                                  Theme.of(context).colorScheme.primary),
-                            ),
+                      child: Tooltip(
+                        message: widget.tooltip ?? '',
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          widget.label,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: (widget.color ??
+                                        Theme.of(context).colorScheme.primary),
+                                  ),
+                        ),
                       ),
                     )
                   ],
@@ -143,13 +151,16 @@ class _PanopticChipState extends State<PanopticChip> {
                   },
                   Padding(
                     padding: const EdgeInsets.all(10),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      widget.label,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: (widget.color ??
-                                Theme.of(context).colorScheme.primary),
-                          ),
+                    child: Tooltip(
+                      message: widget.tooltip ?? '',
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        widget.label,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: (widget.color ??
+                                  Theme.of(context).colorScheme.primary),
+                            ),
+                      ),
                     ),
                   )
                 ],
