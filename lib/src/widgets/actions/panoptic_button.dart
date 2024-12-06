@@ -25,6 +25,7 @@ class PanopticButton extends StatefulWidget {
   final Widget? badge;
   final Gradient? gradient;
   final bool smaller;
+
   const PanopticButton({
     super.key,
     this.buttonType = ButtonType.primary,
@@ -80,112 +81,111 @@ class _PanopticButtonState extends State<PanopticButton> {
                 )
               : null,
           child: widget.isLoading
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize:
-                      widget.expanded ? MainAxisSize.max : MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: (kIsWeb ||
-                                  Theme.of(context).platform ==
-                                      TargetPlatform.macOS ||
-                                  Theme.of(context).platform ==
-                                      TargetPlatform.windows) &&
-                              !widget.smaller
-                          ? const EdgeInsets.all(10)
-                          : EdgeInsets.zero,
-                      child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.0,
-                          valueColor: AlwaysStoppedAnimation(_getTextColor()),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize:
-                      widget.expanded ? MainAxisSize.max : MainAxisSize.min,
-                  children: [
-                    if (widget.icon != null) ...{
-                      PanopticIcon(
-                        icon: widget.icon!,
-                        badge: widget.badge,
-                        color: _getTextColor(),
-                        size: 20,
-                        margin: widget.label != null
-                            ? const EdgeInsets.only(left: 10)
-                            : (kIsWeb ||
-                                        Theme.of(context).platform ==
-                                            TargetPlatform.macOS ||
-                                        Theme.of(context).platform ==
-                                            TargetPlatform.windows) &&
-                                    !widget.smaller
-                                ? const EdgeInsets.all(10)
-                                : EdgeInsets.zero,
-                      ),
-                      if (widget.label != null) const SizedBox(width: 10),
-                    } else if (widget.leading != null) ...{
-                      widget.leading!,
-                      if (widget.label != null) const SizedBox(width: 10),
-                    },
-                    if (widget.expanded) ...{
-                      Expanded(
-                        child: Padding(
-                          padding: (kIsWeb ||
-                                      Theme.of(context).platform ==
-                                          TargetPlatform.macOS ||
-                                      Theme.of(context).platform ==
-                                          TargetPlatform.windows) &&
-                                  !widget.smaller
-                              ? const EdgeInsets.all(10)
-                              : EdgeInsets.zero,
-                          child: Text(
-                            widget.label ?? "",
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: _getTextColor(),
-                                    ),
-                            textAlign: _getButtonLabelAlignment(),
-                          ),
-                        ),
-                      ),
-                    } else ...{
-                      if (widget.label != null)
-                        Padding(
-                          padding: (kIsWeb ||
-                                      Theme.of(context).platform ==
-                                          TargetPlatform.macOS ||
-                                      Theme.of(context).platform ==
-                                          TargetPlatform.windows) &&
-                                  !widget.smaller
-                              ? const EdgeInsets.all(10)
-                              : EdgeInsets.zero,
-                          child: Text(
-                            widget.label ?? "",
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: _getTextColor(),
-                                    ),
-                            textAlign: _getButtonLabelAlignment(),
-                          ),
-                        ),
-                    },
-                    if (widget.trailing != null) ...{
-                      if (widget.label != null) const SizedBox(width: 10),
-                      widget.trailing!,
-                    },
-                  ],
-                ),
+              ? _buildLoadingIndicator()
+              : _buildButtonContent(),
         ),
       ),
     );
   }
 
-  _getButtonColor() {
+  Widget _buildLoadingIndicator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: widget.expanded ? MainAxisSize.max : MainAxisSize.min,
+      children: [
+        Padding(
+          padding: (kIsWeb ||
+                      Theme.of(context).platform == TargetPlatform.macOS ||
+                      Theme.of(context).platform == TargetPlatform.windows) &&
+                  !widget.smaller
+              ? const EdgeInsets.all(10)
+              : EdgeInsets.zero,
+          child: SizedBox(
+            height: 20,
+            width: 20,
+            child: CircularProgressIndicator(
+              strokeWidth: 2.0,
+              valueColor: AlwaysStoppedAnimation(_getTextColor()),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildButtonContent() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: widget.expanded ? MainAxisSize.max : MainAxisSize.min,
+      children: [
+        if (widget.icon != null) ...[
+          PanopticIcon(
+            icon: widget.icon!,
+            badge: widget.badge,
+            color: _getTextColor(),
+            size: 20,
+            margin: widget.label != null
+                ? const EdgeInsets.only(left: 10)
+                : (kIsWeb ||
+                            Theme.of(context).platform ==
+                                TargetPlatform.macOS ||
+                            Theme.of(context).platform ==
+                                TargetPlatform.windows) &&
+                        !widget.smaller
+                    ? const EdgeInsets.all(10)
+                    : EdgeInsets.zero,
+          ),
+          if (widget.label != null) const SizedBox(width: 10),
+        ] else if (widget.leading != null) ...[
+          widget.leading!,
+          if (widget.label != null) const SizedBox(width: 10),
+        ],
+        if (widget.expanded)
+          Expanded(
+            child: Padding(
+              padding: (kIsWeb ||
+                          Theme.of(context).platform == TargetPlatform.macOS ||
+                          Theme.of(context).platform ==
+                              TargetPlatform.windows) &&
+                      !widget.smaller
+                  ? const EdgeInsets.all(10)
+                  : EdgeInsets.zero,
+              child: Text(
+                widget.label ?? "",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge!
+                    .copyWith(color: _getTextColor()),
+                textAlign: _getButtonLabelAlignment(),
+              ),
+            ),
+          )
+        else if (widget.label != null)
+          Padding(
+            padding: (kIsWeb ||
+                        Theme.of(context).platform == TargetPlatform.macOS ||
+                        Theme.of(context).platform == TargetPlatform.windows) &&
+                    !widget.smaller
+                ? const EdgeInsets.all(10)
+                : EdgeInsets.zero,
+            child: Text(
+              widget.label ?? "",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: _getTextColor()),
+              textAlign: _getButtonLabelAlignment(),
+            ),
+          ),
+        if (widget.trailing != null) ...[
+          if (widget.label != null) const SizedBox(width: 10),
+          widget.trailing!,
+        ],
+      ],
+    );
+  }
+
+  Color _getButtonColor() {
     if (ThemeProvider.controllerOf(context)
         .currentThemeId
         .startsWith('white')) {
@@ -204,7 +204,7 @@ class _PanopticButtonState extends State<PanopticButton> {
     }
   }
 
-  _getTextColor() {
+  Color _getTextColor() {
     if (ThemeProvider.controllerOf(context)
         .currentThemeId
         .startsWith('white')) {
@@ -224,37 +224,38 @@ class _PanopticButtonState extends State<PanopticButton> {
     }
   }
 
-  _getShape() {
+  ShapeBorder _getShape() {
     if (ThemeProvider.controllerOf(context)
         .currentThemeId
         .startsWith('white')) {
       return RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            CoreValues.cornerRadius * 0.8,
-          ),
-          side: BorderSide(color: Theme.of(context).colorScheme.primary));
+        borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+        side: BorderSide(color: Theme.of(context).colorScheme.primary),
+      );
     }
     switch (widget.buttonPosition) {
       case ButtonPosition.right:
         return RoundedRectangleBorder(
-            side: widget.buttonType == ButtonType.bordered
-                ? BorderSide(
-                    color:
-                        widget.color ?? Theme.of(context).colorScheme.primary)
-                : BorderSide.none,
-            borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(CoreValues.cornerRadius * 0.8),
-                topRight: Radius.circular(CoreValues.cornerRadius * 0.8)));
+          side: widget.buttonType == ButtonType.bordered
+              ? BorderSide(
+                  color: widget.color ?? Theme.of(context).colorScheme.primary)
+              : BorderSide.none,
+          borderRadius: const BorderRadius.only(
+            bottomRight: Radius.circular(CoreValues.cornerRadius * 0.8),
+            topRight: Radius.circular(CoreValues.cornerRadius * 0.8),
+          ),
+        );
       case ButtonPosition.left:
         return RoundedRectangleBorder(
-            side: widget.buttonType == ButtonType.bordered
-                ? BorderSide(
-                    color:
-                        widget.color ?? Theme.of(context).colorScheme.primary)
-                : BorderSide.none,
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(CoreValues.cornerRadius * 0.8),
-                topLeft: Radius.circular(CoreValues.cornerRadius * 0.8)));
+          side: widget.buttonType == ButtonType.bordered
+              ? BorderSide(
+                  color: widget.color ?? Theme.of(context).colorScheme.primary)
+              : BorderSide.none,
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(CoreValues.cornerRadius * 0.8),
+            topLeft: Radius.circular(CoreValues.cornerRadius * 0.8),
+          ),
+        );
       case ButtonPosition.center:
         return RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(0),
@@ -265,9 +266,7 @@ class _PanopticButtonState extends State<PanopticButton> {
         );
       case ButtonPosition.na:
         return RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(
-            CoreValues.cornerRadius * 0.8,
-          ),
+          borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
           side: widget.buttonType == ButtonType.bordered
               ? BorderSide(
                   color: widget.color ?? Theme.of(context).colorScheme.primary)
@@ -276,14 +275,13 @@ class _PanopticButtonState extends State<PanopticButton> {
     }
   }
 
-  _getButtonLabelAlignment() {
+  TextAlign _getButtonLabelAlignment() {
     if (widget.icon != null && widget.trailing == null) {
       return TextAlign.end;
     }
     if (widget.icon == null && widget.trailing != null) {
       return TextAlign.start;
-    } else {
-      return TextAlign.center;
     }
+    return TextAlign.center;
   }
 }

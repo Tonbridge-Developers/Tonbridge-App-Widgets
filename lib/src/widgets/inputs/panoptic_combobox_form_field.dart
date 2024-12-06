@@ -21,9 +21,8 @@ class PanopticComboBoxFormField
     String? searchValue = '',
     int maxItems = 1,
     bool fullWidth = false,
-
-    ///Use the alternative bg color
     alternative = false,
+    bool keyboardAction = true,
     required List<DropdownMenuItem<dynamic>>? items,
   }) : super(
           autovalidateMode: autoValidate
@@ -31,92 +30,93 @@ class PanopticComboBoxFormField
               : AutovalidateMode.disabled,
           builder: (FormFieldState<dynamic> field) {
             final state = field as PanopticComboBoxFormFieldState;
+            final theme = Theme.of(state.context);
+            final colorScheme = theme.colorScheme;
+            final surfaceColor = (alternative
+                    ? colorScheme.surfaceContainer
+                    : colorScheme.surface)
+                .withAlpha(55);
+            final borderColor =
+                state.hasError ? colorScheme.error : colorScheme.onSurface;
+
+            Widget buildSearchField() {
+              return TextFormField(
+                enabled: enabled,
+                initialValue: searchValue,
+                onChanged: (value) {
+                  state.setState(() {
+                    searchValue = value;
+                  });
+                },
+                decoration: InputDecoration(
+                  fillColor: surfaceColor,
+                  filled: true,
+                  contentPadding: const EdgeInsets.all(17),
+                  border: OutlineInputBorder(
+                    borderRadius:
+                        BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+                    borderSide: BorderSide(color: borderColor),
+                  ),
+                ),
+              );
+            }
+
+            Widget buildListView() {
+              return Container(
+                constraints: const BoxConstraints(maxHeight: 200),
+                child: ListView(
+                  children: [
+                    for (var item in items!.sortedBy<num>(
+                        (e) => state.value!.contains(e.value) ? 0 : 1))
+                      if (item.child
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchValue!.toLowerCase()) ||
+                          item.value
+                              .toString()
+                              .toLowerCase()
+                              .contains(searchValue!.toLowerCase()) ||
+                          state.value!.contains(item.value))
+                        CheckboxListTile(
+                          enabled: enabled,
+                          title: item.child,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                CoreValues.cornerRadius * 0.8),
+                          ),
+                          checkboxShape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                CoreValues.cornerRadius / 4),
+                          ),
+                          value: state.value!.contains(item.value),
+                          onChanged: (bool? value) {
+                            if (value!) {
+                              if (state.value!.length < maxItems) {
+                                state.didChange([...state.value!, item.value]);
+                              }
+                            } else {
+                              state.didChange(state.value!
+                                  .where((element) => element != item.value)
+                                  .toList());
+                            }
+                            onChanged?.call(state.value!);
+                          },
+                        ),
+                  ],
+                ),
+              );
+            }
+
             return fullWidth
                 ? Column(
                     children: [
-                      KeyboardAction(
-                        focusNode: FocusScope.of(state.context),
-                        child: TextFormField(
-                          enabled: enabled,
-                          initialValue: searchValue,
-                          onChanged: (value) {
-                            // ignore: invalid_use_of_protected_member
-                            state.setState(() {
-                              searchValue = value;
-                            });
-                          },
-                          decoration: InputDecoration(
-                              fillColor: (alternative
-                                      ? Theme.of(state.context)
-                                          .colorScheme
-                                          .surfaceContainer
-                                      : Theme.of(state.context)
-                                          .colorScheme
-                                          .surface)
-                                  .withAlpha(55),
-                              filled: true,
-                              contentPadding: const EdgeInsets.all(17),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    CoreValues.cornerRadius * 0.8),
-                                borderSide: BorderSide(
-                                    color: state.hasError
-                                        ? Theme.of(state.context)
-                                            .colorScheme
-                                            .error
-                                        : Theme.of(state.context)
-                                            .colorScheme
-                                            .onSurface),
-                              )),
-                        ),
-                      ),
-                      Container(
-                        constraints: const BoxConstraints(
-                          maxHeight: 200,
-                        ),
-                        child: ListView(
-                          children: [
-                            for (var item in items!.sortedBy<num>(
-                                (e) => state.value!.contains(e.value) ? 0 : 1))
-                              if (item.child
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(searchValue!.toLowerCase()) ||
-                                  item.value
-                                      .toString()
-                                      .toLowerCase()
-                                      .contains(searchValue!.toLowerCase()) ||
-                                  state.value!.contains(item.value))
-                                CheckboxListTile(
-                                  enabled: enabled,
-                                  title: item.child,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        CoreValues.cornerRadius * 0.8),
-                                  ),
-                                  checkboxShape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        CoreValues.cornerRadius / 4),
-                                  ),
-                                  value: state.value!.contains(item.value),
-                                  onChanged: (bool? value) {
-                                    if (value!) {
-                                      if (state.value!.length < maxItems) {
-                                        state.didChange(
-                                            [...state.value!, item.value]);
-                                      }
-                                    } else {
-                                      state.didChange(state.value!
-                                          .where((element) =>
-                                              element != item.value)
-                                          .toList());
-                                    }
-                                    onChanged?.call(state.value!);
-                                  },
-                                ),
-                          ],
-                        ),
-                      )
+                      keyboardAction
+                          ? KeyboardAction(
+                              focusNode: FocusScope.of(state.context),
+                              child: buildSearchField(),
+                            )
+                          : buildSearchField(),
+                      buildListView(),
                     ],
                   )
                 : Column(
@@ -130,13 +130,8 @@ class PanopticComboBoxFormField
                           if (label != null)
                             Row(
                               children: [
-                                Text(
-                                  label,
-                                  style: Theme.of(state.context)
-                                      .textTheme
-                                      .bodyLarge,
-                                ),
-                                if (hintText != null) ...{
+                                Text(label, style: theme.textTheme.bodyLarge),
+                                if (hintText != null)
                                   Tooltip(
                                     message: hintText,
                                     preferBelow: true,
@@ -148,20 +143,17 @@ class PanopticComboBoxFormField
                                       size: 15,
                                       margin: const EdgeInsets.only(
                                           left: 5, top: 2),
-                                      color: Theme.of(state.context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withAlpha(100),
+                                      color:
+                                          colorScheme.onSurface.withAlpha(100),
                                     ),
-                                  )
-                                }
+                                  ),
                               ],
                             ),
                           const Padding(padding: EdgeInsets.all(5)),
                           Container(
                             constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(state.context).size.width,
-                            ),
+                                maxWidth:
+                                    MediaQuery.of(state.context).size.width),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                   CoreValues.cornerRadius * 0.8),
@@ -169,135 +161,31 @@ class PanopticComboBoxFormField
                                           .instance.platformBrightness ==
                                       Brightness.dark
                                   ? Border.all(
-                                      width: 0.5,
-                                      color: Theme.of(state.context)
-                                          .colorScheme
-                                          .onSurface)
+                                      width: 0.5, color: colorScheme.onSurface)
                                   : null),
-                              color: (alternative
-                                      ? Theme.of(state.context)
-                                          .colorScheme
-                                          .surfaceContainer
-                                      : Theme.of(state.context)
-                                          .colorScheme
-                                          .surface)
-                                  .withAlpha(55),
+                              color: surfaceColor,
                             ),
                             width: forceColumn ? null : 400,
                             child: Column(
                               children: [
-                                TextFormField(
-                                  enabled: enabled,
-                                  initialValue: searchValue,
-                                  onChanged: (value) {
-                                    // ignore: invalid_use_of_protected_member
-                                    state.setState(() {
-                                      searchValue = value;
-                                    });
-                                  },
-                                  decoration: InputDecoration(
-                                      fillColor: (alternative
-                                              ? Theme.of(state.context)
-                                                  .colorScheme
-                                                  .surfaceContainer
-                                              : Theme.of(state.context)
-                                                  .colorScheme
-                                                  .surface)
-                                          .withAlpha(55),
-                                      filled: true,
-                                      contentPadding: const EdgeInsets.all(17),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            CoreValues.cornerRadius * 0.8),
-                                        borderSide: BorderSide(
-                                            color: state.hasError
-                                                ? Theme.of(state.context)
-                                                    .colorScheme
-                                                    .error
-                                                : Theme.of(state.context)
-                                                    .colorScheme
-                                                    .onSurface),
-                                      )),
-                                ),
-                                Container(
-                                  constraints: const BoxConstraints(
-                                    maxHeight: 200,
-                                  ),
-                                  child: ListView(
-                                    children: [
-                                      for (var item in items!.sortedBy<num>(
-                                          (e) => state.value!.contains(e.value)
-                                              ? 0
-                                              : 1))
-                                        if (item.child.toString().toLowerCase().contains(
-                                                searchValue!.toLowerCase()) ||
-                                            item.value
-                                                .toString()
-                                                .toLowerCase()
-                                                .contains(searchValue!
-                                                    .toLowerCase()) ||
-                                            state.value!.contains(item.value))
-                                          CheckboxListTile(
-                                            enabled: enabled,
-                                            title: item.child,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      CoreValues.cornerRadius *
-                                                          0.8),
-                                            ),
-                                            checkboxShape:
-                                                RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      CoreValues.cornerRadius /
-                                                          4),
-                                            ),
-                                            value: state.value!
-                                                .contains(item.value),
-                                            onChanged: (bool? value) {
-                                              if (value!) {
-                                                if (state.value!.length <
-                                                    maxItems) {
-                                                  state.didChange([
-                                                    ...state.value!,
-                                                    item.value
-                                                  ]);
-                                                }
-                                              } else {
-                                                state.didChange(state.value!
-                                                    .where((element) =>
-                                                        element != item.value)
-                                                    .toList());
-                                              }
-                                              onChanged?.call(state.value!);
-                                            },
-                                          ),
-                                    ],
-                                  ),
-                                )
+                                buildSearchField(),
+                                buildListView(),
                               ],
                             ),
                           ),
                         ],
                       ),
-                      state.hasError
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  state.errorText ?? 'An error occurred',
-                                  style: Theme.of(state.context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                          color: Theme.of(state.context)
-                                              .colorScheme
-                                              .error),
-                                )
-                              ],
-                            )
-                          : Container()
+                      if (state.hasError)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              state.errorText ?? 'An error occurred',
+                              style: theme.textTheme.labelMedium!
+                                  .copyWith(color: colorScheme.error),
+                            ),
+                          ],
+                        ),
                     ],
                   );
           },

@@ -30,50 +30,37 @@ class _PanopticFormFieldViewState extends State<PanopticFormFieldView> {
         forceColumn: widget.forceColumn,
         columnCrossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            widget.label,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          _buildLabel(),
           const Padding(padding: EdgeInsets.all(5)),
-          if (widget.slideOver) ...{
-            Container(
-              padding: const EdgeInsets.all(17),
-              child: Text(
-                widget.value.toString(),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ),
-          } else ...{
-            Container(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width,
-              ),
-              padding: const EdgeInsets.all(17),
-              width: widget.forceColumn ? null : 400,
-              child: Text(
-                widget.value.toString(),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ),
-          }
+          _buildValueContainer(),
         ],
       );
 
   Widget _buildMultiLineView() => Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            widget.label,
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
+          _buildLabel(),
           const Padding(padding: EdgeInsets.all(5)),
-          Container(
-            padding: const EdgeInsets.all(17),
-            child: Text(
-              widget.value.toString(),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
+          _buildValueContainer(),
         ],
+      );
+
+  Widget _buildLabel() => Text(
+        widget.label,
+        style: Theme.of(context).textTheme.bodyLarge,
+      );
+
+  Widget _buildValueContainer() => Container(
+        padding: const EdgeInsets.all(17),
+        constraints: widget.slideOver
+            ? null
+            : BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width,
+              ),
+        width: widget.forceColumn || widget.slideOver ? null : 400,
+        child: Text(
+          widget.value.toString(),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
       );
 }

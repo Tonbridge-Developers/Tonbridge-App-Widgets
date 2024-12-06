@@ -24,15 +24,16 @@ class PanopticSwitchFormField extends PanopticFormFieldDecoration<bool> {
             final state = field as PanopticSwitchFormFieldState;
             ThemeData theme = Theme.of(state.context);
             ColorScheme colorScheme = theme.colorScheme;
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          if (label != null) ...{
+                    if (label != null) ...[
+                      Expanded(
+                        child: Row(
+                          children: [
                             Flexible(
                               child: Text(
                                 label,
@@ -40,7 +41,7 @@ class PanopticSwitchFormField extends PanopticFormFieldDecoration<bool> {
                                 maxLines: 3,
                               ),
                             ),
-                            if (hintText != null) ...{
+                            if (hintText != null)
                               Tooltip(
                                 message: hintText,
                                 preferBelow: true,
@@ -54,12 +55,11 @@ class PanopticSwitchFormField extends PanopticFormFieldDecoration<bool> {
                                       const EdgeInsets.only(left: 5, top: 2),
                                   color: colorScheme.onSurface.withAlpha(100),
                                 ),
-                              )
-                            }
-                          },
-                        ],
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
+                    ],
                     Switch(
                       value: state.value ?? false,
                       trackOutlineColor: WidgetStateProperty.all(
@@ -70,14 +70,14 @@ class PanopticSwitchFormField extends PanopticFormFieldDecoration<bool> {
                           colorScheme.primary.withOpacity(0.6),
                       inactiveThumbColor:
                           colorScheme.onSurface.withOpacity(0.9),
-                      trackColor: (state.value ?? false)
-                          ? (WidgetStateProperty.all(
-                              activeColor ?? colorScheme.primary))
-                          : (alternative
-                              ? WidgetStateProperty.all(
-                                  colorScheme.surfaceContainer.withOpacity(0.9))
-                              : WidgetStateProperty.all(
-                                  colorScheme.surface.withOpacity(0.6))),
+                      trackColor: WidgetStateProperty.resolveWith((states) {
+                        if (state.value ?? false) {
+                          return activeColor ?? colorScheme.primary;
+                        }
+                        return alternative
+                            ? colorScheme.surfaceContainer.withOpacity(0.9)
+                            : colorScheme.surface.withOpacity(0.6);
+                      }),
                       onChanged: enabled
                           ? (value) {
                               state.didChange(value);
@@ -94,13 +94,14 @@ class PanopticSwitchFormField extends PanopticFormFieldDecoration<bool> {
                         state.errorText ?? 'An error occurred',
                         style: theme.textTheme.labelMedium!
                             .copyWith(color: colorScheme.error),
-                      )
+                      ),
                     ],
-                  )
+                  ),
               ],
             );
           },
         );
+
   @override
   PanopticFormFieldDecorationState<PanopticSwitchFormField, bool>
       createState() => PanopticSwitchFormFieldState();

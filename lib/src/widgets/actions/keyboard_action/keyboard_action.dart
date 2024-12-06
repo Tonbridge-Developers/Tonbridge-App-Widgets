@@ -25,10 +25,10 @@ class KeyboardAction extends StatefulWidget {
       l});
 
   @override
-  _KeyboardActionState createState() => _KeyboardActionState();
+  KeyboardActionState createState() => KeyboardActionState();
 }
 
-class _KeyboardActionState extends State<KeyboardAction> {
+class KeyboardActionState extends State<KeyboardAction> {
   OverlayEntry? _overlayEntry;
   bool forceHide = false;
 
@@ -90,6 +90,7 @@ class _KeyboardActionState extends State<KeyboardAction> {
   @override
   void initState() {
     Future.delayed(const Duration(milliseconds: 100), () {
+      if (!mounted) return;
       if (Theme.of(context).platform == TargetPlatform.iOS ||
           Theme.of(context).platform == TargetPlatform.android) {
         widget.focusNode.addListener(() {
@@ -97,7 +98,7 @@ class _KeyboardActionState extends State<KeyboardAction> {
             _overlayEntry = _createOverlayEntry();
             Overlay.of(context).insert(_overlayEntry!);
           } else {
-            _overlayEntry!.remove();
+            _overlayEntry?.remove();
           }
         });
       }

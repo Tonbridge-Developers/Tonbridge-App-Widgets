@@ -24,27 +24,28 @@ class PanopticIconButton extends StatefulWidget {
   final String? tooltip;
   final TooltipDirection tooltipDirection;
 
-  const PanopticIconButton(
-      {super.key,
-      this.onTap,
-      this.icon,
-      this.widget,
-      this.color,
-      this.foregroundColor,
-      this.gradient,
-      this.badge,
-      this.tooltip,
-      this.badgeAlignment = Alignment.topRight,
-      this.badgeColor,
-      this.badgeTextColor,
-      this.borderSide,
-      this.buttonType = ButtonType.primary,
-      this.tooltipDirection = TooltipDirection.bottom,
-      this.elevation,
-      this.size = 40,
-      this.isLoading = false,
-      this.isDisabled = false,
-      this.margin});
+  const PanopticIconButton({
+    super.key,
+    this.onTap,
+    this.icon,
+    this.widget,
+    this.color,
+    this.foregroundColor,
+    this.gradient,
+    this.badge,
+    this.tooltip,
+    this.badgeAlignment = Alignment.topRight,
+    this.badgeColor,
+    this.badgeTextColor,
+    this.borderSide,
+    this.buttonType = ButtonType.primary,
+    this.tooltipDirection = TooltipDirection.bottom,
+    this.elevation,
+    this.size = 40,
+    this.isLoading = false,
+    this.isDisabled = false,
+    this.margin,
+  });
 
   @override
   State<PanopticIconButton> createState() => _PanopticIconButtonState();
@@ -56,164 +57,131 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
     assert(widget.icon != null || widget.widget != null,
         "Icon or widget must be provided");
 
-    return widget.badge != null
-        ? Badge(
-            alignment: widget.badgeAlignment,
-            backgroundColor:
-                widget.badgeColor ?? Theme.of(context).colorScheme.secondary,
-            textColor: widget.badgeTextColor ??
-                Theme.of(context).colorScheme.onSecondary,
-            label: widget.badge,
-            child: widget.tooltip?.isNotEmpty == true
-                ? _buildTooltip()
-                : _buildButton())
-        : widget.tooltip?.isNotEmpty == true
-            ? _buildTooltip()
-            : _buildButton();
+    Widget button = _buildButton();
+    if (widget.tooltip?.isNotEmpty == true) {
+      button = _buildTooltip(button);
+    }
+    if (widget.badge != null) {
+      button = Badge(
+        alignment: widget.badgeAlignment,
+        backgroundColor:
+            widget.badgeColor ?? Theme.of(context).colorScheme.secondary,
+        textColor:
+            widget.badgeTextColor ?? Theme.of(context).colorScheme.onSecondary,
+        label: widget.badge,
+        child: button,
+      );
+    }
+    return button;
   }
 
-  _buildButton() => Container(
-        margin: widget.margin,
-        constraints:
-            BoxConstraints.tightFor(width: widget.size, height: widget.size),
-        child: MaterialButton(
-            disabledColor: _getButtonColor(),
-            onPressed:
-                widget.isDisabled || widget.isLoading ? null : widget.onTap,
-            padding: const EdgeInsets.all(0),
-            elevation: widget.elevation,
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-              side: widget.borderSide ??
-                  (widget.buttonType == ButtonType.bordered
-                      ? BorderSide(color: Theme.of(context).colorScheme.primary)
-                      : BorderSide.none),
-            ),
-            color: _getButtonColor(),
-            child: Container(
-              decoration: widget.gradient != null
-                  ? BoxDecoration(
-                      gradient: widget.gradient,
-                      borderRadius:
-                          BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+  Widget _buildButton() {
+    return Container(
+      margin: widget.margin,
+      constraints:
+          BoxConstraints.tightFor(width: widget.size, height: widget.size),
+      child: MaterialButton(
+        disabledColor: _getButtonColor(),
+        onPressed: widget.isDisabled || widget.isLoading ? null : widget.onTap,
+        padding: const EdgeInsets.all(0),
+        elevation: widget.elevation,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+          side: widget.borderSide ?? _getBorderSide(),
+        ),
+        color: _getButtonColor(),
+        child: Container(
+          decoration: widget.gradient != null
+              ? BoxDecoration(
+                  gradient: widget.gradient,
+                  borderRadius:
+                      BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+                )
+              : null,
+          child: widget.isLoading
+              ? Center(
+                  child: SizedBox(
+                    height: widget.size / 2,
+                    width: widget.size / 2,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.0,
+                      valueColor: AlwaysStoppedAnimation(_getTextColor()),
+                    ),
+                  ),
+                )
+              : widget.icon != null
+                  ? PanopticIcon(
+                      icon: widget.icon!,
+                      color: widget.foregroundColor ?? _getTextColor(),
+                      size: widget.size / 2,
                     )
-                  : null,
-              child: widget.isLoading
-                  ? Center(
-                      child: SizedBox(
-                        height: widget.size / 2,
-                        width: widget.size / 2,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.0,
-                          valueColor: AlwaysStoppedAnimation(_getTextColor()),
-                        ),
-                      ),
-                    )
-                  : widget.icon != null
-                      ? PanopticIcon(
-                          icon: widget.icon!,
-                          color: widget.foregroundColor ?? _getTextColor(),
-                          size: widget.size / 2,
-                        )
-                      : widget.widget,
-            )),
-      );
+                  : widget.widget,
+        ),
+      ),
+    );
+  }
 
-  _buildTooltip() {
+  Widget _buildTooltip(Widget child) {
+    return Tooltip(
+      message: widget.tooltip!,
+      textStyle: _getTooltipTextStyle(),
+      waitDuration: const Duration(seconds: 3),
+      preferBelow: widget.tooltipDirection == TooltipDirection.bottom,
+      enableTapToDismiss: true,
+      margin: _getTooltipMargin(),
+      verticalOffset: _getTooltipVerticalOffset(),
+      decoration: BoxDecoration(
+        color: _getTooltipBackgroundColor(),
+        borderRadius: BorderRadius.circular(CoreValues.cornerRadius / 2),
+      ),
+      child: child,
+    );
+  }
+
+  TextStyle? _getTooltipTextStyle() {
+    return ThemeProvider.controllerOf(context)
+            .currentThemeId
+            .startsWith('white')
+        ? TextStyle(color: Theme.of(context).colorScheme.onSurface)
+        : null;
+  }
+
+  EdgeInsets? _getTooltipMargin() {
     switch (widget.tooltipDirection) {
-      case TooltipDirection.top:
-        return Tooltip(
-          message: widget.tooltip!,
-          textStyle: ThemeProvider.controllerOf(context)
-                  .currentThemeId
-                  .startsWith('white')
-              ? TextStyle(color: Theme.of(context).colorScheme.onSurface)
-              : null,
-          waitDuration: const Duration(seconds: 3),
-          preferBelow: false,
-          enableTapToDismiss: true,
-          decoration: BoxDecoration(
-            color: ThemeProvider.controllerOf(context)
-                    .currentThemeId
-                    .startsWith('white')
-                ? Theme.of(context).colorScheme.surface
-                : Theme.of(context).colorScheme.secondary.withOpacity(0.9),
-            borderRadius: BorderRadius.circular(CoreValues.cornerRadius / 2),
-          ),
-          child: _buildButton(),
-        );
-      case TooltipDirection.bottom:
-        return Tooltip(
-          message: widget.tooltip!,
-          textStyle: ThemeProvider.controllerOf(context)
-                  .currentThemeId
-                  .startsWith('white')
-              ? TextStyle(color: Theme.of(context).colorScheme.onSurface)
-              : null,
-          waitDuration: const Duration(seconds: 3),
-          preferBelow: true,
-          enableTapToDismiss: true,
-          decoration: BoxDecoration(
-            color: ThemeProvider.controllerOf(context)
-                    .currentThemeId
-                    .startsWith('white')
-                ? Theme.of(context).colorScheme.surface
-                : Theme.of(context).colorScheme.secondary.withOpacity(0.9),
-            borderRadius: BorderRadius.circular(CoreValues.cornerRadius / 2),
-          ),
-          child: _buildButton(),
-        );
       case TooltipDirection.left:
-        return Tooltip(
-          textStyle: ThemeProvider.controllerOf(context)
-                  .currentThemeId
-                  .startsWith('white')
-              ? TextStyle(color: Theme.of(context).colorScheme.onSurface)
-              : null,
-          message: widget.tooltip!,
-          waitDuration: const Duration(seconds: 3),
-          preferBelow: false,
-          margin: const EdgeInsets.only(right: 50),
-          enableTapToDismiss: true,
-          verticalOffset: -15,
-          decoration: BoxDecoration(
-            color: ThemeProvider.controllerOf(context)
-                    .currentThemeId
-                    .startsWith('white')
-                ? Theme.of(context).colorScheme.surface
-                : Theme.of(context).colorScheme.secondary.withOpacity(0.9),
-            borderRadius: BorderRadius.circular(CoreValues.cornerRadius / 2),
-          ),
-          child: _buildButton(),
-        );
+        return const EdgeInsets.only(right: 50);
       case TooltipDirection.right:
-        return Tooltip(
-          message: widget.tooltip!,
-          textStyle: ThemeProvider.controllerOf(context)
-                  .currentThemeId
-                  .startsWith('white')
-              ? TextStyle(color: Theme.of(context).colorScheme.onSurface)
-              : null,
-          waitDuration: const Duration(seconds: 3),
-          preferBelow: false,
-          margin: const EdgeInsets.only(left: 50),
-          enableTapToDismiss: true,
-          verticalOffset: -15,
-          decoration: BoxDecoration(
-            color: ThemeProvider.controllerOf(context)
-                    .currentThemeId
-                    .startsWith('white')
-                ? Theme.of(context).colorScheme.surface
-                : Theme.of(context).colorScheme.secondary.withOpacity(0.9),
-            borderRadius: BorderRadius.circular(CoreValues.cornerRadius / 2),
-          ),
-          child: _buildButton(),
-        );
+        return const EdgeInsets.only(left: 50);
+      default:
+        return null;
     }
   }
 
-  _getButtonColor() {
+  double _getTooltipVerticalOffset() {
+    switch (widget.tooltipDirection) {
+      case TooltipDirection.left:
+      case TooltipDirection.right:
+        return -15;
+      default:
+        return 0;
+    }
+  }
+
+  Color _getTooltipBackgroundColor() {
+    return ThemeProvider.controllerOf(context)
+            .currentThemeId
+            .startsWith('white')
+        ? Theme.of(context).colorScheme.surface
+        : Theme.of(context).colorScheme.secondary.withOpacity(0.9);
+  }
+
+  BorderSide _getBorderSide() {
+    return widget.buttonType == ButtonType.bordered
+        ? BorderSide(color: Theme.of(context).colorScheme.primary)
+        : BorderSide.none;
+  }
+
+  Color _getButtonColor() {
     if (ThemeProvider.controllerOf(context)
         .currentThemeId
         .startsWith('white')) {
@@ -232,7 +200,7 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
     }
   }
 
-  _getTextColor() {
+  Color _getTextColor() {
     if (ThemeProvider.controllerOf(context)
         .currentThemeId
         .startsWith('white')) {

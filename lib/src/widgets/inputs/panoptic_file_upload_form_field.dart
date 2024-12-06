@@ -19,8 +19,7 @@ class PanopticFileUploadFormField
     List<String>? allowedExtensions,
     String uploadedBy = 'Form',
     String? hintText,
-    //Use the alternative bg color
-    alternative = false,
+    bool alternative = false,
     bool fullWidth = false,
     String? label,
   }) : super(
@@ -29,66 +28,70 @@ class PanopticFileUploadFormField
               : AutovalidateMode.disabled,
           builder: (FormFieldState<List<CoreBaseFile>> field) {
             final state = field as PanopticFileUploadFormFieldState;
+
+            Future<void> pickFiles() async {
+              FilePickerResult? result = await FilePicker.platform.pickFiles(
+                allowMultiple: true,
+                withData: true,
+                allowedExtensions: allowedExtensions,
+                type:
+                    allowedExtensions == null ? FileType.any : FileType.custom,
+              );
+
+              if (result != null) {
+                for (var file in result.files) {
+                  state.didChange([
+                    ...state.value!,
+                    CoreBaseFile(
+                      id: 0,
+                      uploadedBy: uploadedBy,
+                      documentName: file.name,
+                      contentType: CoreBaseFile.convertExtensionToMimeType(
+                          file.extension!),
+                      content: file.bytes,
+                      uploadedDate: DateTime.now(),
+                    ),
+                  ]);
+
+                  if (onChanged != null) {
+                    onChanged(state.value!);
+                  }
+                }
+              }
+            }
+
+            Widget buildFileChips() {
+              return Wrap(
+                crossAxisAlignment: WrapCrossAlignment.end,
+                alignment: WrapAlignment.end,
+                children: [
+                  if (state.value != null && state.value!.isNotEmpty)
+                    for (var file in state.value!)
+                      PanopticChip(
+                        margin: const EdgeInsets.all(5),
+                        label: file.documentName!,
+                        onDelete: () => state.didChange(
+                          state.value!
+                              .where((element) => element != file)
+                              .toList(),
+                        ),
+                      ),
+                ],
+              );
+            }
+
             return fullWidth
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       PanopticButton(
                         isDisabled: !enabled,
-                        onPressed: () async {
-                          FilePickerResult? result = await FilePicker.platform
-                              .pickFiles(
-                                  allowMultiple: true,
-                                  withData: true,
-                                  allowedExtensions: allowedExtensions,
-                                  type: allowedExtensions == null
-                                      ? FileType.any
-                                      : FileType.custom);
-
-                          if (result != null) {
-                            for (var file in result.files) {
-                              state.didChange([
-                                ...state.value!,
-                                CoreBaseFile(
-                                    id: 0,
-                                    uploadedBy: uploadedBy,
-                                    documentName: file.name,
-                                    contentType:
-                                        CoreBaseFile.convertExtensionToMimeType(
-                                            file.extension!),
-                                    content: file.bytes,
-                                    uploadedDate: DateTime.now())
-                              ]);
-
-                              if (onChanged != null) {
-                                onChanged(state.value!);
-                              }
-                            }
-                          } else {
-                            // User canceled the picker
-                          }
-                        },
+                        onPressed: pickFiles,
                         label: "Upload Files",
                         icon: PanopticIcons.upload,
                         buttonType: ButtonType.bordered,
                       ),
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.end,
-                        alignment: WrapAlignment.end,
-                        children: [
-                          if (state.value != null &&
-                              state.value?.isNotEmpty == true) ...{
-                            for (var file in state.value!)
-                              PanopticChip(
-                                margin: const EdgeInsets.all(5),
-                                label: file.documentName!,
-                                onDelete: () => state.didChange(state.value!
-                                    .where((element) => element != file)
-                                    .toList()),
-                              )
-                          }
-                        ],
-                      )
+                      buildFileChips(),
                     ],
                   )
                 : Column(
@@ -108,7 +111,7 @@ class PanopticFileUploadFormField
                                       .textTheme
                                       .bodyLarge,
                                 ),
-                                if (hintText != null) ...{
+                                if (hintText != null)
                                   Tooltip(
                                     message: hintText,
                                     preferBelow: true,
@@ -125,8 +128,7 @@ class PanopticFileUploadFormField
                                           .onSurface
                                           .withAlpha(100),
                                     ),
-                                  )
-                                }
+                                  ),
                               ],
                             ),
                           const Padding(padding: EdgeInsets.all(5)),
@@ -139,109 +141,57 @@ class PanopticFileUploadFormField
                                 ),
                                 width: forceColumn ? null : 400,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                        CoreValues.cornerRadius * 0.8),
-                                    color: (alternative
-                                            ? Theme.of(state.context)
-                                                .colorScheme
-                                                .surfaceContainer
-                                            : Theme.of(state.context)
-                                                .colorScheme
-                                                .surface)
-                                        .withAlpha(55)),
+                                  borderRadius: BorderRadius.circular(
+                                      CoreValues.cornerRadius * 0.8),
+                                  color: (alternative
+                                          ? Theme.of(state.context)
+                                              .colorScheme
+                                              .surfaceContainer
+                                          : Theme.of(state.context)
+                                              .colorScheme
+                                              .surface)
+                                      .withAlpha(55),
+                                ),
                                 child: Column(
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
                                     PanopticButton(
                                       isDisabled: !enabled,
-                                      onPressed: () async {
-                                        FilePickerResult? result =
-                                            await FilePicker.platform.pickFiles(
-                                                allowMultiple: true,
-                                                withData: true,
-                                                allowedExtensions:
-                                                    allowedExtensions,
-                                                type: allowedExtensions == null
-                                                    ? FileType.any
-                                                    : FileType.custom);
-
-                                        if (result != null) {
-                                          for (var file in result.files) {
-                                            state.didChange([
-                                              ...state.value!,
-                                              CoreBaseFile(
-                                                  id: 0,
-                                                  uploadedBy: uploadedBy,
-                                                  documentName: file.name,
-                                                  contentType: CoreBaseFile
-                                                      .convertExtensionToMimeType(
-                                                          file.extension!),
-                                                  content: file.bytes,
-                                                  uploadedDate: DateTime.now())
-                                            ]);
-
-                                            if (onChanged != null) {
-                                              onChanged(state.value!);
-                                            }
-                                          }
-                                        } else {
-                                          // User canceled the picker
-                                        }
-                                      },
+                                      onPressed: pickFiles,
                                       label: "Upload Files",
                                       icon: PanopticIcons.upload,
                                       buttonType: ButtonType.bordered,
                                     ),
-                                    Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.end,
-                                      alignment: WrapAlignment.end,
-                                      children: [
-                                        if (state.value != null &&
-                                            state.value?.isNotEmpty ==
-                                                true) ...{
-                                          for (var file in state.value!)
-                                            PanopticChip(
-                                              margin: const EdgeInsets.all(5),
-                                              label: file.documentName!,
-                                              onDelete: () => state.didChange(
-                                                  state.value!
-                                                      .where((element) =>
-                                                          element != file)
-                                                      .toList()),
-                                            )
-                                        }
-                                      ],
-                                    )
+                                    buildFileChips(),
                                   ],
                                 ),
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
-                      state.hasError
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  state.errorText ?? 'An error occurred',
-                                  style: Theme.of(state.context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                          color: Theme.of(state.context)
-                                              .colorScheme
-                                              .error),
-                                )
-                              ],
-                            )
-                          : Container()
+                      if (state.hasError)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              state.errorText ?? 'An error occurred',
+                              style: Theme.of(state.context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                      color: Theme.of(state.context)
+                                          .colorScheme
+                                          .error),
+                            ),
+                          ],
+                        ),
                     ],
                   );
           },
         );
+
   @override
   PanopticFormFieldDecorationState<PanopticFileUploadFormField,
       List<CoreBaseFile>> createState() => PanopticFileUploadFormFieldState();

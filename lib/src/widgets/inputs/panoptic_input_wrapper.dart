@@ -18,6 +18,9 @@ class PanopticInputWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textColor = theme.colorScheme.onSurface;
+
     return Column(
       crossAxisAlignment: crossAxisAlignment,
       mainAxisAlignment: mainAxisAlignment,
@@ -25,11 +28,8 @@ class PanopticInputWrapper extends StatelessWidget {
         Row(
           children: [
             Text(label,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(color: Theme.of(context).colorScheme.onSurface)),
-            if (hintText != null) ...{
+                style: theme.textTheme.labelSmall!.copyWith(color: textColor)),
+            if (hintText != null)
               Tooltip(
                 message: hintText,
                 preferBelow: true,
@@ -39,10 +39,9 @@ class PanopticInputWrapper extends StatelessWidget {
                   icon: PanopticIcons.infoRound,
                   size: 15,
                   margin: const EdgeInsets.only(left: 5, top: 2),
-                  color: Theme.of(context).colorScheme.onSurface.withAlpha(100),
+                  color: textColor.withAlpha(100),
                 ),
-              )
-            }
+              ),
           ],
         ),
         const SizedBox(height: 4),

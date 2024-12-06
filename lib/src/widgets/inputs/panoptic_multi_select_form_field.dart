@@ -18,7 +18,7 @@ class PanopticMultiSelectFormField
     bool forceColumn = false,
     String? label,
     List<DropdownMenuItem<dynamic>>? items,
-    //Use the alternative bg color
+    // Use the alternative bg color
     alternative = false,
     bool fullWidth = false,
   }) : super(
@@ -27,36 +27,38 @@ class PanopticMultiSelectFormField
               : AutovalidateMode.disabled,
           builder: (FormFieldState<List<dynamic>> field) {
             final state = field as PanopticMultiSelectFormFieldState;
+
+            Widget buildCheckboxListTile(DropdownMenuItem<dynamic> item) {
+              return CheckboxListTile(
+                enabled: enabled,
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+                ),
+                checkboxShape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(CoreValues.cornerRadius / 4),
+                ),
+                title: item.child,
+                value: state.value!.contains(item.value),
+                onChanged: (bool? value) {
+                  if (value!) {
+                    state.didChange([...state.value!, item.value]);
+                  } else {
+                    state.didChange(state.value!
+                        .where((element) => element != item.value)
+                        .toList());
+                  }
+                  if (onChanged != null) {
+                    onChanged(state.value);
+                  }
+                },
+              );
+            }
+
             return fullWidth
                 ? Column(
-                    children: [
-                      for (var item in items!)
-                        CheckboxListTile(
-                          enabled: enabled,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                CoreValues.cornerRadius * 0.8),
-                          ),
-                          checkboxShape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                CoreValues.cornerRadius / 4),
-                          ),
-                          title: item.child,
-                          value: state.value!.contains(item.value),
-                          onChanged: (bool? value) {
-                            if (value!) {
-                              state.didChange([...state.value!, item.value]);
-                            } else {
-                              state.didChange(state.value!
-                                  .where((element) => element != item.value)
-                                  .toList());
-                            }
-                            if (onChanged != null) {
-                              onChanged(state.value);
-                            }
-                          },
-                        ),
-                    ],
+                    children: items!.map(buildCheckboxListTile).toList(),
                   )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,7 +77,7 @@ class PanopticMultiSelectFormField
                                       .textTheme
                                       .bodyLarge,
                                 ),
-                                if (hintText != null) ...{
+                                if (hintText != null)
                                   Tooltip(
                                     message: hintText,
                                     preferBelow: true,
@@ -92,8 +94,7 @@ class PanopticMultiSelectFormField
                                           .onSurface
                                           .withAlpha(100),
                                     ),
-                                  )
-                                }
+                                  ),
                               ],
                             ),
                           const Padding(padding: EdgeInsets.all(5)),
@@ -124,61 +125,33 @@ class PanopticMultiSelectFormField
                             ),
                             width: forceColumn ? null : 400,
                             child: Column(
-                              children: [
-                                for (var item in items!)
-                                  CheckboxListTile(
-                                    enabled: enabled,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          CoreValues.cornerRadius * 0.8),
-                                    ),
-                                    checkboxShape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          CoreValues.cornerRadius / 4),
-                                    ),
-                                    title: item.child,
-                                    value: state.value!.contains(item.value),
-                                    onChanged: (bool? value) {
-                                      if (value!) {
-                                        state.didChange(
-                                            [...state.value!, item.value]);
-                                      } else {
-                                        state.didChange(state.value!
-                                            .where((element) =>
-                                                element != item.value)
-                                            .toList());
-                                      }
-                                      if (onChanged != null) {
-                                        onChanged(state.value);
-                                      }
-                                    },
-                                  ),
-                              ],
+                              children:
+                                  items!.map(buildCheckboxListTile).toList(),
                             ),
                           ),
                         ],
                       ),
-                      state.hasError
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  state.errorText ?? 'An error occurred',
-                                  style: Theme.of(state.context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                          color: Theme.of(state.context)
-                                              .colorScheme
-                                              .error),
-                                )
-                              ],
-                            )
-                          : Container()
+                      if (state.hasError)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              state.errorText ?? 'An error occurred',
+                              style: Theme.of(state.context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                      color: Theme.of(state.context)
+                                          .colorScheme
+                                          .error),
+                            ),
+                          ],
+                        ),
                     ],
                   );
           },
         );
+
   @override
   PanopticFormFieldDecorationState<PanopticMultiSelectFormField, List<dynamic>>
       createState() => PanopticMultiSelectFormFieldState();

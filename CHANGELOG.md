@@ -1,3 +1,10 @@
+## 2024.12.3
+
+* Refactored All Inputs and Actions
+* Made Keyboard Action Optional
+* Improved Keyboard Action
+* Added Colour Changes to Large Buttons
+
 ## 2024.12.2
 
 * Added Tooltip to Chip and CollapsedLabel to Card

@@ -19,47 +19,47 @@ class PanopticSegmentedFormField extends PanopticFormFieldDecoration<int> {
     Map<int, String>? items,
     bool forceColumn = false,
     bool fullWidth = false,
-    //Use the alternative bg color
-    alternative = false,
+    bool alternative = false,
   }) : super(
           autovalidateMode: autoValidate
               ? AutovalidateMode.always
               : AutovalidateMode.disabled,
           builder: (FormFieldState<int> field) {
             final state = field as PanopticSegmentedFormFieldState;
+            final theme = Theme.of(state.context);
+            final colorScheme = theme.colorScheme;
+            final surfaceColor = alternative
+                ? colorScheme.surfaceContainer
+                : colorScheme.surface;
+
+            Widget buildSegmentedControl() {
+              return MaterialSegmentedControl(
+                disabledChildren: enabled ? null : items!.keys.toList(),
+                borderRadius: CoreValues.cornerRadius * 0.8,
+                borderColor: colorScheme.primary,
+                unselectedColor: surfaceColor.withAlpha(55),
+                disabledColor: surfaceColor,
+                selectedColor: colorScheme.primary,
+                children: items!.map((key, value) => MapEntry(
+                    key,
+                    Text(value,
+                        style: TextStyle(
+                          color: !enabled
+                              ? colorScheme.onSurface
+                              : (state.value == key
+                                  ? colorScheme.onPrimary
+                                  : colorScheme.onSurface),
+                        )))),
+                onSegmentTapped: (value) {
+                  state.didChange(value);
+                  onChanged?.call(value as int?);
+                },
+                selectionIndex: state.value,
+              );
+            }
+
             return fullWidth
-                ? MaterialSegmentedControl(
-                    disabledChildren: enabled ? null : items!.keys.toList(),
-                    borderRadius: CoreValues.cornerRadius * 0.8,
-                    borderColor: Theme.of(state.context).colorScheme.primary,
-                    unselectedColor: (alternative
-                            ? Theme.of(state.context)
-                                .colorScheme
-                                .surfaceContainer
-                            : Theme.of(state.context).colorScheme.surface)
-                        .withAlpha(55),
-                    disabledColor: (alternative
-                        ? Theme.of(state.context).colorScheme.surfaceContainer
-                        : Theme.of(state.context).colorScheme.surface),
-                    selectedColor: Theme.of(state.context).colorScheme.primary,
-                    children: items!.map((key, value) => MapEntry(
-                        key,
-                        Text(value,
-                            style: TextStyle(
-                              color: state.value == key
-                                  ? Theme.of(state.context)
-                                      .colorScheme
-                                      .onPrimary
-                                  : Theme.of(state.context)
-                                      .colorScheme
-                                      .onSurface,
-                            )))),
-                    onSegmentTapped: (value) {
-                      state.didChange(value);
-                      onChanged?.call(value as int?);
-                    },
-                    selectionIndex: state.value,
-                  )
+                ? buildSegmentedControl()
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -73,11 +73,9 @@ class PanopticSegmentedFormField extends PanopticFormFieldDecoration<int> {
                               children: [
                                 Text(
                                   label,
-                                  style: Theme.of(state.context)
-                                      .textTheme
-                                      .bodyLarge,
+                                  style: theme.textTheme.bodyLarge,
                                 ),
-                                if (hintText != null) ...{
+                                if (hintText != null)
                                   Tooltip(
                                     message: hintText,
                                     preferBelow: true,
@@ -89,13 +87,10 @@ class PanopticSegmentedFormField extends PanopticFormFieldDecoration<int> {
                                       size: 15,
                                       margin: const EdgeInsets.only(
                                           left: 5, top: 2),
-                                      color: Theme.of(state.context)
-                                          .colorScheme
-                                          .onSurface
-                                          .withAlpha(100),
+                                      color:
+                                          colorScheme.onSurface.withAlpha(100),
                                     ),
-                                  )
-                                }
+                                  ),
                               ],
                             ),
                           const Padding(padding: EdgeInsets.all(5)),
@@ -104,71 +99,21 @@ class PanopticSegmentedFormField extends PanopticFormFieldDecoration<int> {
                               maxWidth: MediaQuery.of(state.context).size.width,
                             ),
                             width: forceColumn ? null : 400,
-                            child: MaterialSegmentedControl(
-                              disabledChildren:
-                                  enabled ? null : items!.keys.toList(),
-                              borderRadius: CoreValues.cornerRadius * 0.8,
-                              borderColor:
-                                  Theme.of(state.context).colorScheme.primary,
-                              unselectedColor: (alternative
-                                      ? Theme.of(state.context)
-                                          .colorScheme
-                                          .surfaceContainer
-                                      : Theme.of(state.context)
-                                          .colorScheme
-                                          .surface)
-                                  .withAlpha(55),
-                              disabledColor: (alternative
-                                  ? Theme.of(state.context)
-                                      .colorScheme
-                                      .surfaceContainer
-                                  : Theme.of(state.context)
-                                      .colorScheme
-                                      .surface),
-                              selectedColor:
-                                  Theme.of(state.context).colorScheme.primary,
-                              children: items!.map((key, value) => MapEntry(
-                                  key,
-                                  Text(value,
-                                      style: TextStyle(
-                                        color: !enabled
-                                            ? Theme.of(state.context)
-                                                .colorScheme
-                                                .onSurface
-                                            : (state.value == key
-                                                ? Theme.of(state.context)
-                                                    .colorScheme
-                                                    .onPrimary
-                                                : Theme.of(state.context)
-                                                    .colorScheme
-                                                    .onSurface),
-                                      )))),
-                              onSegmentTapped: (value) {
-                                state.didChange(value);
-                                onChanged?.call(value as int?);
-                              },
-                              selectionIndex: state.value,
-                            ),
+                            child: buildSegmentedControl(),
                           ),
                         ],
                       ),
-                      state.hasError
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  state.errorText ?? 'An error occurred',
-                                  style: Theme.of(state.context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                          color: Theme.of(state.context)
-                                              .colorScheme
-                                              .error),
-                                )
-                              ],
-                            )
-                          : Container()
+                      if (state.hasError)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              state.errorText ?? 'An error occurred',
+                              style: theme.textTheme.labelMedium!
+                                  .copyWith(color: colorScheme.error),
+                            ),
+                          ],
+                        ),
                     ],
                   );
           },

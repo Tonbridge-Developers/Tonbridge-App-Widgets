@@ -18,9 +18,7 @@ class PanopticLoadingDropdownWrapper extends StatelessWidget {
     this.isLoading,
   });
 
-  double? getWidth() {
-    return child.forceColumn || child.fullWidth ? null : 400;
-  }
+  double? getWidth() => child.forceColumn || child.fullWidth ? null : 400;
 
   Color? getColor(BuildContext context) {
     return (child.alternative
@@ -32,25 +30,18 @@ class PanopticLoadingDropdownWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     assert(future != null || isLoading != null);
-    if (future != null) {
-      assert(itemsBuilder != null);
-    }
+    if (future != null) assert(itemsBuilder != null);
 
     if (isLoading != null) {
-      if (isLoading!) {
-        return _buildLoadingWidget(context);
-      }
-      return child;
+      return isLoading! ? _buildLoadingWidget(context) : child;
     }
 
     return FutureBuilder(
       future: future,
       builder: (ctx, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          return _buildLoadingWidget(context);
-        } else {
-          return _buildChildWidget(context, snapshot);
-        }
+        return snapshot.connectionState != ConnectionState.done
+            ? _buildLoadingWidget(context)
+            : _buildChildWidget(context, snapshot);
       },
     );
   }
@@ -81,18 +72,14 @@ class PanopticLoadingDropdownWrapper extends StatelessWidget {
 
   Widget _buildLoadingWidget(BuildContext context) {
     Widget loadingWidget = Container(
-      constraints: BoxConstraints(
-        maxWidth: MediaQuery.of(context).size.width,
-      ),
+      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
       width: getWidth(),
       height: 48,
       decoration: BoxDecoration(
         color: getColor(context),
         borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
         border: Border.all(
-          width: 1,
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
+            width: 1, color: Theme.of(context).colorScheme.onSurface),
       ),
       child: const PanopticLoading(
           isLoading: true, loadingType: LoadingType.circular),
@@ -102,11 +89,8 @@ class PanopticLoadingDropdownWrapper extends StatelessWidget {
         ? null
         : Row(
             children: [
-              Text(
-                child.label!,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              if (child.hintText != null) ...{
+              Text(child.label!, style: Theme.of(context).textTheme.bodyLarge),
+              if (child.hintText != null)
                 Tooltip(
                   message: child.hintText,
                   preferBelow: true,
@@ -119,8 +103,7 @@ class PanopticLoadingDropdownWrapper extends StatelessWidget {
                     color:
                         Theme.of(context).colorScheme.onSurface.withAlpha(100),
                   ),
-                )
-              }
+                ),
             ],
           );
 

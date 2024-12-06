@@ -11,13 +11,13 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
   final bool checked;
   final bool alternative;
   final bool fullWidth;
-  // final bool isLoading;
   final String? label;
   final String? hintText;
   final String placeholder;
   final Widget? icon;
   final Widget? nullLabel;
   final List<DropdownMenuItem<dynamic>>? items;
+
   PanopticDropdownFormField({
     super.key,
     super.onSaved,
@@ -35,445 +35,338 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
     this.checked = false,
     bool checkedEnabled = false,
     this.items,
-    //Use the alternative bg color
     this.alternative = false,
     this.fullWidth = false,
     this.nullLabel,
-    // this.isLoading = false,
   }) : super(
           autovalidateMode: autoValidate
               ? AutovalidateMode.always
               : AutovalidateMode.disabled,
           builder: (FormFieldState<dynamic> field) {
             final state = field as PanopticDropdownFormFieldState;
-            Widget? labelWidget = label.isNullOrWhitespace
-                ? null
-                : Row(
-                    children: [
-                      Text(
-                        label!,
-                        style: Theme.of(state.context).textTheme.bodyLarge,
-                      ),
-                      if (hintText != null) ...{
-                        Tooltip(
-                          message: hintText,
-                          preferBelow: true,
-                          triggerMode: kIsWeb ? null : TooltipTriggerMode.tap,
-                          verticalOffset: 10,
-                          child: PanopticIcon(
-                            icon: PanopticIcons.infoRound,
-                            size: 15,
-                            margin: const EdgeInsets.only(left: 5, top: 2),
-                            color: Theme.of(state.context)
-                                .colorScheme
-                                .onSurface
-                                .withAlpha(100),
-                          ),
-                        )
-                      }
-                    ],
-                  );
-            // if (isLoading) {
-            //   Widget loadingWidget = Container(
-            //     constraints: BoxConstraints(
-            //       maxWidth: MediaQuery.of(state.context).size.width,
-            //     ),
-            //     width: forceColumn ? null : 400,
-            //     height: 48,
-            //     decoration: BoxDecoration(
-            //       color: (alternative
-            //               ? Theme.of(state.context).colorScheme.surfaceContainer
-            //               : Theme.of(state.context).colorScheme.surface)
-            //           .withAlpha(55),
-            //       borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-            //       border: Border.all(
-            //         width: 1,
-            //         color: Theme.of(state.context).colorScheme.onSurface,
-            //       ),
-            //     ),
-            //     child: PanopticLoading(isLoading: isLoading, loadingType: LoadingType.circular),
-            //   );
-            //   return fullWidth
-            //       ? loadingWidget
-            //       : PanopticResponsiveLayout(
-            //           forceColumn: forceColumn,
-            //           childrenPadding: const EdgeInsets.all(2),
-            //           rowCrossAxisAlignment: CrossAxisAlignment.center,
-            //           children: [
-            //             if (labelWidget != null) labelWidget,
-            //             const Padding(padding: EdgeInsets.all(5)),
-            //             loadingWidget,
-            //           ],
-            //         );
-            // }
+            final labelWidget = _buildLabelWidget(label, hintText, state);
+            final dropdownDecoration = _buildInputDecoration(
+                state, alternative, placeholder, checkedEnabled, enabled);
 
             return fullWidth
-                ? DropdownButtonFormField<dynamic>(
-                    key: Key(name),
-                    isExpanded: true,
-                    disabledHint: Text(placeholder,
-                        style: const TextStyle().copyWith(
-                            color: Theme.of(state.context).disabledColor)),
-                    value: state.value,
-                    items: _buildItems(items, nullLabel),
-                    onChanged: enabled
-                        ? (value) {
-                            onChanged?.call(value);
-                          }
-                        : null,
-                    enableFeedback: true,
-                    autovalidateMode: autoValidate
-                        ? AutovalidateMode.always
-                        : AutovalidateMode.disabled,
-                    onSaved: onSaved,
-                    hint: Text(placeholder),
-                    icon: icon,
-                    decoration: InputDecoration(
-                        fillColor: (alternative
-                                ? Theme.of(state.context)
-                                    .colorScheme
-                                    .surfaceContainer
-                                : Theme.of(state.context).colorScheme.surface)
-                            .withAlpha(55),
-                        filled: true,
-                        suffixIcon:
-                            state.value != null && checkedEnabled && enabled
-                                ? GestureDetector(
-                                    onTap: () {
-                                      state.didChange(null);
-                                    },
-                                    child: Icon(
-                                      Icons.clear,
-                                      color: Theme.of(state.context)
-                                          .colorScheme
-                                          .onSurface,
-                                    ),
-                                  )
-                                : null,
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              CoreValues.cornerRadius * 0.8),
-                          borderSide: BorderSide(
-                              color: state.hasError
-                                  ? Theme.of(state.context).colorScheme.error
-                                  : Theme.of(state.context)
-                                      .colorScheme
-                                      .onSurface),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              CoreValues.cornerRadius * 0.8),
-                          borderSide: BorderSide(
-                              color: state.hasError
-                                  ? Theme.of(state.context).colorScheme.error
-                                  : enabled
-                                      ? Theme.of(state.context)
-                                          .colorScheme
-                                          .outline
-                                      : Theme.of(state.context)
-                                          .colorScheme
-                                          .outline
-                                          .withOpacity(0.4)),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              CoreValues.cornerRadius * 0.8),
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: state.hasError
-                                ? Theme.of(state.context).colorScheme.error
-                                : Theme.of(state.context).colorScheme.onSurface,
-                          ),
-                        ),
-                        error: const SizedBox.shrink(),
-                        contentPadding: const EdgeInsets.all(15)),
-                    borderRadius:
-                        BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      PanopticResponsiveLayout(
-                        forceColumn: forceColumn,
-                        childrenPadding: const EdgeInsets.all(2),
-                        rowCrossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          if (labelWidget != null) labelWidget,
-                          const Padding(padding: EdgeInsets.all(5)),
-                          Container(
-                            constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(state.context).size.width,
-                            ),
-                            width: forceColumn ? null : 400,
-                            child: checked // If checked == true
-                                ? Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Expanded(
-                                        flex: 4,
-                                        child: DropdownButtonFormField<dynamic>(
-                                          isExpanded: true,
-                                          key: Key(name),
-                                          disabledHint: Text(placeholder,
-                                              style: const TextStyle().copyWith(
-                                                  color: Theme.of(state.context)
-                                                      .disabledColor)),
-                                          value: state.value,
-                                          items: _buildItems(items, nullLabel),
-                                          onChanged: enabled && checkedEnabled
-                                              ? (value) {
-                                                  onChanged?.call(value);
-                                                }
-                                              : null,
-                                          enableFeedback: true,
-                                          autovalidateMode: autoValidate
-                                              ? AutovalidateMode.always
-                                              : AutovalidateMode.disabled,
-                                          onSaved: onSaved,
-                                          hint: Text(
-                                            placeholder,
-                                          ),
-                                          icon: icon,
-                                          autofocus: false,
-                                          decoration: InputDecoration(
-                                              fillColor: (alternative
-                                                      ? Theme.of(state.context)
-                                                          .colorScheme
-                                                          .surfaceContainer
-                                                      : Theme.of(state.context)
-                                                          .colorScheme
-                                                          .surface)
-                                                  .withAlpha(55),
-                                              filled: true,
-                                              suffixIcon: state.value != null &&
-                                                      checkedEnabled &&
-                                                      enabled
-                                                  ? GestureDetector(
-                                                      onTap: () {
-                                                        state.didChange(null);
-                                                      },
-                                                      child: Icon(
-                                                        Icons.clear,
-                                                        color: Theme.of(
-                                                                state.context)
-                                                            .colorScheme
-                                                            .onSurface,
-                                                      ),
-                                                    )
-                                                  : null,
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        CoreValues
-                                                                .cornerRadius *
-                                                            0.8),
-                                                borderSide: BorderSide(
-                                                    color: state.hasError
-                                                        ? Theme.of(
-                                                                state.context)
-                                                            .colorScheme
-                                                            .error
-                                                        : Theme.of(
-                                                                state.context)
-                                                            .colorScheme
-                                                            .onSurface),
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        CoreValues
-                                                                .cornerRadius *
-                                                            0.8),
-                                                borderSide: BorderSide(
-                                                    color: state.hasError
-                                                        ? Theme.of(
-                                                                state.context)
-                                                            .colorScheme
-                                                            .error
-                                                        : checkedEnabled &&
-                                                                enabled
-                                                            ? Theme.of(state
-                                                                    .context)
-                                                                .colorScheme
-                                                                .outline
-                                                            : Theme.of(state
-                                                                    .context)
-                                                                .colorScheme
-                                                                .outline
-                                                                .withOpacity(
-                                                                    0.4)),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        CoreValues
-                                                                .cornerRadius *
-                                                            0.8),
-                                                borderSide: BorderSide(
-                                                  width: 1,
-                                                  color: state.hasError
-                                                      ? Theme.of(state.context)
-                                                          .colorScheme
-                                                          .error
-                                                      : Theme.of(state.context)
-                                                          .colorScheme
-                                                          .onSurface,
-                                                ),
-                                              ),
-                                              error: Container(),
-                                              contentPadding:
-                                                  const EdgeInsets.all(15)),
-                                          borderRadius: BorderRadius.circular(
-                                              CoreValues.cornerRadius * 0.8),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      !checkedEnabled
-                                          ? PanopticIconButton(
-                                              icon: PanopticIcons.edit,
-                                              size: 50,
-                                              isDisabled: !enabled,
-                                              onTap: () {
-                                                state.setState(() {
-                                                  checkedEnabled = true;
-                                                });
-                                              },
-                                            )
-                                          : PanopticIconButton(
-                                              icon: PanopticIcons.cross,
-                                              size: 50,
-                                              isDisabled: !enabled,
-                                              onTap: () {
-                                                state.setState(() {
-                                                  checkedEnabled = false;
-                                                  state.didChange(initialValue);
-                                                });
-                                              },
-                                            ),
-                                    ],
-                                  )
-                                : DropdownButtonFormField<dynamic>(
-                                    key: Key(name),
-                                    isExpanded: true,
-                                    // If checked == false
-                                    disabledHint: Text(placeholder,
-                                        style: const TextStyle().copyWith(
-                                            color: Theme.of(state.context)
-                                                .disabledColor)),
-                                    value: state.value,
-                                    items: _buildItems(items, nullLabel),
-                                    onChanged: enabled
-                                        ? (value) {
-                                            state.didChange(value);
-                                            onChanged?.call(value);
-                                          }
-                                        : null,
-                                    enableFeedback: true,
-                                    autovalidateMode: autoValidate
-                                        ? AutovalidateMode.always
-                                        : AutovalidateMode.disabled,
-                                    onSaved: onSaved,
-                                    hint: Text(placeholder),
-                                    icon: icon,
-                                    decoration: InputDecoration(
-                                        fillColor: (alternative
-                                                ? Theme.of(state.context)
-                                                    .colorScheme
-                                                    .surfaceContainer
-                                                : Theme.of(state.context)
-                                                    .colorScheme
-                                                    .surface)
-                                            .withAlpha(55),
-                                        filled: true,
-                                        suffixIcon: state.value != null &&
-                                                checkedEnabled &&
-                                                enabled
-                                            ? GestureDetector(
-                                                onTap: () {
-                                                  state.didChange(null);
-                                                },
-                                                child: Icon(
-                                                  Icons.clear,
-                                                  color: Theme.of(state.context)
-                                                      .colorScheme
-                                                      .onSurface,
-                                                ),
-                                              )
-                                            : null,
-                                        focusedErrorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              CoreValues.cornerRadius * 0.8),
-                                          borderSide: BorderSide(
-                                              color: state.hasError
-                                                  ? Theme.of(state.context)
-                                                      .colorScheme
-                                                      .error
-                                                  : Theme.of(state.context)
-                                                      .colorScheme
-                                                      .onSurface),
-                                        ),
-                                        errorBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              CoreValues.cornerRadius * 0.8),
-                                          borderSide: BorderSide(
-                                              color: state.hasError
-                                                  ? Theme.of(state.context)
-                                                      .colorScheme
-                                                      .error
-                                                  : enabled
-                                                      ? Theme.of(state.context)
-                                                          .colorScheme
-                                                          .outline
-                                                      : Theme.of(state.context)
-                                                          .colorScheme
-                                                          .outline
-                                                          .withOpacity(0.4)),
-                                        ),
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              CoreValues.cornerRadius * 0.8),
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: state.hasError
-                                                ? Theme.of(state.context)
-                                                    .colorScheme
-                                                    .error
-                                                : Theme.of(state.context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                          ),
-                                        ),
-                                        error: Container(),
-                                        contentPadding:
-                                            const EdgeInsets.all(15)),
-                                    borderRadius: BorderRadius.circular(
-                                        CoreValues.cornerRadius * 0.8),
-                                  ),
-                          ),
-                        ],
-                      ),
-                      state.hasError
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  state.errorText ?? 'An error occurred',
-                                  style: Theme.of(state.context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                          color: Theme.of(state.context)
-                                              .colorScheme
-                                              .error),
-                                )
-                              ],
-                            )
-                          : Container()
-                    ],
+                ? _buildFullWidthDropdown(state, dropdownDecoration, icon,
+                    placeholder, items, nullLabel, enabled, onChanged, onSaved)
+                : _buildColumnDropdown(
+                    state,
+                    labelWidget,
+                    dropdownDecoration,
+                    icon,
+                    placeholder,
+                    items,
+                    nullLabel,
+                    enabled,
+                    onChanged,
+                    onSaved,
+                    forceColumn,
+                    checked,
+                    checkedEnabled,
+                    initialValue,
                   );
           },
         );
+
+  static Widget? _buildLabelWidget(
+      String? label, String? hintText, PanopticDropdownFormFieldState state) {
+    if (label.isNullOrWhitespace) return null;
+    return Row(
+      children: [
+        Text(
+          label!,
+          style: Theme.of(state.context).textTheme.bodyLarge,
+        ),
+        if (hintText != null)
+          Tooltip(
+            message: hintText,
+            preferBelow: true,
+            triggerMode: kIsWeb ? null : TooltipTriggerMode.tap,
+            verticalOffset: 10,
+            child: PanopticIcon(
+              icon: PanopticIcons.infoRound,
+              size: 15,
+              margin: const EdgeInsets.only(left: 5, top: 2),
+              color:
+                  Theme.of(state.context).colorScheme.onSurface.withAlpha(100),
+            ),
+          ),
+      ],
+    );
+  }
+
+  static InputDecoration _buildInputDecoration(
+      PanopticDropdownFormFieldState state,
+      bool alternative,
+      String placeholder,
+      bool checkedEnabled,
+      bool enabled) {
+    return InputDecoration(
+      fillColor: (alternative
+              ? Theme.of(state.context).colorScheme.surfaceContainer
+              : Theme.of(state.context).colorScheme.surface)
+          .withAlpha(55),
+      filled: true,
+      suffixIcon: state.value != null && checkedEnabled && enabled!
+          ? GestureDetector(
+              onTap: () {
+                state.didChange(null);
+              },
+              child: Icon(
+                Icons.clear,
+                color: Theme.of(state.context).colorScheme.onSurface,
+              ),
+            )
+          : null,
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+        borderSide: BorderSide(
+          color: state.hasError
+              ? Theme.of(state.context).colorScheme.error
+              : Theme.of(state.context).colorScheme.onSurface,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+        borderSide: BorderSide(
+          color: state.hasError
+              ? Theme.of(state.context).colorScheme.error
+              : enabled
+                  ? Theme.of(state.context).colorScheme.outline
+                  : Theme.of(state.context)
+                      .colorScheme
+                      .outline
+                      .withOpacity(0.4),
+        ),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+        borderSide: BorderSide(
+          width: 1,
+          color: state.hasError
+              ? Theme.of(state.context).colorScheme.error
+              : Theme.of(state.context).colorScheme.onSurface,
+        ),
+      ),
+      error: const SizedBox.shrink(),
+      contentPadding: const EdgeInsets.all(15),
+    );
+  }
+
+  static Widget _buildFullWidthDropdown(
+      PanopticDropdownFormFieldState state,
+      InputDecoration dropdownDecoration,
+      Widget? icon,
+      String placeholder,
+      List<DropdownMenuItem<dynamic>>? items,
+      Widget? nullLabel,
+      bool enabled,
+      ValueChanged<dynamic>? onChanged,
+      FormFieldSetter<dynamic>? onSaved) {
+    return DropdownButtonFormField<dynamic>(
+      key: Key(state.widget.name),
+      isExpanded: true,
+      disabledHint: Text(
+        placeholder,
+        style: const TextStyle().copyWith(
+          color: Theme.of(state.context).disabledColor,
+        ),
+      ),
+      value: state.value,
+      items: _buildItems(items, nullLabel),
+      onChanged: enabled
+          ? (value) {
+              onChanged?.call(value);
+            }
+          : null,
+      enableFeedback: true,
+      autovalidateMode: state.widget.autoValidate
+          ? AutovalidateMode.always
+          : AutovalidateMode.disabled,
+      onSaved: onSaved,
+      hint: Text(placeholder),
+      icon: icon,
+      decoration: dropdownDecoration,
+      borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+    );
+  }
+
+  static Widget _buildColumnDropdown(
+      PanopticDropdownFormFieldState state,
+      Widget? labelWidget,
+      InputDecoration dropdownDecoration,
+      Widget? icon,
+      String placeholder,
+      List<DropdownMenuItem<dynamic>>? items,
+      Widget? nullLabel,
+      bool enabled,
+      ValueChanged<dynamic>? onChanged,
+      FormFieldSetter<dynamic>? onSaved,
+      bool forceColumn,
+      bool checked,
+      bool checkedEnabled,
+      dynamic initialValue) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        PanopticResponsiveLayout(
+          forceColumn: forceColumn,
+          childrenPadding: const EdgeInsets.all(2),
+          rowCrossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (labelWidget != null) labelWidget,
+            const Padding(padding: EdgeInsets.all(5)),
+            Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(state.context).size.width,
+              ),
+              width: forceColumn ? null : 400,
+              child: checked
+                  ? _buildCheckedDropdown(
+                      state,
+                      dropdownDecoration,
+                      icon,
+                      placeholder,
+                      items,
+                      nullLabel,
+                      enabled,
+                      onChanged,
+                      onSaved,
+                      checkedEnabled,
+                      initialValue)
+                  : _buildUnCheckedDropdown(
+                      state,
+                      dropdownDecoration,
+                      icon,
+                      placeholder,
+                      items,
+                      nullLabel,
+                      enabled,
+                      onChanged,
+                      onSaved),
+            ),
+          ],
+        ),
+        if (state.hasError)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                state.errorText ?? 'An error occurred',
+                style: Theme.of(state.context)
+                    .textTheme
+                    .labelMedium!
+                    .copyWith(color: Theme.of(state.context).colorScheme.error),
+              ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  static Widget _buildCheckedDropdown(
+      PanopticDropdownFormFieldState state,
+      InputDecoration dropdownDecoration,
+      Widget? icon,
+      String placeholder,
+      List<DropdownMenuItem<dynamic>>? items,
+      Widget? nullLabel,
+      bool enabled,
+      ValueChanged<dynamic>? onChanged,
+      FormFieldSetter<dynamic>? onSaved,
+      bool checkedEnabled,
+      dynamic initialValue) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Expanded(
+          flex: 4,
+          child: DropdownButtonFormField<dynamic>(
+            isExpanded: true,
+            key: Key(state.widget.name),
+            disabledHint: Text(
+              placeholder,
+              style: const TextStyle().copyWith(
+                color: Theme.of(state.context).disabledColor,
+              ),
+            ),
+            value: state.value,
+            items: _buildItems(items, nullLabel),
+            onChanged: enabled && checkedEnabled
+                ? (value) {
+                    onChanged?.call(value);
+                  }
+                : null,
+            enableFeedback: true,
+            autovalidateMode: state.widget.autoValidate
+                ? AutovalidateMode.always
+                : AutovalidateMode.disabled,
+            onSaved: onSaved,
+            hint: Text(placeholder),
+            icon: icon,
+            autofocus: false,
+            decoration: dropdownDecoration,
+            borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+          ),
+        ),
+        const SizedBox(width: 10),
+        PanopticIconButton(
+          icon: checkedEnabled ? PanopticIcons.cross : PanopticIcons.edit,
+          size: 50,
+          isDisabled: !enabled!,
+          onTap: () {
+            state.setState(() {
+              checkedEnabled = !checkedEnabled;
+              if (!checkedEnabled) {
+                state.didChange(initialValue);
+              }
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  static Widget _buildUnCheckedDropdown(
+      PanopticDropdownFormFieldState state,
+      InputDecoration dropdownDecoration,
+      Widget? icon,
+      String placeholder,
+      List<DropdownMenuItem<dynamic>>? items,
+      Widget? nullLabel,
+      bool enabled,
+      ValueChanged<dynamic>? onChanged,
+      FormFieldSetter<dynamic>? onSaved) {
+    return DropdownButtonFormField<dynamic>(
+      key: Key(state.widget.name),
+      isExpanded: true,
+      disabledHint: Text(
+        placeholder,
+        style: const TextStyle().copyWith(
+          color: Theme.of(state.context).disabledColor,
+        ),
+      ),
+      value: state.value,
+      items: _buildItems(items, nullLabel),
+      onChanged: enabled
+          ? (value) {
+              state.didChange(value);
+              onChanged?.call(value);
+            }
+          : null,
+      enableFeedback: true,
+      autovalidateMode: state.widget.autoValidate
+          ? AutovalidateMode.always
+          : AutovalidateMode.disabled,
+      onSaved: onSaved,
+      hint: Text(placeholder),
+      icon: icon,
+      decoration: dropdownDecoration,
+      borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+    );
+  }
 
   static List<DropdownMenuItem<dynamic>> _buildItems(
       List<DropdownMenuItem<dynamic>>? items, Widget? nullLabel) {
@@ -492,5 +385,3 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
 
 class PanopticDropdownFormFieldState extends PanopticFormFieldDecorationState<
     PanopticDropdownFormField, dynamic> {}
-
-// class _NullItem {}
