@@ -1,6 +1,3 @@
-// ignore_for_file: invalid_use_of_protected_member, use_build_context_synchronously
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
@@ -8,6 +5,8 @@ import 'package:panoptic_widgets/src/static/core_values.dart';
 
 class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
   final TextEditingController? controller;
+
+  final bool checkedEnabled;
 
   PanopticTextFormField({
     super.key,
@@ -29,7 +28,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
     bool readOnly = false,
     bool showCursor = true,
     bool checked = false,
-    bool checkedEnabled = false,
+    this.checkedEnabled = false,
     bool copyButton = false,
     String? Function(String?)? validator,
     int? maxLines,
@@ -104,9 +103,9 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
     Widget? trailing,
     int alpha = 55,
     bool alternative = false,
-    EdgeInsetsGeometry contentPadding = const EdgeInsets.all(17),
     bool isDense = false,
     bool hasError = false,
+    EdgeInsetsGeometry contentPadding = const EdgeInsets.all(17),
   }) {
     final colorScheme = Theme.of(context).colorScheme;
     return InputDecoration(
@@ -123,6 +122,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
       enabledBorder: _buildOutlineBorder(colorScheme.onSurface),
       errorBorder: _buildOutlineBorder(colorScheme.error),
       focusedErrorBorder: _buildOutlineBorder(colorScheme.error),
+      disabledBorder: _buildOutlineBorder(colorScheme.onSurface),
     );
   }
 
@@ -280,59 +280,60 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
     int? minLines,
     int? maxLength,
   }) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            enabled: checkedEnabled && state.widget.enabled,
-            controller: state._effectiveController,
-            obscureText: obscureText,
-            keyboardType: keyboardType,
-            autocorrect: autocorrect,
-            autofocus: autofocus,
-            readOnly: readOnly,
-            showCursor: showCursor,
-            maxLines: maxLines,
-            minLines: minLines,
-            maxLength: maxLength,
-            onChanged: onChanged,
-            onFieldSubmitted: onFieldSubmitted,
-            decoration: _buildInputDecoration(
-              context: state.context,
-              placeholder: placeholder,
-              icon: icon,
-              trailing: trailing,
-              alpha: alpha,
-              alternative: alternative,
-              contentPadding: contentPadding,
-              isDense: isDense,
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        !checkedEnabled
-            ? PanopticIconButton(
-                icon: PanopticIcons.edit,
-                size: 50,
-                isDisabled: !state.widget.enabled,
-                onTap: () {
-                  state.setState(() {
-                    checkedEnabled = true;
-                  });
-                },
-              )
-            : PanopticIconButton(
-                icon: PanopticIcons.undo,
-                size: 50,
-                isDisabled: !state.widget.enabled,
-                onTap: () {
-                  state.setState(() {
-                    checkedEnabled = false;
-                    state.didChange(state.widget.initialValue);
-                  });
-                },
+    return ValueListenableBuilder<bool>(
+      valueListenable: state.checkedEnabledNotifier,
+      builder: (context, checkedEnabled, child) {
+        return Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                enabled: checkedEnabled && state.widget.enabled,
+                controller: state._effectiveController,
+                obscureText: obscureText,
+                keyboardType: keyboardType,
+                autocorrect: autocorrect,
+                autofocus: autofocus,
+                readOnly: readOnly,
+                showCursor: showCursor,
+                maxLines: maxLines,
+                minLines: minLines,
+                maxLength: maxLength,
+                onChanged: onChanged,
+                onFieldSubmitted: onFieldSubmitted,
+                decoration: _buildInputDecoration(
+                  context: state.context,
+                  placeholder: placeholder,
+                  icon: icon,
+                  trailing: trailing,
+                  alpha: alpha,
+                  alternative: alternative,
+                  contentPadding: contentPadding,
+                  isDense: isDense,
+                ),
               ),
-      ],
+            ),
+            const SizedBox(width: 10),
+            !checkedEnabled
+                ? PanopticIconButton(
+                    icon: PanopticIcons.edit,
+                    size: 50,
+                    isDisabled: !state.widget.enabled,
+                    onTap: () {
+                      state.checkedEnabledNotifier.value = true;
+                    },
+                  )
+                : PanopticIconButton(
+                    icon: PanopticIcons.undo,
+                    size: 50,
+                    isDisabled: !state.widget.enabled,
+                    onTap: () {
+                      state.checkedEnabledNotifier.value = false;
+                      state.didChange(state.widget.initialValue);
+                    },
+                  ),
+          ],
+        );
+      },
     );
   }
 
@@ -392,14 +393,12 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
         PanopticIconButton(
           icon: PanopticIcons.copy,
           size: 50,
-          isDisabled: state.widget.enabled,
-          onTap: () {
-            state.setState(() async {
-              await Clipboard.setData(
-                  ClipboardData(text: state._effectiveController!.text));
-              PanopticExtension.showToast('Copied to Clipboard!', state.context,
-                  type: ToastType.success);
-            });
+          isDisabled: !state.widget.enabled,
+          onTap: () async {
+            await Clipboard.setData(
+                ClipboardData(text: state._effectiveController!.text));
+            PanopticExtension.showToast('Copied to Clipboard!', state.context,
+                type: ToastType.success);
           },
         ),
       ],
@@ -467,12 +466,14 @@ class PanopticFormTextFieldState
       widget.controller ?? _controller;
 
   TextEditingController? _controller;
+  late ValueNotifier<bool> checkedEnabledNotifier;
 
   @override
   void initState() {
     super.initState();
     _controller = widget.controller ?? TextEditingController(text: value);
     _controller!.addListener(_handleControllerChanged);
+    checkedEnabledNotifier = ValueNotifier(widget.checkedEnabled);
   }
 
   @override
@@ -481,6 +482,7 @@ class PanopticFormTextFieldState
     if (widget.controller == null) {
       _controller?.dispose();
     }
+    checkedEnabledNotifier.dispose();
     super.dispose();
   }
 
