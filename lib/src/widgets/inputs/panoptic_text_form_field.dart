@@ -309,17 +309,29 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
             ),
           ),
         ),
-        IconButton(
-          icon: Icon(checkedEnabled ? Icons.undo : Icons.edit),
-          onPressed: () {
-            state.setState(() {
-              if (checkedEnabled) {
-                state.didChange(state.widget.initialValue);
-              }
-              checkedEnabled = !checkedEnabled;
-            });
-          },
-        ),
+        const SizedBox(width: 10),
+        !checkedEnabled
+            ? PanopticIconButton(
+                icon: PanopticIcons.edit,
+                size: 50,
+                isDisabled: !state.widget.enabled,
+                onTap: () {
+                  state.setState(() {
+                    checkedEnabled = true;
+                  });
+                },
+              )
+            : PanopticIconButton(
+                icon: PanopticIcons.undo,
+                size: 50,
+                isDisabled: !state.widget.enabled,
+                onTap: () {
+                  state.setState(() {
+                    checkedEnabled = false;
+                    state.didChange(state.widget.initialValue);
+                  });
+                },
+              ),
       ],
     );
   }
@@ -376,13 +388,18 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
             ),
           ),
         ),
-        IconButton(
-          icon: Icon(Icons.copy),
-          onPressed: () {
-            Clipboard.setData(
-                ClipboardData(text: state._effectiveController?.text ?? ''));
-            PanopticExtension.showToast('Copied to Clipboard', state.context,
-                type: ToastType.info);
+        const SizedBox(width: 10),
+        PanopticIconButton(
+          icon: PanopticIcons.copy,
+          size: 50,
+          isDisabled: state.widget.enabled,
+          onTap: () {
+            state.setState(() async {
+              await Clipboard.setData(
+                  ClipboardData(text: state._effectiveController!.text));
+              PanopticExtension.showToast('Copied to Clipboard!', state.context,
+                  type: ToastType.success);
+            });
           },
         ),
       ],
