@@ -150,7 +150,7 @@ class PanopticFileUploadFormField
                                           : Theme.of(state.context)
                                               .colorScheme
                                               .surface)
-                                      .withAlpha(55),
+                                      .withAlpha(255),
                                 ),
                                 child: Column(
                                   crossAxisAlignment:

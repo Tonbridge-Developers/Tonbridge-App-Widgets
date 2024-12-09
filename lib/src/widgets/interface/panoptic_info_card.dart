@@ -49,7 +49,7 @@ class _PanopticInfoCardState extends State<PanopticInfoCard> {
                   .startsWith('white')
               ? Theme.of(context).colorScheme.surface
               : (widget.color ?? Theme.of(context).colorScheme.primary)
-                  .withAlpha(55),
+                  .withAlpha(255),
           borderRadius: BorderRadius.circular(CoreValues.cornerRadius),
         ),
         child: Column(

@@ -35,7 +35,7 @@ class PanopticComboBoxFormField
             final surfaceColor = (alternative
                     ? colorScheme.surfaceContainer
                     : colorScheme.surface)
-                .withAlpha(55);
+                .withAlpha(255);
             final borderColor =
                 state.hasError ? colorScheme.error : colorScheme.onSurface;
 

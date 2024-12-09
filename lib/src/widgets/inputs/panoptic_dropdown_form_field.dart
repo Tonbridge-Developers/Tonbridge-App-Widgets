@@ -107,7 +107,7 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
       fillColor: (alternative
               ? Theme.of(state.context).colorScheme.surfaceContainer
               : Theme.of(state.context).colorScheme.surface)
-          .withAlpha(55),
+          .withAlpha(255),
       filled: true,
       suffixIcon: state.value != null && checkedEnabled && enabled!
           ? GestureDetector(

@@ -38,7 +38,7 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
     double width = 400,
     bool fullWidth = false,
     bool forceColumn = false,
-    int alpha = 55,
+    int alpha = 255,
     EdgeInsetsGeometry contentPadding = const EdgeInsets.all(17),
     EdgeInsetsGeometry leadingPadding = const EdgeInsets.all(5),
     Function(String)? onFieldSubmitted,

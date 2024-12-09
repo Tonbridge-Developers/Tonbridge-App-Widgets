@@ -83,7 +83,7 @@ class PanopticImageUploadFormField
                                 .colorScheme
                                 .surfaceContainer
                             : Theme.of(state.context).colorScheme.surface)
-                        .withAlpha(55),
+                        .withAlpha(255),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

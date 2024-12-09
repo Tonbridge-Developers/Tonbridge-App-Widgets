@@ -62,7 +62,7 @@ class PanopticNumberFormField extends PanopticFormFieldDecoration<int> {
                   fillColor: (alternative
                           ? Theme.of(state.context).colorScheme.surfaceContainer
                           : Theme.of(state.context).colorScheme.surface)
-                      .withAlpha(55),
+                      .withAlpha(255),
                   filled: true,
                   contentPadding: const EdgeInsets.all(17),
                   focusedErrorBorder: OutlineInputBorder(

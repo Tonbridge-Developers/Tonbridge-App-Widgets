@@ -81,7 +81,7 @@ class PanopticDateFormField extends PanopticFormFieldDecoration<DateTime> {
         color: (alternative
                 ? Theme.of(state.context).colorScheme.surfaceContainer
                 : Theme.of(state.context).colorScheme.surface)
-            .withAlpha(55),
+            .withAlpha(255),
       ),
       child: TextButton(
         onPressed: enabled
@@ -249,7 +249,7 @@ class PanopticDateFormField extends PanopticFormFieldDecoration<DateTime> {
         color: (alternative
                 ? Theme.of(state.context).colorScheme.surfaceContainer
                 : Theme.of(state.context).colorScheme.surface)
-            .withAlpha(55),
+            .withAlpha(255),
       ),
       child: TextButton(
         onPressed: enabled && checkedEnabled
@@ -304,7 +304,7 @@ class PanopticDateFormField extends PanopticFormFieldDecoration<DateTime> {
         color: (alternative
                 ? Theme.of(state.context).colorScheme.surfaceContainer
                 : Theme.of(state.context).colorScheme.surface)
-            .withAlpha(55),
+            .withAlpha(255),
       ),
       child: TextButton(
         onPressed: enabled

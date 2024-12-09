@@ -24,7 +24,7 @@ class PanopticLoadingDropdownWrapper extends StatelessWidget {
     return (child.alternative
             ? Theme.of(context).colorScheme.surfaceContainer
             : Theme.of(context).colorScheme.surface)
-        .withAlpha(55);
+        .withAlpha(255);
   }
 
   @override

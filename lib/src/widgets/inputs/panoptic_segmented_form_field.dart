@@ -37,7 +37,7 @@ class PanopticSegmentedFormField extends PanopticFormFieldDecoration<int> {
                 disabledChildren: enabled ? null : items!.keys.toList(),
                 borderRadius: CoreValues.cornerRadius * 0.8,
                 borderColor: colorScheme.primary,
-                unselectedColor: surfaceColor.withAlpha(55),
+                unselectedColor: surfaceColor.withAlpha(255),
                 disabledColor: surfaceColor,
                 selectedColor: colorScheme.primary,
                 children: items!.map((key, value) => MapEntry(
