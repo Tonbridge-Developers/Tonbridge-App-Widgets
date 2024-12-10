@@ -50,7 +50,7 @@ class _PanopticLargeButtonState extends State<PanopticLargeButton> {
           },
           alternative: widget.alternative,
           color: isSelected
-              ? Theme.of(context).colorScheme.primary.withAlpha(255)
+              ? Theme.of(context).colorScheme.primary.withAlpha(55)
               : null,
           child: Column(
             children: [
