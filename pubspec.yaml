@@ -1,6 +1,6 @@
 name: panoptic_widgets
 description: "A group of flutter widgets which are used in the Panoptic Family of Apps - created and maintained by Tonbridge School's Developers"
-version: 2024.12.9
+version: 2024.12.10
 homepage: https://tonbridge-school.co.uk
 
 environment:
@@ -36,8 +36,9 @@ dependencies:
   measure_size_builder: ^1.0.3
   shared_preferences: ^2.3.2
   share_plus: ^10.0.2
-  syncfusion_flutter_core: ^27.1.52
-  syncfusion_flutter_datagrid: ^27.1.52
+  syncfusion_flutter_core: ^28.1.33
+  syncfusion_flutter_datagrid: ^28.1.33
+  syncfusion_flutter_pdfviewer: ^28.1.33
   theme_provider: ^0.6.0
   toastification: ^2.3.0
   vsc_quill_delta_to_html: ^1.0.5

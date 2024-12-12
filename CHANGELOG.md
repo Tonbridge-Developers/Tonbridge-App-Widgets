@@ -1,3 +1,7 @@
+## 2024.12.10
+
+* Added PDF Viewer
+
 ## 2024.12.5
 
 * Refactored All Inputs and Actions

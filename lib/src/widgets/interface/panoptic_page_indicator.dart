@@ -2,36 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 
-class PanopticPager extends StatefulWidget {
-  final int totalRowCount;
-  final int pageSize;
-  final List<int> availableRowsPerPage;
-  final PanopticDataSource dataSource;
+class PanopticPageIndicator extends StatefulWidget {
+  final ValueNotifier<int> pageCount;
+  final ValueNotifier<int> currentPage;
   final int visibleButtonCount;
 
-  final void Function(int)? onRowsPerPageChanged;
-  final void Function()? onPageNavigationStart;
-  final void Function()? onPageNavigationEnd;
-  final bool showPageSizeDropdown;
+  final void Function(int)? onPageChanged;
 
-  const PanopticPager({
-    required this.totalRowCount,
-    required this.pageSize,
-    required this.dataSource,
-    this.visibleButtonCount = 3,
-    this.availableRowsPerPage = const [10, 20, 50, 100],
-    this.onRowsPerPageChanged,
-    this.onPageNavigationStart,
-    this.onPageNavigationEnd,
-    this.showPageSizeDropdown = true,
+  const PanopticPageIndicator({
+    required this.pageCount,
+    required this.currentPage,
+    required this.visibleButtonCount,
+    this.onPageChanged,
     super.key,
   });
 
   @override
-  State<PanopticPager> createState() => _PanopticPagerState();
+  State<PanopticPageIndicator> createState() => _PanopticPageIndicatorState();
 }
 
-class _PanopticPagerState extends State<PanopticPager> {
+class _PanopticPageIndicatorState extends State<PanopticPageIndicator> {
   late ScrollController _controller;
   final double _buttonSize = 40;
   final double _buttonHorizontalMargin = 1;
@@ -45,20 +35,27 @@ class _PanopticPagerState extends State<PanopticPager> {
   void initState() {
     super.initState();
     _controller = ScrollController();
-    _pageCount = _calculatePageCount(widget.totalRowCount, widget.pageSize);
+    _pageCount = widget.pageCount.value;
     _halfButtonCount = (widget.visibleButtonCount * 0.5).floor();
     if (_halfButtonCount < 1) {
       _halfButtonCount = 1;
     }
-    widget.dataSource.addOnPageChangeListener(_handleDataSourcePageChange);
+
+    widget.pageCount.addListener(_updatePageCount);
+    widget.currentPage.addListener(_updateCurrentPage);
   }
 
-  int _calculatePageCount(int rowCount, int pageSize) {
-    int pageCount = (rowCount / pageSize).ceil();
-    if (pageCount < 1) {
-      return 1;
-    }
-    return pageCount;
+  void _updatePageCount() {
+    setState(() {
+      _pageCount = widget.pageCount.value;
+    });
+  }
+
+  void _updateCurrentPage() {
+    setState(() {
+      _currentIndex = widget.currentPage.value - 1;
+      _animateToIndex(_currentIndex);
+    });
   }
 
   double _calculatePageButtonListWidth() {
@@ -76,20 +73,9 @@ class _PanopticPagerState extends State<PanopticPager> {
     );
   }
 
-  /// Handles the data source's page change event being called externally.
-  /// (i.e. not called by the pager itself)
-  Future _handleDataSourcePageChange(int index) async {
-    if (_currentIndex == index) {
-      return;
-    }
-    _currentIndex = index;
-    _animateToIndex(index);
-    _pageCount = _calculatePageCount(widget.totalRowCount, widget.pageSize);
-  }
-
   Future _handleButtonPress(int direction) async {
-    widget.onPageNavigationStart?.call();
     int oldIndex = _currentIndex;
+
     setState(() {
       _loading = true;
       _currentIndex += direction;
@@ -101,100 +87,25 @@ class _PanopticPagerState extends State<PanopticPager> {
       }
     });
 
-    if (_pageCount > widget.visibleButtonCount) {
-      int animateToIndex;
-      int pageCountDiff = _pageCount - widget.visibleButtonCount;
-      if (_currentIndex > pageCountDiff) {
-        animateToIndex = pageCountDiff;
-      } else if (_currentIndex < _halfButtonCount) {
-        animateToIndex = 0;
-      } else {
-        animateToIndex = _currentIndex - _halfButtonCount;
-      }
+    widget.currentPage.value = _currentIndex + 1;
 
-      _animateToIndex(animateToIndex);
-
-      if (oldIndex != _currentIndex) {
-        await widget.dataSource.handlePageChange(oldIndex, _currentIndex);
-        widget.dataSource.notifyListeners();
-      }
+    if (oldIndex != _currentIndex) {
+      widget.onPageChanged?.call(_currentIndex);
     }
 
     setState(() => _loading = false);
-    widget.onPageNavigationEnd?.call();
-  }
-
-  void _handlePageSizeChange(int? newPageSize) {
-    if (newPageSize == null) {
-      return;
-    }
-    widget.onRowsPerPageChanged?.call(newPageSize);
   }
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    bool smallDevice =
-        PanopticExtension.getDeviceType(context) == DeviceType.small;
+
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _buildPageButtons(theme),
-          if (!smallDevice) ...[
-            const SizedBox(width: 4),
-            _buildInfo(theme),
-            if (widget.showPageSizeDropdown) ...[
-              const Spacer(),
-              _buildPageSizeDropdown(theme),
-            ]
-          ]
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfo(ThemeData theme) {
-    String results = '${widget.totalRowCount} results';
-    // String filters = widget.filterCount != null ? ' using ${widget.filterCount} filters' : '';
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-      ),
-      child: Text(results),
-    );
-  }
-
-  Widget _buildPageSizeDropdown(ThemeData theme) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text('Rows per page:'),
-          const SizedBox(width: 10),
-          DropdownButtonHideUnderline(
-            child: DropdownButton<int>(
-              // itemHeight: 50,
-              isDense: true,
-              borderRadius:
-                  BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-              value: widget.pageSize,
-              items: widget.availableRowsPerPage
-                  .map((e) =>
-                      DropdownMenuItem(value: e, child: Text(e.toString())))
-                  .toList(),
-              onChanged: _handlePageSizeChange,
-            ),
-          ),
         ],
       ),
     );
@@ -302,7 +213,9 @@ class _PanopticPagerState extends State<PanopticPager> {
   @override
   void dispose() {
     _controller.dispose();
-    widget.dataSource.removeOnPageChangeListener(_handleDataSourcePageChange);
+    widget.pageCount.removeListener(_updatePageCount);
+    widget.currentPage.removeListener(_updateCurrentPage);
+
     super.dispose();
   }
 }

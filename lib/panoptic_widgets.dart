@@ -75,6 +75,7 @@ export 'src/widgets/interface/panoptic_list_view.dart';
 export 'src/widgets/interface/panoptic_page_content.dart';
 export 'src/widgets/interface/panoptic_pager.dart';
 export 'src/widgets/interface/panoptic_progress.dart';
+export 'src/widgets/interface/panoptic_pdf_viewer.dart';
 export 'src/widgets/interface/panoptic_responsive_layout.dart';
 export 'src/widgets/interface/panoptic_responsive.dart';
 export 'src/widgets/interface/panoptic_row.dart';
