@@ -1,3 +1,7 @@
+## 2025.1.1
+
+* Made PDF title optional
+
 ## 2024.12.10
 
 * Added PDF Viewer

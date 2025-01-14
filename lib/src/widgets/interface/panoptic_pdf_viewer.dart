@@ -14,6 +14,7 @@ class PanopticPdfViewer extends StatefulWidget {
     this.searchQuery,
     this.url,
     this.subTitle,
+    this.showTitle = true,
   });
   final Uint8List pdfBytes;
   final String title;
@@ -21,6 +22,7 @@ class PanopticPdfViewer extends StatefulWidget {
   final String? url;
   final String? subTitle;
   final ValueNotifier<String?>? searchQuery;
+  final bool showTitle;
 
   @override
   State<PanopticPdfViewer> createState() => _PanopticPdfViewerState();
@@ -56,23 +58,27 @@ class _PanopticPdfViewerState extends State<PanopticPdfViewer> {
       children: [
         PanopticCard(
           child: PanopticResponsiveLayout(
+            rowMainAxisAlignment:
+                widget.showTitle ? null : MainAxisAlignment.end,
             children: [
-              PanopticExpanded(
-                expandOnMobile: false,
-                child: RichText(
-                    text: TextSpan(
-                  text: widget.title,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                  children: [
-                    if (widget.subTitle != null) ...{
-                      TextSpan(
-                        text: '${widget.subTitle}',
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    },
-                  ],
-                )),
-              ),
+              if (widget.showTitle) ...{
+                PanopticExpanded(
+                  expandOnMobile: false,
+                  child: RichText(
+                      text: TextSpan(
+                    text: widget.title,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                    children: [
+                      if (widget.subTitle != null) ...{
+                        TextSpan(
+                          text: '${widget.subTitle}',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      },
+                    ],
+                  )),
+                ),
+              },
               if (_searchResult.hasResult) ...{
                 PanopticRow(
                   mainAxisAlignment: MainAxisAlignment.center,

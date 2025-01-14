@@ -172,28 +172,28 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
   ) {
     if (fullWidth) {
       return _buildTextField(
-          state,
-          checkedEnabled,
-          enabled,
-          placeholder,
-          icon,
-          trailing,
-          obscureText,
-          keyboardType,
-          autocorrect,
-          autofocus,
-          readOnly,
-          showCursor,
-          maxLines,
-          minLines,
-          maxLength,
-          isDense,
-          alpha,
-          contentPadding,
-          onChanged,
-          onFieldSubmitted,
-          alternative,
-          checked);
+        state,
+        checkedEnabled,
+        enabled,
+        placeholder,
+        icon,
+        trailing,
+        obscureText,
+        keyboardType,
+        autocorrect,
+        autofocus,
+        readOnly,
+        showCursor,
+        maxLines,
+        minLines,
+        maxLength,
+        isDense,
+        alpha,
+        contentPadding,
+        onChanged,
+        onFieldSubmitted,
+        alternative,
+      );
     } else {
       return _buildStandardField(
         state,
@@ -302,8 +302,8 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
               child: Row(
                 children: [
                   PanopticExpanded(
-                    // expandOnDesktop: checked || copyButton,
-                    // expandOnMobile: checked || copyButton,
+                    expandOnDesktop: checked || copyButton,
+                    expandOnMobile: checked || copyButton,
                     flex: 4,
                     child: _buildTextField(
                       state,
@@ -327,7 +327,6 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
                       onChanged,
                       onFieldSubmitted,
                       alternative,
-                      checked,
                     ),
                   ),
                   if (copyButton) ...{
@@ -407,10 +406,9 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
     Function(String)? onChanged,
     Function(String)? onFieldSubmitted,
     bool alternative,
-    bool checked,
   ) {
     return TextFormField(
-      enabled: (checked && checkedEnabled) || enabled,
+      enabled: checkedEnabled && enabled,
       scribbleEnabled: true,
       obscureText: obscureText,
       controller: state._effectiveController,
