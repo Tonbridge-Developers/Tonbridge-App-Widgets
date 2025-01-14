@@ -669,3 +669,56 @@ enum ChangeApproverStatus {
   @override
   String toString() => printedValue;
 }
+
+enum AssessmentType {
+  undecided,
+  use,
+  notUse,
+}
+
+//#region Custom Forms
+enum CustomPageUserRole {
+  @JsonValue(0)
+  owner('Owner', Colors.purple),
+  @JsonValue(1)
+  editor('Editor', Colors.blue),
+  @JsonValue(2)
+  viewer('Viewer', Colors.grey);
+
+  final String printedValue;
+  final Color chipColor;
+
+  const CustomPageUserRole(this.printedValue, this.chipColor);
+
+  @override
+  String toString() => printedValue;
+}
+
+enum CustomPageUserType {
+  @JsonValue(0)
+  msUser,
+  @JsonValue(1)
+  msGroup,
+  @JsonValue(2)
+  email,
+}
+
+enum CustomPageStatus {
+  @JsonValue(0)
+  unpublished('Unpublished', Colors.grey),
+  @JsonValue(1)
+  scheduled('Scheduled', Colors.amber),
+  @JsonValue(2)
+  open('Open', Colors.green),
+  @JsonValue(3)
+  closed('Closed', Colors.red);
+
+  final String printedValue;
+  final Color chipColor;
+
+  const CustomPageStatus(this.printedValue, this.chipColor);
+
+  @override
+  String toString() => printedValue;
+}
+//#endregion
