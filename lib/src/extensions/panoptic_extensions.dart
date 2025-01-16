@@ -601,6 +601,29 @@ extension CoreFileExtension on CoreFile {
   }
 }
 
+extension TimeOfDayExtension on TimeOfDay {
+  static TimeOfDay fromJson(String json) {
+    final parts = json.split(':');
+    return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+  }
+
+  static String toJson(TimeOfDay time) {
+    return '${time.hhmm()}:00';
+  }
+
+  String hhmm() {
+    String hour = this.hour.toString();
+    String minute = this.minute.toString();
+    if (hour.length == 1) {
+      hour = '0$hour';
+    }
+    if (minute.length == 1) {
+      minute = '0$minute';
+    }
+    return '$hour:$minute';
+  }
+}
+
 extension DateTimeExtension on DateTime {
   String toFormattedString({String format = "dd/MM/yyyy"}) {
     return DateFormat(format).format(this);
