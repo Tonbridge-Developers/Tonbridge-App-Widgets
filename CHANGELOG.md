@@ -1,3 +1,7 @@
+## 2025.1.2
+
+* Added Slider Form Field
+
 ## 2025.1.1
 
 * Made PDF title optional
