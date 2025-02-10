@@ -903,6 +903,24 @@ extension DataGridRowsExtension on List<DataGridRow> {
 }
 
 extension StringExtension on String {
+  bool containsAny(List<String> values) {
+    for (String value in values) {
+      if (contains(value)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  T? firstMatch<T>(List<T> values) {
+    for (T value in values) {
+      if (contains(value.toString())) {
+        return value;
+      }
+    }
+    return null;
+  }
+
   bool get isWhiteSpace {
     return trim().isEmpty;
   }
