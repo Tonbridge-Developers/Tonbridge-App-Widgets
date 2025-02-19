@@ -1,9 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/mvc/panoptic_page_builder_inherited.dart';
 
-abstract class PanopticPageBuilderController extends ChangeNotifier {
+abstract class PanopticPageBuilderController<T> extends ChangeNotifier {
+  final T model;
   ShowFiltersDelegate? _onShowFilters;
   ShowHelpDelegate? _onShowHelp;
+
+  // page parameters
+  String _pageTitle = 'Page';
+  PanopticButton? _actionButton;
+  List<PanopticSplitButtonAction> _splitButtonActions = const [];
+  bool _hideSearch = false;
+  Widget? _leading;
+  TabBar? _tabs;
+  PanopticLoading? _loadingWidget;
+  Widget? _helpContent;
+  int? _filterCount;
+  bool _useFilterForm = true;
+
+  String get pageTitle => _pageTitle;
+  PanopticButton? get actionButton => _actionButton;
+  List<PanopticSplitButtonAction> get splitButtonActions => _splitButtonActions;
+  bool get hideSearch => _hideSearch;
+  Widget? get leading => _leading;
+  TabBar? get tabs => _tabs;
+  PanopticLoading? get loadingWidget => _loadingWidget;
+  Widget? get helpContent => _helpContent;
+  int? get filterCount => _filterCount;
+  bool get useFilterForm => _useFilterForm;
+
+  set pageTitle(String value) {
+    _pageTitle = value;
+    notifyPageChange();
+  }
+
+  set actionButton(PanopticButton? value) {
+    _actionButton = value;
+    notifyPageChange();
+  }
+
+  set splitButtonActions(List<PanopticSplitButtonAction> value) {
+    _splitButtonActions = value;
+    notifyPageChange();
+  }
+
+  set hideSearch(bool value) {
+    _hideSearch = value;
+    notifyPageChange();
+  }
+
+  set leading(Widget? value) {
+    _leading = value;
+    notifyPageChange();
+  }
+
+  set tabs(TabBar? value) {
+    _tabs = value;
+    notifyPageChange();
+  }
+
+  set loadingWidget(PanopticLoading? value) {
+    _loadingWidget = value;
+    notifyPageChange();
+  }
+
+  set helpContent(Widget? value) {
+    _helpContent = value;
+    notifyPageChange();
+  }
+
+  set filterCount(int? value) {
+    _filterCount = value;
+    notifyPageChange();
+  }
+
+  set useFilterForm(bool value) {
+    _useFilterForm = value;
+    notifyPageChange();
+  }
+
+  PanopticPageBuilderController(this.model);
 
   final _loadingNotifiers = <String, ValueNotifier<bool>>{
     'content': ValueNotifier<bool>(false),
@@ -11,11 +88,11 @@ abstract class PanopticPageBuilderController extends ChangeNotifier {
   };
 
   final _changeNotifiers = <String, ChangeNotifier>{
-    'filters': ChangeNotifier(),
     'page': ChangeNotifier(),
+    'filters': ChangeNotifier(),
   };
 
-  bool get isPageLoading => _loadingNotifiers['page']!.value;
+  bool get isContentLoading => _loadingNotifiers['content']!.value;
   bool get isFiltersLoading => _loadingNotifiers['filters']!.value;
 
   set onShowFilters(ShowFiltersDelegate? value) {
@@ -52,6 +129,10 @@ abstract class PanopticPageBuilderController extends ChangeNotifier {
   ValueNotifier<bool> get filtersLoadingNotifier =>
       _loadingNotifiers['filters']!;
 
+  ChangeNotifier get pageChangeNotifier => _changeNotifiers['page']!;
+  ChangeNotifier get contentChangeNotifier => this;
+  ChangeNotifier get filtersChangeNotifier => _changeNotifiers['filters']!;
+
   ChangeNotifier getChangeNotifier(String key) {
     if (key == 'content') {
       return this;
@@ -61,9 +142,6 @@ abstract class PanopticPageBuilderController extends ChangeNotifier {
     }
     return _changeNotifiers[key]!;
   }
-
-  ChangeNotifier get contentChangeNotifier => this;
-  ChangeNotifier get filtersChangeNotifier => _changeNotifiers['filters']!;
 
   void loadingContent(Future<dynamic> Function() fn) {
     final contentNotifier = _loadingNotifiers['content']!;
@@ -90,12 +168,16 @@ abstract class PanopticPageBuilderController extends ChangeNotifier {
     fn().whenComplete(() => customNotifier.value = false);
   }
 
+  void notifyPageChange() {
+    pageChangeNotifier.notifyListeners();
+  }
+
   void notifyContentChange() {
     notifyListeners();
   }
 
   void notifyFiltersChange() {
-    _changeNotifiers['filters']!.notifyListeners();
+    filtersChangeNotifier.notifyListeners();
   }
 
   void notifyCustomChange(String key) {
@@ -111,6 +193,45 @@ abstract class PanopticPageBuilderController extends ChangeNotifier {
 
   void showHelp() {
     _onShowHelp?.call();
+  }
+
+  /// Use this when setting multiple fields at once to avoid multiple page rebuilds.
+  /// Note that this will not change a field if you pass null for it. For that, use the setter.
+  /// e.g. setPageFields({pageTitle: 'New Title', filterCount: 3})
+  void setPageFields({
+    String? pageTitle,
+    PanopticButton? actionButton,
+    List<PanopticSplitButtonAction>? splitButtonActions,
+    bool? hideSearch,
+    Widget? leading,
+    TabBar? tabs,
+    PanopticLoading? loadingWidget,
+    Widget? helpContent,
+    int? filterCount,
+    bool? useFilterForm,
+  }) {
+    _pageTitle = pageTitle ?? _pageTitle;
+    _actionButton = actionButton ?? _actionButton;
+    _splitButtonActions = splitButtonActions ?? _splitButtonActions;
+    _hideSearch = hideSearch ?? _hideSearch;
+    _leading = leading ?? _leading;
+    _tabs = tabs ?? _tabs;
+    _loadingWidget = loadingWidget ?? _loadingWidget;
+    _helpContent = helpContent ?? _helpContent;
+    _filterCount = filterCount ?? _filterCount;
+    _useFilterForm = useFilterForm ?? _useFilterForm;
+    notifyPageChange();
+  }
+
+  @override
+  void dispose() {
+    for (final notifier in _loadingNotifiers.values) {
+      notifier.dispose();
+    }
+    for (final notifier in _changeNotifiers.values) {
+      notifier.dispose();
+    }
+    super.dispose();
   }
 }
 
