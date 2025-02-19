@@ -15,17 +15,23 @@ class PanopticChip extends StatefulWidget {
     this.type = ChipType.small,
     this.largeDeleteIcon,
     this.expand = false,
+    this.onSelected,
+    this.selected = false,
   });
 
   final String label;
   final String? tooltip;
   final Widget? leading;
   final VoidCallback? onDelete;
+
+  /// for Filter chip only
+  final Function(bool)? onSelected;
   final EdgeInsetsGeometry? margin;
   final Color? color;
   final ChipType type;
   final PanopticIcons? largeDeleteIcon;
   final bool expand;
+  final bool selected;
 
   @override
   State<PanopticChip> createState() => _PanopticChipState();
@@ -38,7 +44,9 @@ class _PanopticChipState extends State<PanopticChip> {
       padding: widget.margin ?? const EdgeInsets.all(10),
       child: widget.type == ChipType.small
           ? _buildSmallChip(context)
-          : _buildLargeOrExpandedChip(context),
+          : widget.type == ChipType.filter
+              ? _buildFilterChip(context)
+              : _buildLargeOrExpandedChip(context),
     );
   }
 
@@ -63,6 +71,35 @@ class _PanopticChipState extends State<PanopticChip> {
         ),
       ),
       avatar: widget.leading,
+      onDeleted: widget.onDelete,
+      deleteIconColor: widget.color ?? Theme.of(context).colorScheme.primary,
+    );
+  }
+
+  Widget _buildFilterChip(BuildContext context) {
+    return FilterChip(
+      label: Tooltip(
+        message: widget.tooltip ?? '',
+        child: Text(
+          widget.label,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+        ),
+      ),
+      backgroundColor: _getBackgroundColor(context),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+        side: BorderSide(
+          color: widget.color ??
+              Theme.of(context).colorScheme.primary.withAlpha(60),
+          width: 0.5,
+        ),
+      ),
+      selected: widget.selected,
+      checkmarkColor: widget.color ?? Theme.of(context).colorScheme.onPrimary,
+      avatar: widget.leading,
+      onSelected: widget.onSelected,
       onDeleted: widget.onDelete,
       deleteIconColor: widget.color ?? Theme.of(context).colorScheme.primary,
     );

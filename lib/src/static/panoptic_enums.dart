@@ -38,6 +38,7 @@ enum LoginType {
 enum ChipType {
   small,
   large,
+  filter,
 }
 
 enum LoadingType {

@@ -50,6 +50,7 @@ export 'src/widgets/inputs/panoptic_loading_dropdown_wrapper.dart';
 export 'src/widgets/inputs/panoptic_multi_select_form_field.dart';
 export 'src/widgets/inputs/panoptic_number_form_field.dart';
 export 'src/widgets/inputs/panoptic_segmented_form_field.dart';
+export 'src/widgets/inputs/panoptic_slider_form_field.dart';
 export 'src/widgets/inputs/panoptic_switch_form_field.dart';
 export 'src/widgets/inputs/panoptic_text_form_field.dart';
 
