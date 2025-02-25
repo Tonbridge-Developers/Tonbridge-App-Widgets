@@ -14,6 +14,7 @@ export 'src/extensions/panoptic_data_grid_row.dart';
 
 //actions
 export 'src/widgets/actions/panoptic_button.dart';
+export 'src/widgets/actions/panoptic_button_listener.dart';
 export 'src/widgets/actions/panoptic_icon_button.dart';
 export 'src/widgets/actions/panoptic_card_button.dart';
 export 'src/widgets/actions/panoptic_chip.dart';
