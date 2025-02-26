@@ -40,7 +40,6 @@ class _PanopticButtonListenerState extends State<PanopticButtonListener> {
   Widget build(BuildContext context) {
     final ctrl = widget.controller ?? PanopticPageBuilderController.of(context);
     final notifier = ctrl.getLoadingNotifier(widget.listenKey);
-    print('button listener build');
     return ListenableBuilder(
       listenable: notifier,
       builder: (ctx, child) {
