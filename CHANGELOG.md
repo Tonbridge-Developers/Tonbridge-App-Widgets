@@ -1,3 +1,8 @@
+## 2025.2.1
+
+* Fixed an issue with the TextField not showing errors
+* Incremented all pubspec versions
+
 ## 2025.1.3
 
 * Added a Filter Chip Type

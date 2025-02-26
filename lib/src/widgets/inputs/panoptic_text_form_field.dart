@@ -379,6 +379,20 @@ class PanopticTextFormField extends PanopticFormFieldDecoration<String> {
                 ],
               ),
             ),
+            if (state.hasError)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    state.errorText ?? 'An error occurred',
+                    style: Theme.of(state.context)
+                        .textTheme
+                        .labelMedium!
+                        .copyWith(
+                            color: Theme.of(state.context).colorScheme.error),
+                  ),
+                ],
+              ),
           ],
         )
       ],

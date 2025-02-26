@@ -109,7 +109,7 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
               : Theme.of(state.context).colorScheme.surface)
           .withAlpha(255),
       filled: true,
-      suffixIcon: state.value != null && checkedEnabled && enabled!
+      suffixIcon: state.value != null && checkedEnabled && enabled
           ? GestureDetector(
               onTap: () {
                 state.didChange(null);
@@ -315,7 +315,7 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
         PanopticIconButton(
           icon: checkedEnabled ? PanopticIcons.cross : PanopticIcons.edit,
           size: 50,
-          isDisabled: !enabled!,
+          isDisabled: !enabled,
           onTap: () {
             state.setState(() {
               checkedEnabled = !checkedEnabled;
