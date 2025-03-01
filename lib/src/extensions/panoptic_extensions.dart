@@ -6,9 +6,9 @@ import 'dart:math';
 import 'package:delightful_toast/delight_toast.dart';
 import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:excel/excel.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_file_saver/flutter_file_saver.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
 import 'package:http/http.dart';
@@ -416,14 +416,11 @@ class PanopticExtension {
   }
 
   static void saveFile(
-      Uint8List data, String fileName, String mimeType, BuildContext context,
+      Uint8List data, String fileName, MimeType mimeType, BuildContext context,
       {bool share = true, bool download = true, bool shareOnWeb = false}) {
     if (download) {
-      FlutterFileSaver fileSaver = FlutterFileSaver();
-      fileSaver.writeFileAsBytes(
-        fileName: fileName,
-        bytes: data,
-      );
+      FileSaver.instance
+          .saveFile(name: fileName, bytes: data, mimeType: mimeType);
     }
 
     if (share && (!kIsWeb || (kIsWeb && shareOnWeb))) {
@@ -432,7 +429,7 @@ class PanopticExtension {
           [
             XFile.fromData(
               data,
-              mimeType: mimeType,
+              mimeType: mimeType.type,
               name: fileName,
             ),
           ],
@@ -449,6 +446,17 @@ class PanopticExtension {
           'File Saved - Find it in ${Theme.of(context).platform == TargetPlatform.windows ? 'Downloads' : 'Files'}',
           context);
     }
+  }
+
+  static MimeType mimeTypeFromExtension(String extension) {
+    return MimeType.values.firstWhere(
+        (element) => element.type.contains(extension),
+        orElse: () => MimeType.custom);
+  }
+
+  static MimeType mimeTypeFromName(String name) {
+    return MimeType.values.firstWhere((element) => element.name.contains(name),
+        orElse: () => MimeType.custom);
   }
 
   static double calculateAspectRatio(BuildContext context,

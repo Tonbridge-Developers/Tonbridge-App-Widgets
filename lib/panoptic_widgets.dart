@@ -6,6 +6,7 @@ export 'src/static/core_themes.dart';
 export 'src/static/core_base_file.dart';
 export 'src/static/core_file.dart';
 export 'src/static/core_upload_file.dart';
+export 'package:file_saver/file_saver.dart';
 //extensions
 export 'src/extensions/panoptic_extensions.dart';
 export 'src/extensions/panoptic_grid_extension.dart';
