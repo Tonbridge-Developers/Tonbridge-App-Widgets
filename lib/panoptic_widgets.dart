@@ -1,4 +1,4 @@
-library panoptic_widgets;
+library;
 
 export 'src/static/panoptic_icons.dart';
 export 'src/static/panoptic_enums.dart';

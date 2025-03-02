@@ -1,18 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_app_icons/flutter_app_icons.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:theme_provider/theme_provider.dart';
-import 'package:android_dynamic_icon/android_dynamic_icon.dart';
 
 class PanopticThemeWidget extends StatefulWidget {
-  const PanopticThemeWidget({super.key, required this.inSlideOver});
+  const PanopticThemeWidget(
+      {super.key, required this.inSlideOver, this.onThemeChange});
   final bool inSlideOver;
+  final ValueChanged<String>? onThemeChange;
+
   @override
   State<PanopticThemeWidget> createState() => _PanopticThemeWidgetState();
 }
@@ -244,32 +242,15 @@ class _PanopticThemeWidgetState extends State<PanopticThemeWidget> {
               ? 2
               : 1;
 
-  static const platform = MethodChannel('org.tonbridge-school.app/icon');
   void _setTheme(String themeId) async {
     ThemeProvider.controllerOf(context).setTheme(themeId);
+
+    if (widget.onThemeChange != null) {
+      widget.onThemeChange!(themeId);
+    }
 
     setState(() {
       _currentTheme = themeId;
     });
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String? addon = prefs.getBool("pride") == true ? "_pride" : "";
-    if (Theme.of(context).platform == TargetPlatform.iOS && !kIsWeb) {
-      await platform.invokeMethod<void>(
-          themeId.replaceAll("_light", "").replaceAll("_dark", "") + addon);
-    } else if (Theme.of(context).platform == TargetPlatform.android &&
-        !kIsWeb) {
-      var androidDynamicIconPlugin = AndroidDynamicIcon();
-      await androidDynamicIconPlugin.changeIcon(classNames: [
-        'Icon${themeId.replaceAll("_light", "").replaceAll("_dark", "")}',
-        ''
-      ]);
-    } else if (kIsWeb) {
-      var flutterAppIconsPlugin = FlutterAppIcons();
-      flutterAppIconsPlugin.setIcon(
-          icon:
-              'assets/appicons/${themeId.replaceAll("_light", "").replaceAll("_dark", "")}$addon.png');
-    }
   }
 }

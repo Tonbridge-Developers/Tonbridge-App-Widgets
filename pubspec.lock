@@ -30,14 +30,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.11.0"
-  android_dynamic_icon:
-    dependency: "direct main"
-    description:
-      name: android_dynamic_icon
-      sha256: cefb257ff2ed6228db6c82b68e1185a986677fa985e40fe6a463f26f3422631f
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
   archive:
     dependency: "direct overridden"
     description:
@@ -411,14 +403,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.5.2"
-  flutter_app_icons:
-    dependency: "direct main"
-    description:
-      name: flutter_app_icons
-      sha256: c9061363914d8fd6ffb727a8884909495cac7982cef8af662ee78e8fbb10d2c5
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.1"
   flutter_colorpicker:
     dependency: "direct main"
     description:
