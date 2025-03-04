@@ -31,6 +31,7 @@ class PanopticCardColumn extends StatefulWidget {
   final bool dottedBorder;
   final bool useDarkBorder;
   final Function(bool)? onCollapse;
+  final double cornerRadiusFactor;
 
   PanopticCardColumn(
       {super.key,
@@ -54,6 +55,7 @@ class PanopticCardColumn extends StatefulWidget {
       this.dottedBorder = false,
       this.useDarkBorder = true,
       this.crossAxisAlignment = CrossAxisAlignment.stretch,
+      this.cornerRadiusFactor = 1,
       this.onCollapse});
 
   @override
@@ -73,7 +75,8 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
             color: Theme.of(context).colorScheme.primary,
             strokeWidth: 1,
             borderType: BorderType.RRect,
-            radius: const Radius.circular(CoreValues.cornerRadius),
+            radius: Radius.circular(
+                (CoreValues.cornerRadius * widget.cornerRadiusFactor)),
             child: _buildCard(widget.collapsible == true
                 ? buildCollapsibleContent()
                 : _buildContent()),
@@ -99,7 +102,8 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
                     width: 0.5, color: Theme.of(context).colorScheme.onSurface)
                 : null),
             borderRadius: BorderRadius.circular(
-                CoreValues.cornerRadius * (widget.dottedBorder ? 0.9 : 1)),
+                (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                    (widget.dottedBorder ? 0.9 : 1)),
             gradient: widget.gradient ??
                 LinearGradient(colors: [
                   widget.color ??

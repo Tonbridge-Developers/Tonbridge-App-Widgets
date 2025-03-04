@@ -27,6 +27,7 @@ class PanopticCardButton extends StatefulWidget {
   final double? height;
   final bool scrollable;
   final bool alternative;
+  final double cornerRadiusFactor;
 
   const PanopticCardButton({
     super.key,
@@ -50,6 +51,7 @@ class PanopticCardButton extends StatefulWidget {
     this.mainAxisAlignment = MainAxisAlignment.start,
     this.gradient,
     this.crossAxisAlignment = CrossAxisAlignment.stretch,
+    this.cornerRadiusFactor = 1,
   });
 
   @override
@@ -87,7 +89,8 @@ class _PanopticCardButtonState extends State<PanopticCardButton> {
                 (isDarkMode
                     ? Border.all(width: 0.5, color: theme.colorScheme.onSurface)
                     : null),
-            borderRadius: BorderRadius.circular(CoreValues.cornerRadius),
+            borderRadius: BorderRadius.circular(
+                (CoreValues.cornerRadius * widget.cornerRadiusFactor)),
             gradient: widget.gradient ??
                 LinearGradient(
                   colors: [

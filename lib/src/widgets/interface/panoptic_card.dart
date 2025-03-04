@@ -32,6 +32,7 @@ class PanopticCard extends StatefulWidget {
   final bool dottedBorder;
   final Function(bool)? onCollapse;
   final bool useDarkBorder;
+  final double cornerRadiusFactor;
 
   PanopticCard(
       {super.key,
@@ -58,6 +59,7 @@ class PanopticCard extends StatefulWidget {
       this.dottedBorder = false,
       this.crossAxisAlignment = CrossAxisAlignment.stretch,
       this.useDarkBorder = true,
+      this.cornerRadiusFactor = 1.0,
       this.onCollapse});
 
   @override
@@ -77,7 +79,8 @@ class _PanopticCardState extends State<PanopticCard> {
             color: Theme.of(context).colorScheme.primary,
             strokeWidth: 1,
             borderType: BorderType.RRect,
-            radius: const Radius.circular(CoreValues.cornerRadius),
+            radius: Radius.circular(
+                (CoreValues.cornerRadius * widget.cornerRadiusFactor)),
             child: _buildCard(widget.collapsible == true
                 ? buildCollapsibleContent()
                 : _buildContent()),
@@ -105,7 +108,8 @@ class _PanopticCardState extends State<PanopticCard> {
                         color: Theme.of(context).colorScheme.onSurface)
                     : null),
             borderRadius: BorderRadius.circular(
-                CoreValues.cornerRadius * (widget.dottedBorder ? 0.9 : 1)),
+                (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                    (widget.dottedBorder ? 0.9 : 1)),
             gradient: widget.gradient ??
                 LinearGradient(colors: [
                   widget.color ??

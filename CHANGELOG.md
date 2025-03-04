@@ -1,3 +1,7 @@
+## 2025.3.1
+
+* Added Radius Scale Factor to the Cards
+  
 ## 2025.2.1
 
 * Fixed an issue with the TextField not showing errors
