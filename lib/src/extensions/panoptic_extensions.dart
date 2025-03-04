@@ -181,9 +181,8 @@ class PanopticExtension {
     if (mode == DisplayMode.slideOver) {
       return await showDialog<T>(
         context: context,
-        barrierColor: accessibleTheme
-            ? Theme.of(context).colorScheme.surface
-            : Theme.of(context).colorScheme.surfaceContainer,
+        barrierColor:
+            accessibleTheme ? Theme.of(context).colorScheme.surface : null,
         builder: (BuildContext context) => PanopticSlideOver(
           title: title,
           child: page,
@@ -195,9 +194,8 @@ class PanopticExtension {
       return await showDialog<T>(
         context: context,
         barrierDismissible: isDismissible,
-        barrierColor: accessibleTheme
-            ? Theme.of(context).colorScheme.surface
-            : Theme.of(context).colorScheme.surfaceContainer,
+        barrierColor:
+            accessibleTheme ? Theme.of(context).colorScheme.surface : null,
         builder: (BuildContext context) => PanopticDialog(
           title: title ?? '',
           actions: dialogActions,
