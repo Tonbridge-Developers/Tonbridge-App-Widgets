@@ -168,6 +168,10 @@ class PanopticExtension {
     ///for Dialog only
     List<Widget> dialogActions = const [],
   }) async {
+    bool accessibleTheme =
+        ThemeProvider.controllerOf(context).currentThemeId.startsWith('white');
+    print(ThemeProvider.controllerOf(context).currentThemeId);
+
     DisplayMode mode = displayMode == DisplayMode.deviceDefault
         ? (getDeviceType(context) == DeviceType.large && kIsWeb
             ? DisplayMode.slideOver
@@ -177,11 +181,9 @@ class PanopticExtension {
     if (mode == DisplayMode.slideOver) {
       return await showDialog<T>(
         context: context,
-        barrierColor: ThemeProvider.controllerOf(context)
-                .currentThemeId
-                .startsWith('white')
+        barrierColor: accessibleTheme
             ? Theme.of(context).colorScheme.surface
-            : null,
+            : Theme.of(context).colorScheme.surfaceContainer,
         builder: (BuildContext context) => PanopticSlideOver(
           title: title,
           child: page,
@@ -193,11 +195,9 @@ class PanopticExtension {
       return await showDialog<T>(
         context: context,
         barrierDismissible: isDismissible,
-        barrierColor: ThemeProvider.controllerOf(context)
-                .currentThemeId
-                .startsWith('white')
+        barrierColor: accessibleTheme
             ? Theme.of(context).colorScheme.surface
-            : null,
+            : Theme.of(context).colorScheme.surfaceContainer,
         builder: (BuildContext context) => PanopticDialog(
           title: title ?? '',
           actions: dialogActions,
@@ -219,11 +219,8 @@ class PanopticExtension {
     if (mode == DisplayMode.bottomSheet) {
       return await showModalBottomSheet<T>(
         context: context,
-        barrierColor: ThemeProvider.controllerOf(context)
-                .currentThemeId
-                .startsWith('white')
-            ? Theme.of(context).colorScheme.surface
-            : null,
+        barrierColor:
+            accessibleTheme ? Theme.of(context).colorScheme.surface : null,
         builder: (BuildContext context) => DraggableScrollableSheet(
           maxChildSize: 0.9,
           minChildSize: kIsWeb || expand ? 0.7 : 0.4,
@@ -267,7 +264,7 @@ class PanopticExtension {
           ),
         ),
         isScrollControlled: isScrollControlled,
-        backgroundColor: Theme.of(context).dialogBackgroundColor,
+        backgroundColor: Theme.of(context).dialogTheme.backgroundColor,
         isDismissible: isDismissible,
         showDragHandle: isDismissible,
         constraints: BoxConstraints(
