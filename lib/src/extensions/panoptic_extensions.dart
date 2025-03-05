@@ -3,8 +3,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-import 'package:delightful_toast/delight_toast.dart';
-import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +15,6 @@ import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:theme_provider/theme_provider.dart';
-import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:uuid/uuid.dart';
@@ -297,99 +293,66 @@ class PanopticExtension {
   }
 
   static void showToast(String message, BuildContext context,
-      {ToastType type = ToastType.success, String? subTitle}) {
+      {ToastType type = ToastType.success,
+      String? subTitle,
+      bool usingWrapper = true}) {
     PanopticIcons icon = PanopticIcons.success;
 
-    Color color = Colors.green;
     ToastificationType toastificationType = ToastificationType.success;
 
     switch (type) {
       case ToastType.success:
         icon = PanopticIcons.success;
-        color = Colors.green;
+
         toastificationType = ToastificationType.success;
         break;
       case ToastType.error:
         icon = PanopticIcons.error;
-        color = Colors.red;
+
         toastificationType = ToastificationType.error;
         break;
       case ToastType.warning:
         icon = PanopticIcons.warning;
-        color = Colors.orange;
         toastificationType = ToastificationType.warning;
         break;
       case ToastType.info:
         icon = PanopticIcons.info;
-        color = Colors.blue;
         toastificationType = ToastificationType.info;
         break;
     }
 
-    if (getDeviceType(context) == DeviceType.small) {
-      DelightToastBar(
-        autoDismiss: true,
-        snackbarDuration: const Duration(seconds: 2),
-        builder: (context) => ToastCard(
-          color: color,
-          shadowColor: Theme.of(context).colorScheme.surfaceContainer,
-          leading: PanopticIcon(
-            icon: icon,
-            color: Colors.white,
-            margin: EdgeInsets.zero,
-            size: 28,
-          ),
-          title: Text(
-            message,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: Colors.white),
-          ),
-          subtitle: subTitle != null
-              ? Text(
-                  subTitle,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: Colors.white),
-                )
-              : null,
-        ),
-      ).show(context);
-    } else {
-      toastification.show(
-        context: context,
-        title: Text(
-          message,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge!
-              .copyWith(color: Colors.white),
-        ),
-        autoCloseDuration: const Duration(seconds: 2),
-        alignment: Alignment.topRight,
-        type: toastificationType,
-        borderRadius: BorderRadius.circular(CoreValues.cornerRadius),
-        closeOnClick: true,
-        style: ToastificationStyle.fillColored,
-        icon: PanopticIcon(
-          icon: icon,
-          color: Colors.white,
-          margin: EdgeInsets.zero,
-          size: 28,
-        ),
-        description: subTitle != null
-            ? Text(
-                subTitle,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: Colors.white),
-              )
-            : null,
-      );
-    }
+    toastification.show(
+      context: usingWrapper ? null : context,
+      title: Text(
+        message,
+        style: Theme.of(context)
+            .textTheme
+            .bodyLarge!
+            .copyWith(color: Colors.white),
+      ),
+      autoCloseDuration: const Duration(seconds: 2),
+      alignment: kIsWeb ? Alignment.topRight : Alignment.bottomCenter,
+      type: toastificationType,
+      borderRadius: BorderRadius.circular(CoreValues.cornerRadius),
+      closeOnClick: true,
+      applyBlurEffect: true,
+      style: ToastificationStyle.fillColored,
+      icon: PanopticIcon(
+        icon: icon,
+        color: Colors.white,
+        margin: EdgeInsets.zero,
+        size: 28,
+      ),
+      description: subTitle != null
+          ? Text(
+              subTitle,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: Colors.white),
+            )
+          : null,
+    );
   }
 
   static int calculateCrossAxisCount(BuildContext context,

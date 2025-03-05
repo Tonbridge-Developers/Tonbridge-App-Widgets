@@ -1,3 +1,7 @@
+## 2025.3.3
+
+* Removed dual toast style. Only one is used now. Added Support for the wrapper
+  
 ## 2025.3.1
 
 * Added Radius Scale Factor to the Cards

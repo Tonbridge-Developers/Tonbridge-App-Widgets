@@ -5,7 +5,6 @@ import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:theme_provider/theme_provider.dart';
 
 class PanopticTable extends StatefulWidget {
   const PanopticTable(
