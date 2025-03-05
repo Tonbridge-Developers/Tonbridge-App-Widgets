@@ -1,4 +1,4 @@
-## 2025.3.3
+## 2025.3.4
 
 * Removed dual toast style. Only one is used now. Added Support for the wrapper
   
