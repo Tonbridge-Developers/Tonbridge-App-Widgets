@@ -19,8 +19,16 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:uuid/uuid.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
+import 'package:os_detect/os_detect.dart' as os_detect;
 
 class PanopticExtension {
+  static bool isWebOrDesktop() {
+    return kIsWeb ||
+        os_detect.isMacOS ||
+        os_detect.isWindows ||
+        os_detect.isLinux;
+  }
+
   static int get currentAcademicYear =>
       DateTime.now().add(const Duration(days: -244)).year;
 
@@ -166,10 +174,9 @@ class PanopticExtension {
   }) async {
     bool accessibleTheme =
         ThemeProvider.controllerOf(context).currentThemeId.startsWith('white');
-    print(ThemeProvider.controllerOf(context).currentThemeId);
 
     DisplayMode mode = displayMode == DisplayMode.deviceDefault
-        ? (getDeviceType(context) == DeviceType.large && kIsWeb
+        ? (getDeviceType(context) == DeviceType.large && isWebOrDesktop()
             ? DisplayMode.slideOver
             : DisplayMode.bottomSheet)
         : displayMode;
@@ -201,7 +208,7 @@ class PanopticExtension {
               ? page
               : Container(
                   width: MediaQuery.of(context).size.width *
-                      (kIsWeb ? desktopWidthFactor : 0.8),
+                      (isWebOrDesktop() ? desktopWidthFactor : 0.8),
                   constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context).size.width),
                   child: page,
@@ -217,8 +224,10 @@ class PanopticExtension {
             accessibleTheme ? Theme.of(context).colorScheme.surface : null,
         builder: (BuildContext context) => DraggableScrollableSheet(
           maxChildSize: 0.9,
-          minChildSize: kIsWeb || expand ? 0.7 : 0.4,
-          initialChildSize: kIsWeb || expand ? 0.7 : 0.4,
+          minChildSize:
+              PanopticExtension.isWebOrDesktop() || expand ? 0.7 : 0.4,
+          initialChildSize:
+              PanopticExtension.isWebOrDesktop() || expand ? 0.7 : 0.4,
           expand: false,
           builder: (context, scrollController) => ListView(
             controller: scrollController,
@@ -264,11 +273,15 @@ class PanopticExtension {
         constraints: BoxConstraints(
             maxWidth: getDeviceType(context) == DeviceType.large
                 ? MediaQuery.of(context).size.width *
-                    (kIsWeb ? desktopWidthFactor : 0.8)
+                    (PanopticExtension.isWebOrDesktop()
+                        ? desktopWidthFactor
+                        : 0.8)
                 : MediaQuery.of(context).size.width,
             minWidth: getDeviceType(context) == DeviceType.large
                 ? MediaQuery.of(context).size.width *
-                    (kIsWeb ? desktopWidthFactor : 0.8)
+                    (PanopticExtension.isWebOrDesktop()
+                        ? desktopWidthFactor
+                        : 0.8)
                 : MediaQuery.of(context).size.width),
       );
     }
@@ -331,7 +344,9 @@ class PanopticExtension {
             .copyWith(color: Colors.white),
       ),
       autoCloseDuration: const Duration(seconds: 2),
-      alignment: kIsWeb ? Alignment.topRight : Alignment.bottomCenter,
+      alignment: PanopticExtension.isWebOrDesktop()
+          ? Alignment.topRight
+          : Alignment.bottomCenter,
       type: toastificationType,
       borderRadius: BorderRadius.circular(CoreValues.cornerRadius),
       closeOnClick: true,
@@ -380,7 +395,9 @@ class PanopticExtension {
           .saveFile(name: fileName, bytes: data, mimeType: mimeType);
     }
 
-    if (share && (!kIsWeb || (kIsWeb && shareOnWeb))) {
+    if (share &&
+        (!PanopticExtension.isWebOrDesktop() ||
+            (PanopticExtension.isWebOrDesktop() && shareOnWeb))) {
       try {
         Share.shareXFiles(
           [

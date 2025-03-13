@@ -9,6 +9,7 @@ export 'src/static/core_upload_file.dart';
 export 'package:file_saver/file_saver.dart';
 export 'package:toastification/toastification.dart';
 export 'package:theme_provider/theme_provider.dart';
+export 'package:os_detect/os_detect.dart';
 export 'package:easy_date_timeline/easy_date_timeline.dart'
     show EasyDatePickerController;
 //extensions

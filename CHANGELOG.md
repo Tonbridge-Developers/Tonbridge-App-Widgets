@@ -1,3 +1,9 @@
+## 2025.3.7
+
+* Added Support for MacOS and Windows
+  
+
+
 ## 2025.3.6
 
 * Improved the styling fo the Cards & Buttons

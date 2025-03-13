@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:panoptic_widgets/panoptic_widgets.dart';
 
 class PanopticProgress extends StatelessWidget {
   const PanopticProgress(
@@ -22,14 +22,17 @@ class PanopticProgress extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (showLabel) Text(mapLabel != null ? mapLabel!(value) : value.toString()),
+        if (showLabel)
+          Text(mapLabel != null ? mapLabel!(value) : value.toString()),
         const Padding(padding: EdgeInsets.all(2)),
         !showLabel && mapLabel != null
             ? Tooltip(
                 message: mapLabel!(value),
                 preferBelow: true,
                 verticalOffset: 10,
-                triggerMode: kIsWeb ? null : TooltipTriggerMode.tap,
+                triggerMode: PanopticExtension.isWebOrDesktop()
+                    ? null
+                    : TooltipTriggerMode.tap,
                 child: _buildProgressBar())
             : _buildProgressBar(),
       ],

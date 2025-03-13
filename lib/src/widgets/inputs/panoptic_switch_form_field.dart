@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 
@@ -45,8 +44,9 @@ class PanopticSwitchFormField extends PanopticFormFieldDecoration<bool> {
                               Tooltip(
                                 message: hintText,
                                 preferBelow: true,
-                                triggerMode:
-                                    kIsWeb ? null : TooltipTriggerMode.tap,
+                                triggerMode: PanopticExtension.isWebOrDesktop()
+                                    ? null
+                                    : TooltipTriggerMode.tap,
                                 verticalOffset: 10,
                                 child: PanopticIcon(
                                   icon: PanopticIcons.infoRound,

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
@@ -77,7 +76,7 @@ class _PanopticButtonState extends State<PanopticButton> {
                 LinearGradient(
                   colors: [
                     _getButtonColor(),
-                    PanopticExtension.shiftHue(_getButtonColor(), 10)
+                    PanopticExtension.shiftHue(_getButtonColor(), 15)
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -98,7 +97,7 @@ class _PanopticButtonState extends State<PanopticButton> {
       mainAxisSize: widget.expanded ? MainAxisSize.max : MainAxisSize.min,
       children: [
         Padding(
-          padding: (kIsWeb ||
+          padding: (PanopticExtension.isWebOrDesktop() ||
                       Theme.of(context).platform == TargetPlatform.macOS ||
                       Theme.of(context).platform == TargetPlatform.windows) &&
                   !widget.smaller
@@ -130,7 +129,7 @@ class _PanopticButtonState extends State<PanopticButton> {
             size: 20,
             margin: widget.label != null
                 ? const EdgeInsets.only(left: 10)
-                : (kIsWeb ||
+                : (PanopticExtension.isWebOrDesktop() ||
                             Theme.of(context).platform ==
                                 TargetPlatform.macOS ||
                             Theme.of(context).platform ==
@@ -147,7 +146,7 @@ class _PanopticButtonState extends State<PanopticButton> {
         if (widget.expanded)
           Expanded(
             child: Padding(
-              padding: (kIsWeb ||
+              padding: (PanopticExtension.isWebOrDesktop() ||
                           Theme.of(context).platform == TargetPlatform.macOS ||
                           Theme.of(context).platform ==
                               TargetPlatform.windows) &&
@@ -166,7 +165,7 @@ class _PanopticButtonState extends State<PanopticButton> {
           )
         else if (widget.label != null)
           Padding(
-            padding: (kIsWeb ||
+            padding: (PanopticExtension.isWebOrDesktop() ||
                         Theme.of(context).platform == TargetPlatform.macOS ||
                         Theme.of(context).platform == TargetPlatform.windows) &&
                     !widget.smaller

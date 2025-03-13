@@ -95,7 +95,7 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
                 LinearGradient(
                   colors: [
                     _getButtonColor(),
-                    PanopticExtension.shiftHue(_getButtonColor(), 10)
+                    PanopticExtension.shiftHue(_getButtonColor(), 15)
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,

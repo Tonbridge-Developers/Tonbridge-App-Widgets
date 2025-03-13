@@ -42,7 +42,7 @@ class PanopticIcon extends StatelessWidget {
                     : [
                         color ?? theme.colorScheme.primary,
                         PanopticExtension.shiftHue(
-                            color ?? theme.colorScheme.primary, 10)
+                            color ?? theme.colorScheme.primary, 15)
                       ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
