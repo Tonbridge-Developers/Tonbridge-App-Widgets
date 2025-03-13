@@ -1,7 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:theme_provider/theme_provider.dart';
@@ -28,6 +26,7 @@ class PanopticCardButton extends StatefulWidget {
   final bool scrollable;
   final bool alternative;
   final double cornerRadiusFactor;
+  final bool hideShadow;
 
   const PanopticCardButton({
     super.key,
@@ -52,6 +51,7 @@ class PanopticCardButton extends StatefulWidget {
     this.gradient,
     this.crossAxisAlignment = CrossAxisAlignment.stretch,
     this.cornerRadiusFactor = 1,
+    this.hideShadow = false,
   });
 
   @override
@@ -70,8 +70,7 @@ class _PanopticCardButtonState extends State<PanopticCardButton> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDarkMode = PlatformDispatcher.instance.platformBrightness ==
-            Brightness.dark ||
+    final isDarkMode =
         ThemeProvider.controllerOf(context).currentThemeId.startsWith('white');
 
     return MouseRegion(

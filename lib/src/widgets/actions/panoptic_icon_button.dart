@@ -90,13 +90,18 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
         ),
         color: _getButtonColor(),
         child: Container(
-          decoration: widget.gradient != null
-              ? BoxDecoration(
-                  gradient: widget.gradient,
-                  borderRadius:
-                      BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-                )
-              : null,
+          decoration: BoxDecoration(
+            gradient: widget.gradient ??
+                LinearGradient(
+                  colors: [
+                    _getButtonColor(),
+                    PanopticExtension.shiftHue(_getButtonColor(), 10)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+            borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+          ),
           child: widget.isLoading
               ? Center(
                   child: SizedBox(

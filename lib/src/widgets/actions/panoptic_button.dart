@@ -72,13 +72,18 @@ class _PanopticButtonState extends State<PanopticButton> {
         shape: _getShape(),
         child: Container(
           padding: widget.padding,
-          decoration: widget.gradient != null
-              ? BoxDecoration(
-                  gradient: widget.gradient,
-                  borderRadius:
-                      BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-                )
-              : null,
+          decoration: BoxDecoration(
+            gradient: widget.gradient ??
+                LinearGradient(
+                  colors: [
+                    _getButtonColor(),
+                    PanopticExtension.shiftHue(_getButtonColor(), 10)
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+            borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+          ),
           child: widget.isLoading
               ? _buildLoadingIndicator()
               : _buildButtonContent(),

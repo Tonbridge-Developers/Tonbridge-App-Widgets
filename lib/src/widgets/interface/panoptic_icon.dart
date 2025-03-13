@@ -30,40 +30,36 @@ class PanopticIcon extends StatelessWidget {
     return Padding(
       padding: margin,
       child: Badge(
-        offset: badgeOffset,
-        label: badge,
-        isLabelVisible: badge != null,
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        child: pride
-            ? ShaderMask(
-                shaderCallback: (bounds) {
-                  return SweepGradient(
-                    colors: Themes.pride,
-                  ).createShader(bounds);
-                },
-                blendMode: BlendMode.srcATop,
-                child: SvgPicture.asset(
-                  icon.path!,
-                  colorFilter: ColorFilter.mode(
-                      bw
-                          ? theme.colorScheme.onSurface
-                          : (color ?? theme.colorScheme.primary),
-                      BlendMode.srcIn),
-                  width: size,
-                  height: size,
-                ),
-              )
-            : SvgPicture.asset(
-                icon.path!,
-                colorFilter: ColorFilter.mode(
-                    bw
-                        ? theme.colorScheme.onSurface
-                        : (color ?? theme.colorScheme.primary),
-                    BlendMode.srcIn),
-                width: size,
-                height: size,
-              ),
-      ),
+          offset: badgeOffset,
+          label: badge,
+          isLabelVisible: badge != null,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          child: ShaderMask(
+            shaderCallback: (bounds) {
+              return LinearGradient(
+                colors: pride
+                    ? Themes.pride
+                    : [
+                        color ?? theme.colorScheme.primary,
+                        PanopticExtension.shiftHue(
+                            color ?? theme.colorScheme.primary, 10)
+                      ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ).createShader(bounds);
+            },
+            blendMode: BlendMode.srcATop,
+            child: SvgPicture.asset(
+              icon.path!,
+              colorFilter: ColorFilter.mode(
+                  bw
+                      ? theme.colorScheme.onSurface
+                      : (color ?? theme.colorScheme.primary),
+                  BlendMode.srcIn),
+              width: size,
+              height: size,
+            ),
+          )),
     );
   }
 }

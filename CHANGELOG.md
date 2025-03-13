@@ -1,3 +1,8 @@
+## 2025.3.6
+
+* Improved the styling fo the Cards & Buttons
+  
+
 ## 2025.3.5
 
 * Added Date Timeline Widget

@@ -405,6 +405,11 @@ class PanopticExtension {
     }
   }
 
+  static Color shiftHue(Color color, double shiftAmount) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl.withHue((hsl.hue + shiftAmount) % 360).toColor();
+  }
+
   static MimeType mimeTypeFromExtension(String extension) {
     return MimeType.values.firstWhere(
         (element) => element.type.contains(extension),
