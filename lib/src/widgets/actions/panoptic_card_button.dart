@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:macos_haptic_feedback/macos_haptic_feedback.dart';
+import 'package:os_detect/os_detect.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -60,7 +62,7 @@ class PanopticCardButton extends StatefulWidget {
 
 class _PanopticCardButtonState extends State<PanopticCardButton> {
   late bool isCollapsed;
-
+  final _macosHapticFeedback = MacosHapticFeedback();
   @override
   void initState() {
     super.initState();
@@ -79,92 +81,101 @@ class _PanopticCardButtonState extends State<PanopticCardButton> {
         behavior: HitTestBehavior.opaque,
         onTap: widget.onPressed,
         onDoubleTap: widget.onDoublePress,
-        child: Container(
-          width: widget.width,
-          height: widget.height,
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            border: widget.border ??
-                (isDarkMode
-                    ? Border.all(width: 0.5, color: theme.colorScheme.onSurface)
-                    : null),
-            borderRadius: BorderRadius.circular(
-                (CoreValues.cornerRadius * widget.cornerRadiusFactor)),
-            gradient: widget.gradient ??
-                LinearGradient(
-                  colors: [
-                    widget.color ??
-                        (widget.alternative
-                            ? theme.colorScheme.surfaceContainer
-                            : theme.colorScheme.surface),
-                    widget.color ??
-                        (widget.alternative
-                            ? theme.colorScheme.surfaceContainer
-                            : theme.colorScheme.surface),
-                  ],
-                ),
-          ),
-          margin: widget.margin ??
-              const EdgeInsetsDirectional.only(top: 10, bottom: 10),
-          child: Column(
-            mainAxisAlignment: widget.mainAxisAlignment,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              if (widget.label != null ||
-                  widget.leading != null ||
-                  widget.trailing != null ||
-                  widget.collapsible)
-                MouseRegion(
-                  cursor: widget.collapsible
-                      ? SystemMouseCursors.click
-                      : MouseCursor.defer,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: widget.collapsible
-                        ? () => setState(() => isCollapsed = !isCollapsed)
-                        : null,
-                    child: Padding(
-                      padding: widget.labelPadding ??
-                          const EdgeInsetsDirectional.all(10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          if (widget.leading != null) ...[
-                            widget.leading!,
-                            const SizedBox(width: 10),
+        child: MouseRegion(
+          onEnter: (event) {
+            if (isMacOS) {
+              _macosHapticFeedback.generic();
+            }
+          },
+          child: Container(
+            width: widget.width,
+            height: widget.height,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              border: widget.border ??
+                  (isDarkMode
+                      ? Border.all(
+                          width: 0.5, color: theme.colorScheme.onSurface)
+                      : null),
+              borderRadius: BorderRadius.circular(
+                  (CoreValues.cornerRadius * widget.cornerRadiusFactor)),
+              gradient: widget.gradient ??
+                  LinearGradient(
+                    colors: [
+                      widget.color ??
+                          (widget.alternative
+                              ? theme.colorScheme.surfaceContainer
+                              : theme.colorScheme.surface),
+                      widget.color ??
+                          (widget.alternative
+                              ? theme.colorScheme.surfaceContainer
+                              : theme.colorScheme.surface),
+                    ],
+                  ),
+            ),
+            margin: widget.margin ??
+                const EdgeInsetsDirectional.only(top: 10, bottom: 10),
+            child: Column(
+              mainAxisAlignment: widget.mainAxisAlignment,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                if (widget.label != null ||
+                    widget.leading != null ||
+                    widget.trailing != null ||
+                    widget.collapsible)
+                  MouseRegion(
+                    cursor: widget.collapsible
+                        ? SystemMouseCursors.click
+                        : MouseCursor.defer,
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: widget.collapsible
+                          ? () => setState(() => isCollapsed = !isCollapsed)
+                          : null,
+                      child: Padding(
+                        padding: widget.labelPadding ??
+                            const EdgeInsetsDirectional.all(10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            if (widget.leading != null) ...[
+                              widget.leading!,
+                              const SizedBox(width: 10),
+                            ],
+                            if (widget.label != null)
+                              Expanded(
+                                child: Text(widget.label!,
+                                    style: theme.textTheme.titleMedium),
+                              ),
+                            if (widget.trailing != null) widget.trailing!,
+                            if (widget.collapsible)
+                              Icon(isCollapsed
+                                  ? Icons.keyboard_arrow_right_rounded
+                                  : Icons.keyboard_arrow_down_rounded),
                           ],
-                          if (widget.label != null)
-                            Expanded(
-                              child: Text(widget.label!,
-                                  style: theme.textTheme.titleMedium),
-                            ),
-                          if (widget.trailing != null) widget.trailing!,
-                          if (widget.collapsible)
-                            Icon(isCollapsed
-                                ? Icons.keyboard_arrow_right_rounded
-                                : Icons.keyboard_arrow_down_rounded),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              if (!isCollapsed)
-                widget.scrollable
-                    ? Expanded(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Padding(
-                            padding: widget.padding ?? const EdgeInsets.all(10),
-                            child: widget.child,
+                if (!isCollapsed)
+                  widget.scrollable
+                      ? Expanded(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Padding(
+                              padding:
+                                  widget.padding ?? const EdgeInsets.all(10),
+                              child: widget.child,
+                            ),
                           ),
+                        )
+                      : Padding(
+                          padding: widget.padding ?? const EdgeInsets.all(10),
+                          child: widget.child,
                         ),
-                      )
-                    : Padding(
-                        padding: widget.padding ?? const EdgeInsets.all(10),
-                        child: widget.child,
-                      ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

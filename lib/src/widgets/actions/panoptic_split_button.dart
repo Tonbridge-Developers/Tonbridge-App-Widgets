@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macos_haptic_feedback/macos_haptic_feedback.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 
@@ -49,7 +50,7 @@ class PanopticSplitButton extends StatefulWidget {
 
 class _PanopticSplitButtonState extends State<PanopticSplitButton> {
   final FocusNode _buttonFocusNode = FocusNode(debugLabel: 'Menu Button');
-
+  final _macosHapticFeedback = MacosHapticFeedback();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -171,6 +172,11 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
                     icon: action.icon!, size: 20, color: _getColor('action'))
                 : null,
             onPressed: action.onPressed,
+            onHover: (value) {
+              if (isMacOS) {
+                _macosHapticFeedback.generic();
+              }
+            },
             child: Text(
               action.label,
               textAlign: TextAlign.center,

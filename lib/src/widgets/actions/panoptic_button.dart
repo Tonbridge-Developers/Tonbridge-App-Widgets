@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:macos_haptic_feedback/macos_haptic_feedback.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 
@@ -53,6 +54,8 @@ class PanopticButton extends StatefulWidget {
 }
 
 class _PanopticButtonState extends State<PanopticButton> {
+  final _macosHapticFeedback = MacosHapticFeedback();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -69,23 +72,31 @@ class _PanopticButtonState extends State<PanopticButton> {
         elevation: widget.elevation,
         padding: EdgeInsets.zero,
         shape: _getShape(),
-        child: Container(
-          padding: widget.padding,
-          decoration: BoxDecoration(
-            gradient: widget.gradient ??
-                LinearGradient(
-                  colors: [
-                    _getButtonColor(),
-                    PanopticExtension.shiftHue(_getButtonColor(), 15)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-            borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+        child: MouseRegion(
+          onEnter: (event) {
+            if (isMacOS) {
+              _macosHapticFeedback.generic();
+            }
+          },
+          child: Container(
+            padding: widget.padding,
+            decoration: BoxDecoration(
+              gradient: widget.gradient ??
+                  LinearGradient(
+                    colors: [
+                      _getButtonColor(),
+                      PanopticExtension.shiftHue(_getButtonColor(), 15)
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+              borderRadius:
+                  BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+            ),
+            child: widget.isLoading
+                ? _buildLoadingIndicator()
+                : _buildButtonContent(),
           ),
-          child: widget.isLoading
-              ? _buildLoadingIndicator()
-              : _buildButtonContent(),
         ),
       ),
     );

@@ -1,3 +1,8 @@
+## 2025.3.8
+
+* Added Native Hover Events for MacOS
+  
+
 ## 2025.3.7
 
 * Added Support for MacOS and Windows

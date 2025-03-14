@@ -2,6 +2,8 @@
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:macos_haptic_feedback/macos_haptic_feedback.dart';
+import 'package:os_detect/os_detect.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -67,6 +69,7 @@ class PanopticCard extends StatefulWidget {
 }
 
 class _PanopticCardState extends State<PanopticCard> {
+  final _macosHapticFeedback = MacosHapticFeedback();
   @override
   void initState() {
     super.initState();
@@ -130,6 +133,13 @@ class _PanopticCardState extends State<PanopticCard> {
   Widget _buildContent() => SelectionArea(
         child: InkWell(
           onDoubleTap: widget.onDoublePress,
+          onHover: (value) {
+            if (widget.onPressed != null || widget.onDoublePress != null) {
+              if (isMacOS) {
+                _macosHapticFeedback.generic();
+              }
+            }
+          },
           onTap: widget.onPressed,
           child: widget.scrollable
               ? SingleChildScrollView(
