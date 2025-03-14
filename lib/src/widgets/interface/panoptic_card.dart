@@ -1,9 +1,9 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:ui';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:macos_haptic_feedback/macos_haptic_feedback.dart';
+import 'package:os_detect/os_detect.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:theme_provider/theme_provider.dart';
 
@@ -32,6 +32,8 @@ class PanopticCard extends StatefulWidget {
   final bool dottedBorder;
   final Function(bool)? onCollapse;
   final bool useDarkBorder;
+  final double cornerRadiusFactor;
+  final bool hideShadow;
 
   PanopticCard(
       {super.key,
@@ -57,7 +59,9 @@ class PanopticCard extends StatefulWidget {
       this.gradient,
       this.dottedBorder = false,
       this.crossAxisAlignment = CrossAxisAlignment.stretch,
-      this.useDarkBorder = true,
+      this.useDarkBorder = false,
+      this.cornerRadiusFactor = 1.0,
+      this.hideShadow = false,
       this.onCollapse});
 
   @override
@@ -65,6 +69,7 @@ class PanopticCard extends StatefulWidget {
 }
 
 class _PanopticCardState extends State<PanopticCard> {
+  final _macosHapticFeedback = MacosHapticFeedback();
   final focusNode = FocusNode(
     skipTraversal: true,
     canRequestFocus: false,
@@ -86,7 +91,8 @@ class _PanopticCardState extends State<PanopticCard> {
             color: Theme.of(context).colorScheme.primary,
             strokeWidth: 1,
             borderType: BorderType.RRect,
-            radius: const Radius.circular(CoreValues.cornerRadius),
+            radius: Radius.circular(
+                (CoreValues.cornerRadius * widget.cornerRadiusFactor)),
             child: _buildCard(widget.collapsible == true
                 ? buildCollapsibleContent()
                 : _buildContent()),
@@ -102,21 +108,21 @@ class _PanopticCardState extends State<PanopticCard> {
         height: widget.height,
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-            border: widget.border ??
-                ((widget.useDarkBorder &&
-                            PlatformDispatcher.instance.platformBrightness ==
-                                Brightness.dark) ||
-                        ThemeProvider.controllerOf(context)
-                            .currentThemeId
-                            .startsWith('white')
-                    ? Border.all(
-                        width: 0.5,
-                        color: Theme.of(context).colorScheme.onSurface)
-                    : null),
-            borderRadius: BorderRadius.circular(
-                CoreValues.cornerRadius * (widget.dottedBorder ? 0.9 : 1)),
-            gradient: widget.gradient ??
-                LinearGradient(colors: [
+          border: widget.border ??
+              ((widget.useDarkBorder) ||
+                      ThemeProvider.controllerOf(context)
+                          .currentThemeId
+                          .startsWith('white')
+                  ? Border.all(
+                      width: 0.5,
+                      color: Theme.of(context).colorScheme.onSurface)
+                  : null),
+          borderRadius: BorderRadius.circular(
+              (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                  (widget.dottedBorder ? 0.9 : 1)),
+          gradient: widget.gradient ??
+              LinearGradient(
+                colors: [
                   widget.color ??
                       (widget.alternative
                           ? Theme.of(context).colorScheme.surfaceContainer
@@ -125,7 +131,9 @@ class _PanopticCardState extends State<PanopticCard> {
                       (widget.alternative
                           ? Theme.of(context).colorScheme.surfaceContainer
                           : Theme.of(context).colorScheme.surface)
-                ])),
+                ],
+              ),
+        ),
         margin: widget.margin ??
             const EdgeInsetsDirectional.only(top: 10, bottom: 10),
         child: child,
@@ -136,6 +144,13 @@ class _PanopticCardState extends State<PanopticCard> {
         child: InkWell(
           focusNode: focusNode2,
           onDoubleTap: widget.onDoublePress,
+          onHover: (value) {
+            if (widget.onPressed != null || widget.onDoublePress != null) {
+              if (isMacOS) {
+                _macosHapticFeedback.generic();
+              }
+            }
+          },
           onTap: widget.onPressed,
           child: widget.scrollable
               ? SingleChildScrollView(

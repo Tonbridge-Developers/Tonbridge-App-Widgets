@@ -111,7 +111,7 @@ class _PanopticPdfViewerState extends State<PanopticPdfViewer> {
                     label: 'Download',
                     onPressed: () {
                       PanopticExtension.saveFile(widget.pdfBytes,
-                          '${widget.title}.pdf', 'application/pdf', context);
+                          '${widget.title}.pdf', MimeType.pdf, context);
                     },
                   ),
                   if (widget.url != null)

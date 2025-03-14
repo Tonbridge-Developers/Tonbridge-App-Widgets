@@ -1,7 +1,5 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:ui';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
@@ -31,6 +29,8 @@ class PanopticCardColumn extends StatefulWidget {
   final bool dottedBorder;
   final bool useDarkBorder;
   final Function(bool)? onCollapse;
+  final double cornerRadiusFactor;
+  final bool hideShadow;
 
   PanopticCardColumn(
       {super.key,
@@ -52,8 +52,10 @@ class PanopticCardColumn extends StatefulWidget {
       this.mainAxisAlignment = MainAxisAlignment.start,
       this.gradient,
       this.dottedBorder = false,
-      this.useDarkBorder = true,
+      this.useDarkBorder = false,
       this.crossAxisAlignment = CrossAxisAlignment.stretch,
+      this.cornerRadiusFactor = 1,
+      this.hideShadow = false,
       this.onCollapse});
 
   @override
@@ -73,7 +75,8 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
             color: Theme.of(context).colorScheme.primary,
             strokeWidth: 1,
             borderType: BorderType.RRect,
-            radius: const Radius.circular(CoreValues.cornerRadius),
+            radius: Radius.circular(
+                (CoreValues.cornerRadius * widget.cornerRadiusFactor)),
             child: _buildCard(widget.collapsible == true
                 ? buildCollapsibleContent()
                 : _buildContent()),
@@ -89,19 +92,19 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
         height: widget.height,
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-            border: ((widget.useDarkBorder &&
-                        PlatformDispatcher.instance.platformBrightness ==
-                            Brightness.dark) ||
-                    ThemeProvider.controllerOf(context)
-                        .currentThemeId
-                        .startsWith('white')
-                ? Border.all(
-                    width: 0.5, color: Theme.of(context).colorScheme.onSurface)
-                : null),
-            borderRadius: BorderRadius.circular(
-                CoreValues.cornerRadius * (widget.dottedBorder ? 0.9 : 1)),
-            gradient: widget.gradient ??
-                LinearGradient(colors: [
+          border: ((widget.useDarkBorder) ||
+                  ThemeProvider.controllerOf(context)
+                      .currentThemeId
+                      .startsWith('white')
+              ? Border.all(
+                  width: 0.5, color: Theme.of(context).colorScheme.onSurface)
+              : null),
+          borderRadius: BorderRadius.circular(
+              (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                  (widget.dottedBorder ? 0.9 : 1)),
+          gradient: widget.gradient ??
+              LinearGradient(
+                colors: [
                   widget.color ??
                       (widget.alternative
                           ? Theme.of(context).colorScheme.surfaceContainer
@@ -110,7 +113,9 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
                       (widget.alternative
                           ? Theme.of(context).colorScheme.surfaceContainer
                           : Theme.of(context).colorScheme.surface)
-                ])),
+                ],
+              ),
+        ),
         margin: widget.margin ??
             const EdgeInsetsDirectional.only(top: 10, bottom: 10),
         child: child,

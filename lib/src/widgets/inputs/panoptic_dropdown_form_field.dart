@@ -1,6 +1,5 @@
 // ignore_for_file: invalid_use_of_protected_member
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
@@ -83,7 +82,9 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
           Tooltip(
             message: hintText,
             preferBelow: true,
-            triggerMode: kIsWeb ? null : TooltipTriggerMode.tap,
+            triggerMode: PanopticExtension.isWebOrDesktop()
+                ? null
+                : TooltipTriggerMode.tap,
             verticalOffset: 10,
             child: PanopticIcon(
               icon: PanopticIcons.infoRound,
@@ -109,7 +110,7 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
               : Theme.of(state.context).colorScheme.surface)
           .withAlpha(255),
       filled: true,
-      suffixIcon: state.value != null && checkedEnabled && enabled!
+      suffixIcon: state.value != null && checkedEnabled && enabled
           ? GestureDetector(
               onTap: () {
                 state.didChange(null);
@@ -315,7 +316,7 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
         PanopticIconButton(
           icon: checkedEnabled ? PanopticIcons.cross : PanopticIcons.edit,
           size: 50,
-          isDisabled: !enabled!,
+          isDisabled: !enabled,
           onTap: () {
             state.setState(() {
               checkedEnabled = !checkedEnabled;

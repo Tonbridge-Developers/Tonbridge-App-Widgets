@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:macos_haptic_feedback/macos_haptic_feedback.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:theme_provider/theme_provider.dart';
 
 class PanopticIconButton extends StatefulWidget {
   final VoidCallback? onTap;
@@ -52,6 +52,7 @@ class PanopticIconButton extends StatefulWidget {
 }
 
 class _PanopticIconButtonState extends State<PanopticIconButton> {
+  final _macosHapticFeedback = MacosHapticFeedback();
   @override
   Widget build(BuildContext context) {
     assert(widget.icon != null || widget.widget != null,
@@ -76,46 +77,60 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
   }
 
   Widget _buildButton() {
-    return Container(
-      margin: widget.margin,
-      constraints:
-          BoxConstraints.tightFor(width: widget.size, height: widget.size),
-      child: MaterialButton(
-        disabledColor: _getButtonColor(),
-        onPressed: widget.isDisabled || widget.isLoading ? null : widget.onTap,
-        padding: const EdgeInsets.all(0),
-        elevation: widget.elevation,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-          side: widget.borderSide ?? _getBorderSide(),
-        ),
-        color: _getButtonColor(),
-        child: Container(
-          decoration: widget.gradient != null
-              ? BoxDecoration(
-                  gradient: widget.gradient,
-                  borderRadius:
-                      BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-                )
-              : null,
-          child: widget.isLoading
-              ? Center(
-                  child: SizedBox(
-                    height: widget.size / 2,
-                    width: widget.size / 2,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      valueColor: AlwaysStoppedAnimation(_getTextColor()),
-                    ),
+    return MouseRegion(
+      onEnter: (event) {
+        if (isMacOS) {
+          _macosHapticFeedback.generic();
+        }
+      },
+      child: Container(
+        margin: widget.margin,
+        constraints:
+            BoxConstraints.tightFor(width: widget.size, height: widget.size),
+        child: MaterialButton(
+          disabledColor: _getButtonColor(),
+          onPressed:
+              widget.isDisabled || widget.isLoading ? null : widget.onTap,
+          padding: const EdgeInsets.all(0),
+          elevation: widget.elevation,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+            side: widget.borderSide ?? _getBorderSide(),
+          ),
+          color: _getButtonColor(),
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: widget.gradient ??
+                  LinearGradient(
+                    colors: [
+                      _getButtonColor(),
+                      PanopticExtension.shiftHue(_getButtonColor(), 15)
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
-                )
-              : widget.icon != null
-                  ? PanopticIcon(
-                      icon: widget.icon!,
-                      color: widget.foregroundColor ?? _getTextColor(),
-                      size: widget.size / 2,
-                    )
-                  : widget.widget,
+              borderRadius:
+                  BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+            ),
+            child: widget.isLoading
+                ? Center(
+                    child: SizedBox(
+                      height: widget.size / 2,
+                      width: widget.size / 2,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                        valueColor: AlwaysStoppedAnimation(_getTextColor()),
+                      ),
+                    ),
+                  )
+                : widget.icon != null
+                    ? PanopticIcon(
+                        icon: widget.icon!,
+                        color: widget.foregroundColor ?? _getTextColor(),
+                        size: widget.size / 2,
+                      )
+                    : widget.widget,
+          ),
         ),
       ),
     );

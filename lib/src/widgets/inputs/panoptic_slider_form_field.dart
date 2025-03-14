@@ -1,8 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member, use_build_context_synchronously, unnecessary_overrides
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
@@ -130,7 +128,9 @@ class PanopticSliderFormField
             message: hintText,
             preferBelow: true,
             verticalOffset: 10,
-            triggerMode: kIsWeb ? null : TooltipTriggerMode.tap,
+            triggerMode: PanopticExtension.isWebOrDesktop()
+                ? null
+                : TooltipTriggerMode.tap,
             child: PanopticIcon(
               icon: PanopticIcons.infoRound,
               size: 15,

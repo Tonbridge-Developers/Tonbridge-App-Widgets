@@ -3,12 +3,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-import 'package:delightful_toast/delight_toast.dart';
-import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_file_saver/flutter_file_saver.dart';
 import 'package:flutter_quill/quill_delta.dart';
 import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
 import 'package:http/http.dart';
@@ -18,14 +15,20 @@ import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:theme_provider/theme_provider.dart';
-import 'package:toastification/toastification.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:uuid/uuid.dart';
 import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
+import 'package:os_detect/os_detect.dart' as os_detect;
 
 class PanopticExtension {
+  static bool isWebOrDesktop() {
+    return kIsWeb ||
+        os_detect.isMacOS ||
+        os_detect.isWindows ||
+        os_detect.isLinux;
+  }
+
   static int get currentAcademicYear =>
       DateTime.now().add(const Duration(days: -244)).year;
 
@@ -169,8 +172,11 @@ class PanopticExtension {
     ///for Dialog only
     List<Widget> dialogActions = const [],
   }) async {
+    bool accessibleTheme =
+        ThemeProvider.controllerOf(context).currentThemeId.startsWith('white');
+
     DisplayMode mode = displayMode == DisplayMode.deviceDefault
-        ? (getDeviceType(context) == DeviceType.large && kIsWeb
+        ? (getDeviceType(context) == DeviceType.large && isWebOrDesktop()
             ? DisplayMode.slideOver
             : DisplayMode.bottomSheet)
         : displayMode;
@@ -178,11 +184,8 @@ class PanopticExtension {
     if (mode == DisplayMode.slideOver) {
       return await showDialog<T>(
         context: context,
-        barrierColor: ThemeProvider.controllerOf(context)
-                .currentThemeId
-                .startsWith('white')
-            ? Theme.of(context).colorScheme.surface
-            : null,
+        barrierColor:
+            accessibleTheme ? Theme.of(context).colorScheme.surface : null,
         builder: (BuildContext context) => PanopticSlideOver(
           title: title,
           child: page,
@@ -194,11 +197,8 @@ class PanopticExtension {
       return await showDialog<T>(
         context: context,
         barrierDismissible: isDismissible,
-        barrierColor: ThemeProvider.controllerOf(context)
-                .currentThemeId
-                .startsWith('white')
-            ? Theme.of(context).colorScheme.surface
-            : null,
+        barrierColor:
+            accessibleTheme ? Theme.of(context).colorScheme.surface : null,
         builder: (BuildContext context) => PanopticDialog(
           title: title ?? '',
           actions: dialogActions,
@@ -208,7 +208,7 @@ class PanopticExtension {
               ? page
               : Container(
                   width: MediaQuery.of(context).size.width *
-                      (kIsWeb ? desktopWidthFactor : 0.8),
+                      (isWebOrDesktop() ? desktopWidthFactor : 0.8),
                   constraints: BoxConstraints(
                       maxWidth: MediaQuery.of(context).size.width),
                   child: page,
@@ -220,15 +220,14 @@ class PanopticExtension {
     if (mode == DisplayMode.bottomSheet) {
       return await showModalBottomSheet<T>(
         context: context,
-        barrierColor: ThemeProvider.controllerOf(context)
-                .currentThemeId
-                .startsWith('white')
-            ? Theme.of(context).colorScheme.surface
-            : null,
+        barrierColor:
+            accessibleTheme ? Theme.of(context).colorScheme.surface : null,
         builder: (BuildContext context) => DraggableScrollableSheet(
           maxChildSize: 0.9,
-          minChildSize: kIsWeb || expand ? 0.7 : 0.4,
-          initialChildSize: kIsWeb || expand ? 0.7 : 0.4,
+          minChildSize:
+              PanopticExtension.isWebOrDesktop() || expand ? 0.7 : 0.4,
+          initialChildSize:
+              PanopticExtension.isWebOrDesktop() || expand ? 0.7 : 0.4,
           expand: false,
           builder: (context, scrollController) => ListView(
             controller: scrollController,
@@ -268,17 +267,21 @@ class PanopticExtension {
           ),
         ),
         isScrollControlled: isScrollControlled,
-        backgroundColor: Theme.of(context).dialogBackgroundColor,
+        backgroundColor: Theme.of(context).dialogTheme.backgroundColor,
         isDismissible: isDismissible,
         showDragHandle: isDismissible,
         constraints: BoxConstraints(
             maxWidth: getDeviceType(context) == DeviceType.large
                 ? MediaQuery.of(context).size.width *
-                    (kIsWeb ? desktopWidthFactor : 0.8)
+                    (PanopticExtension.isWebOrDesktop()
+                        ? desktopWidthFactor
+                        : 0.8)
                 : MediaQuery.of(context).size.width,
             minWidth: getDeviceType(context) == DeviceType.large
                 ? MediaQuery.of(context).size.width *
-                    (kIsWeb ? desktopWidthFactor : 0.8)
+                    (PanopticExtension.isWebOrDesktop()
+                        ? desktopWidthFactor
+                        : 0.8)
                 : MediaQuery.of(context).size.width),
       );
     }
@@ -303,99 +306,68 @@ class PanopticExtension {
   }
 
   static void showToast(String message, BuildContext context,
-      {ToastType type = ToastType.success, String? subTitle}) {
+      {ToastType type = ToastType.success,
+      String? subTitle,
+      bool usingWrapper = true}) {
     PanopticIcons icon = PanopticIcons.success;
 
-    Color color = Colors.green;
     ToastificationType toastificationType = ToastificationType.success;
 
     switch (type) {
       case ToastType.success:
         icon = PanopticIcons.success;
-        color = Colors.green;
+
         toastificationType = ToastificationType.success;
         break;
       case ToastType.error:
         icon = PanopticIcons.error;
-        color = Colors.red;
+
         toastificationType = ToastificationType.error;
         break;
       case ToastType.warning:
         icon = PanopticIcons.warning;
-        color = Colors.orange;
         toastificationType = ToastificationType.warning;
         break;
       case ToastType.info:
         icon = PanopticIcons.info;
-        color = Colors.blue;
         toastificationType = ToastificationType.info;
         break;
     }
 
-    if (getDeviceType(context) == DeviceType.small) {
-      DelightToastBar(
-        autoDismiss: true,
-        snackbarDuration: const Duration(seconds: 2),
-        builder: (context) => ToastCard(
-          color: color,
-          shadowColor: Theme.of(context).colorScheme.surfaceContainer,
-          leading: PanopticIcon(
-            icon: icon,
-            color: Colors.white,
-            margin: EdgeInsets.zero,
-            size: 28,
-          ),
-          title: Text(
-            message,
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: Colors.white),
-          ),
-          subtitle: subTitle != null
-              ? Text(
-                  subTitle,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(color: Colors.white),
-                )
-              : null,
-        ),
-      ).show(context);
-    } else {
-      toastification.show(
-        context: context,
-        title: Text(
-          message,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge!
-              .copyWith(color: Colors.white),
-        ),
-        autoCloseDuration: const Duration(seconds: 2),
-        alignment: Alignment.topRight,
-        type: toastificationType,
-        borderRadius: BorderRadius.circular(CoreValues.cornerRadius),
-        closeOnClick: true,
-        style: ToastificationStyle.fillColored,
-        icon: PanopticIcon(
-          icon: icon,
-          color: Colors.white,
-          margin: EdgeInsets.zero,
-          size: 28,
-        ),
-        description: subTitle != null
-            ? Text(
-                subTitle,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: Colors.white),
-              )
-            : null,
-      );
-    }
+    toastification.show(
+      context: usingWrapper ? null : context,
+      title: Text(
+        message,
+        style: Theme.of(context)
+            .textTheme
+            .bodyLarge!
+            .copyWith(color: Colors.white),
+      ),
+      autoCloseDuration: const Duration(seconds: 2),
+      alignment: PanopticExtension.isWebOrDesktop()
+          ? Alignment.topRight
+          : Alignment.bottomCenter,
+      type: toastificationType,
+      borderRadius: BorderRadius.circular(CoreValues.cornerRadius),
+      closeOnClick: true,
+      applyBlurEffect: true,
+      style: ToastificationStyle.fillColored,
+      icon: PanopticIcon(
+        icon: icon,
+        color: Colors.white,
+        margin: EdgeInsets.zero,
+        size: 28,
+      ),
+      description: subTitle != null
+          ? Text(
+              subTitle,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: Colors.white),
+            )
+          : null,
+    );
   }
 
   static int calculateCrossAxisCount(BuildContext context,
@@ -416,23 +388,22 @@ class PanopticExtension {
   }
 
   static void saveFile(
-      Uint8List data, String fileName, String mimeType, BuildContext context,
+      Uint8List data, String fileName, MimeType mimeType, BuildContext context,
       {bool share = true, bool download = true, bool shareOnWeb = false}) {
     if (download) {
-      FlutterFileSaver fileSaver = FlutterFileSaver();
-      fileSaver.writeFileAsBytes(
-        fileName: fileName,
-        bytes: data,
-      );
+      FileSaver.instance
+          .saveFile(name: fileName, bytes: data, mimeType: mimeType);
     }
 
-    if (share && (!kIsWeb || (kIsWeb && shareOnWeb))) {
+    if (share &&
+        (!PanopticExtension.isWebOrDesktop() ||
+            (PanopticExtension.isWebOrDesktop() && shareOnWeb))) {
       try {
         Share.shareXFiles(
           [
             XFile.fromData(
               data,
-              mimeType: mimeType,
+              mimeType: mimeType.type,
               name: fileName,
             ),
           ],
@@ -449,6 +420,22 @@ class PanopticExtension {
           'File Saved - Find it in ${Theme.of(context).platform == TargetPlatform.windows ? 'Downloads' : 'Files'}',
           context);
     }
+  }
+
+  static Color shiftHue(Color color, double shiftAmount) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl.withHue((hsl.hue + shiftAmount) % 360).toColor();
+  }
+
+  static MimeType mimeTypeFromExtension(String extension) {
+    return MimeType.values.firstWhere(
+        (element) => element.type.contains(extension),
+        orElse: () => MimeType.custom);
+  }
+
+  static MimeType mimeTypeFromName(String name) {
+    return MimeType.values.firstWhere((element) => element.name.contains(name),
+        orElse: () => MimeType.custom);
   }
 
   static double calculateAspectRatio(BuildContext context,

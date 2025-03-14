@@ -11,8 +11,8 @@ const kTagImg = 'img';
 class TagImg {
   final WidgetFactory wf;
 
-  double? _height;
-  double? _width;
+  final double? _height;
+  final double? _width;
 
   static final _builts = Expando<Widget>();
 

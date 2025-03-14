@@ -1,4 +1,4 @@
-library panoptic_widgets;
+library;
 
 export 'src/static/panoptic_icons.dart';
 export 'src/static/panoptic_enums.dart';
@@ -6,6 +6,12 @@ export 'src/static/core_themes.dart';
 export 'src/static/core_base_file.dart';
 export 'src/static/core_file.dart';
 export 'src/static/core_upload_file.dart';
+export 'package:file_saver/file_saver.dart';
+export 'package:toastification/toastification.dart';
+export 'package:theme_provider/theme_provider.dart';
+export 'package:os_detect/os_detect.dart';
+export 'package:easy_date_timeline/easy_date_timeline.dart'
+    show EasyDatePickerController;
 //extensions
 export 'src/extensions/panoptic_extensions.dart';
 export 'src/extensions/panoptic_grid_extension.dart';
@@ -64,6 +70,7 @@ export 'src/widgets/interface/panoptic_bubble_tab_decoration.dart';
 export 'src/widgets/interface/panoptic_card_column.dart';
 export 'src/widgets/interface/panoptic_card.dart';
 export 'src/widgets/interface/panoptic_column.dart';
+export 'src/widgets/interface/panoptic_date_timeline.dart';
 export 'src/widgets/interface/panoptic_dialog.dart';
 export 'src/widgets/interface/panoptic_empty_state.dart';
 export 'src/widgets/interface/panoptic_expanded.dart';

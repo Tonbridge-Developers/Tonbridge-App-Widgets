@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
@@ -116,7 +115,9 @@ class PanopticDecimalFormField extends PanopticFormFieldDecoration<String> {
                       message: hintText,
                       preferBelow: true,
                       verticalOffset: 10,
-                      triggerMode: kIsWeb ? null : TooltipTriggerMode.tap,
+                      triggerMode: PanopticExtension.isWebOrDesktop()
+                          ? null
+                          : TooltipTriggerMode.tap,
                       child: PanopticIcon(
                         icon: PanopticIcons.infoRound,
                         size: 15,

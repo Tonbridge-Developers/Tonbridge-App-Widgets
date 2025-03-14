@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
@@ -117,7 +116,9 @@ class PanopticFileUploadFormField
                                     preferBelow: true,
                                     verticalOffset: 10,
                                     triggerMode:
-                                        kIsWeb ? null : TooltipTriggerMode.tap,
+                                        PanopticExtension.isWebOrDesktop()
+                                            ? null
+                                            : TooltipTriggerMode.tap,
                                     child: PanopticIcon(
                                       icon: PanopticIcons.infoRound,
                                       size: 15,

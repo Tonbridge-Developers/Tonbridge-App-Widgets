@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:macos_haptic_feedback/macos_haptic_feedback.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:theme_provider/theme_provider.dart';
 
 class PanopticSplitButton extends StatefulWidget {
   final ButtonType buttonType;
@@ -51,7 +50,7 @@ class PanopticSplitButton extends StatefulWidget {
 
 class _PanopticSplitButtonState extends State<PanopticSplitButton> {
   final FocusNode _buttonFocusNode = FocusNode(debugLabel: 'Menu Button');
-
+  final _macosHapticFeedback = MacosHapticFeedback();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -163,7 +162,7 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
           shape: WidgetStatePropertyAll(RoundedRectangleBorder(
               borderRadius:
                   BorderRadius.circular(CoreValues.cornerRadius * 0.8)))),
-      alignmentOffset: const Offset(0, kIsWeb ? 5 : 0),
+      alignmentOffset: Offset(0, PanopticExtension.isWebOrDesktop() ? 5 : 0),
       childFocusNode: _buttonFocusNode,
       menuChildren: [
         for (var action in widget.actions) ...{
@@ -173,6 +172,11 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
                     icon: action.icon!, size: 20, color: _getColor('action'))
                 : null,
             onPressed: action.onPressed,
+            onHover: (value) {
+              if (isMacOS) {
+                _macosHapticFeedback.generic();
+              }
+            },
             child: Text(
               action.label,
               textAlign: TextAlign.center,
@@ -187,7 +191,9 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
         return SizedBox(
           width: 50,
           child: MaterialButton(
-              height: widget.topBar ? (kIsWeb ? 53 : 36) : (kIsWeb ? 57 : 40),
+              height: widget.topBar
+                  ? (PanopticExtension.isWebOrDesktop() ? 53 : 36)
+                  : (PanopticExtension.isWebOrDesktop() ? 57 : 40),
               onPressed: widget.isDisabled
                   ? null
                   : () => controller.isOpen
@@ -276,7 +282,7 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
   }
 
   EdgeInsets _getPlatformPadding() {
-    return (kIsWeb ||
+    return (PanopticExtension.isWebOrDesktop() ||
             Theme.of(context).platform == TargetPlatform.macOS ||
             Theme.of(context).platform == TargetPlatform.windows)
         ? const EdgeInsets.all(10)

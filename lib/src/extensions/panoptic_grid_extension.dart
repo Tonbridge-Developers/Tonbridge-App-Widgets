@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:theme_provider/theme_provider.dart';
 
 class PanopticGridExtension {
   static GridColumn defaultColumn(
@@ -152,21 +151,23 @@ class PanopticGridExtension {
       );
   static defaultChip(
     DataGridCell<dynamic> dataGridCell,
-    String Function(dynamic value) mapValue, {
+    String? Function(dynamic value) mapValue, {
     Color? color,
     Alignment alignment = Alignment.centerLeft,
     Color Function(dynamic value)? mapColor,
     EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 16.0),
   }) =>
-      Container(
-        alignment: alignment,
-        padding: padding,
-        child: PanopticChip(
-          label: mapValue(dataGridCell.value),
-          color: mapColor != null ? mapColor(dataGridCell.value) : color,
-          margin: EdgeInsets.zero,
-        ),
-      );
+      mapValue(dataGridCell.value) != null
+          ? Container(
+              alignment: alignment,
+              padding: padding,
+              child: PanopticChip(
+                label: mapValue(dataGridCell.value)!,
+                color: mapColor != null ? mapColor(dataGridCell.value) : color,
+                margin: EdgeInsets.zero,
+              ),
+            )
+          : Container();
 
   static defaultButton(
     DataGridCell<dynamic> dataGridCell,

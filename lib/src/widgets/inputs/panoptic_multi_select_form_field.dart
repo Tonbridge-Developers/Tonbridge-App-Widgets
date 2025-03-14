@@ -83,7 +83,9 @@ class PanopticMultiSelectFormField
                                     preferBelow: true,
                                     verticalOffset: 10,
                                     triggerMode:
-                                        kIsWeb ? null : TooltipTriggerMode.tap,
+                                        PanopticExtension.isWebOrDesktop()
+                                            ? null
+                                            : TooltipTriggerMode.tap,
                                     child: PanopticIcon(
                                       icon: PanopticIcons.infoRound,
                                       size: 15,

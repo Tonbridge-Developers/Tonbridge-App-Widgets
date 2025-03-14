@@ -907,7 +907,6 @@ class Themes {
           primaryColor: Colors.black,
           popupMenuTheme: const PopupMenuThemeData(color: Colors.white),
           dialogTheme: const DialogTheme(backgroundColor: Colors.white),
-          dialogBackgroundColor: Colors.white,
           timePickerTheme: const TimePickerThemeData(
               inputDecorationTheme: InputDecorationTheme(
                 fillColor: Colors.white,
@@ -936,7 +935,6 @@ class Themes {
           primaryColor: Colors.white,
           popupMenuTheme: const PopupMenuThemeData(color: Colors.black),
           dialogTheme: const DialogTheme(backgroundColor: Colors.black),
-          dialogBackgroundColor: Colors.black,
           timePickerTheme: const TimePickerThemeData(
               inputDecorationTheme: InputDecorationTheme(
                 fillColor: Colors.black,
@@ -966,7 +964,6 @@ class Themes {
           primaryColor: Colors.black,
           popupMenuTheme: const PopupMenuThemeData(color: Colors.white),
           dialogTheme: const DialogTheme(backgroundColor: Colors.white),
-          dialogBackgroundColor: Colors.white,
           timePickerTheme: const TimePickerThemeData(
               inputDecorationTheme: InputDecorationTheme(
                 fillColor: Colors.white,
@@ -995,7 +992,6 @@ class Themes {
           primaryColor: Colors.white,
           popupMenuTheme: const PopupMenuThemeData(color: Colors.black),
           dialogTheme: const DialogTheme(backgroundColor: Colors.black),
-          dialogBackgroundColor: Colors.black,
           timePickerTheme: const TimePickerThemeData(
               inputDecorationTheme: InputDecorationTheme(
                 fillColor: Colors.black,
@@ -1111,7 +1107,6 @@ class Themes {
           const PopupMenuThemeData(color: Color.fromARGB(255, 226, 232, 240)),
       dialogTheme: const DialogTheme(
           backgroundColor: Color.fromARGB(255, 226, 232, 240)),
-      dialogBackgroundColor: const Color.fromARGB(255, 226, 232, 240),
       timePickerTheme: const TimePickerThemeData(
           inputDecorationTheme: InputDecorationTheme(
             fillColor: Color.fromARGB(255, 226, 232, 240),
@@ -1140,7 +1135,6 @@ class Themes {
           const PopupMenuThemeData(color: Color.fromARGB(255, 30, 41, 59)),
       dialogTheme:
           const DialogTheme(backgroundColor: Color.fromARGB(255, 30, 41, 59)),
-      dialogBackgroundColor: const Color.fromARGB(255, 30, 41, 59),
       timePickerTheme: const TimePickerThemeData(
         inputDecorationTheme: InputDecorationTheme(
           fillColor: Color.fromARGB(255, 30, 41, 59),

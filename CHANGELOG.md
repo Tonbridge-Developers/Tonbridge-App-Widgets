@@ -1,3 +1,37 @@
+## 2025.3.8
+
+* Added Native Hover Events for MacOS
+  
+
+## 2025.3.7
+
+* Added Support for MacOS and Windows
+  
+
+
+## 2025.3.6
+
+* Improved the styling fo the Cards & Buttons
+  
+
+## 2025.3.5
+
+* Added Date Timeline Widget
+  
+
+## 2025.3.4
+
+* Removed dual toast style. Only one is used now. Added Support for the wrapper
+  
+## 2025.3.1
+
+* Added Radius Scale Factor to the Cards
+  
+## 2025.2.1
+
+* Fixed an issue with the TextField not showing errors
+* Incremented all pubspec versions
+
 ## 2025.1.3
 
 * Added a Filter Chip Type

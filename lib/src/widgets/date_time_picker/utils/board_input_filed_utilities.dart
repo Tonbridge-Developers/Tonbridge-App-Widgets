@@ -65,7 +65,9 @@ class ValidatorResult {
     if (year == null ||
         month == null ||
         year.text.isEmpty ||
-        month.text.isEmpty) return null;
+        month.text.isEmpty) {
+      return null;
+    }
     return DateTime(
       int.parse(year.text),
       int.parse(month.text),
