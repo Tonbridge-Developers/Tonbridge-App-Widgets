@@ -62,6 +62,11 @@ class _PanopticButtonState extends State<PanopticButton> {
     return Padding(
       padding: widget.margin,
       child: GradientElevatedButton(
+        onHover: (value) {
+          if (isMacOS) {
+            _macosHapticFeedback.generic();
+          }
+        },
         onPressed:
             widget.isDisabled || widget.isLoading ? null : widget.onPressed,
         onLongPress:
@@ -91,18 +96,11 @@ class _PanopticButtonState extends State<PanopticButton> {
           shape: _getShape(),
         ),
         key: widget.key,
-        child: MouseRegion(
-          onEnter: (event) {
-            if (isMacOS) {
-              _macosHapticFeedback.generic();
-            }
-          },
-          child: Container(
-            padding: widget.padding,
-            child: widget.isLoading
-                ? _buildLoadingIndicator()
-                : _buildButtonContent(),
-          ),
+        child: Container(
+          padding: widget.padding,
+          child: widget.isLoading
+              ? _buildLoadingIndicator()
+              : _buildButtonContent(),
         ),
       ),
     );

@@ -19,7 +19,11 @@ class PanopticCard extends StatefulWidget {
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? labelPadding;
   final VoidCallback? onPressed;
+  final VoidCallback? onLongPress;
+  final VoidCallback? onSecondaryPressed;
   final VoidCallback? onDoublePress;
+  final Function(TapDownDetails)? onTapDown;
+  final Function(TapDownDetails)? onSecondaryTapDown;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
   final BoxBorder? border;
@@ -47,7 +51,11 @@ class PanopticCard extends StatefulWidget {
       this.padding,
       this.labelPadding,
       this.onPressed,
+      this.onLongPress,
       this.onDoublePress,
+      this.onSecondaryPressed,
+      this.onTapDown,
+      this.onSecondaryTapDown,
       this.border,
       this.color,
       this.width,
@@ -141,6 +149,10 @@ class _PanopticCardState extends State<PanopticCard> {
             }
           },
           onTap: widget.onPressed,
+          onLongPress: widget.onLongPress,
+          onTapDown: widget.onTapDown,
+          onSecondaryTap: widget.onSecondaryPressed,
+          onSecondaryTapDown: widget.onSecondaryTapDown,
           child: widget.scrollable
               ? SingleChildScrollView(
                   scrollDirection: Axis.vertical,
@@ -212,6 +224,10 @@ class _PanopticCardState extends State<PanopticCard> {
               child: InkWell(
                 onDoubleTap: widget.onDoublePress,
                 onTap: widget.onPressed,
+                onLongPress: widget.onLongPress,
+                onTapDown: widget.onTapDown,
+                onSecondaryTap: widget.onSecondaryPressed,
+                onSecondaryTapDown: widget.onSecondaryTapDown,
                 child: widget.scrollable
                     ? SingleChildScrollView(
                         scrollDirection: Axis.vertical,

@@ -1,6 +1,7 @@
-## 2025.3.10
+## 2025.3.11
 
 * Fixed button colour issue
+* Added more tap options to card and buttons
   
 
 ## 2025.3.8
