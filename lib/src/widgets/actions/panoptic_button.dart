@@ -81,15 +81,17 @@ class _PanopticButtonState extends State<PanopticButton> {
           child: Container(
             padding: widget.padding,
             decoration: BoxDecoration(
-              gradient: widget.gradient ??
-                  LinearGradient(
-                    colors: [
-                      _getButtonColor(),
-                      PanopticExtension.shiftHue(_getButtonColor(), 15)
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+              gradient: (widget.isLoading || widget.expanded)
+                  ? null
+                  : widget.gradient ??
+                      LinearGradient(
+                        colors: [
+                          _getButtonColor(),
+                          PanopticExtension.shiftHue(_getButtonColor(), 15)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
               borderRadius:
                   BorderRadius.circular(CoreValues.cornerRadius * 0.8),
             ),
@@ -129,8 +131,8 @@ class _PanopticButtonState extends State<PanopticButton> {
 
   Widget _buildButtonContent() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: widget.expanded ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
         if (widget.icon != null) ...[
           PanopticIcon(
