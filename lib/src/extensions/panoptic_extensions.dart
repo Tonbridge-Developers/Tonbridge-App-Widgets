@@ -305,10 +305,14 @@ class PanopticExtension {
     return DateFormat(format).format(date);
   }
 
-  static void showToast(String message, BuildContext context,
+  static void showToast(String message, BuildContext? context,
       {ToastType type = ToastType.success,
       String? subTitle,
       bool usingWrapper = true}) {
+    if (!usingWrapper && context == null) {
+      throw Exception('Either use the wrapper or provide a context');
+    }
+
     PanopticIcons icon = PanopticIcons.success;
 
     ToastificationType toastificationType = ToastificationType.success;
@@ -338,10 +342,10 @@ class PanopticExtension {
       context: usingWrapper ? null : context,
       title: Text(
         message,
-        style: Theme.of(context)
-            .textTheme
-            .bodyLarge!
-            .copyWith(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
       ),
       autoCloseDuration: const Duration(seconds: 2),
       alignment: PanopticExtension.isWebOrDesktop()
@@ -361,10 +365,74 @@ class PanopticExtension {
       description: subTitle != null
           ? Text(
               subTitle,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+              ),
+            )
+          : null,
+    );
+  }
+
+  static void showToastWithoutContext(String message,
+      {ToastType type = ToastType.success,
+      String? subTitle,
+      bool usingWrapper = true}) {
+    PanopticIcons icon = PanopticIcons.success;
+
+    ToastificationType toastificationType = ToastificationType.success;
+
+    switch (type) {
+      case ToastType.success:
+        icon = PanopticIcons.success;
+
+        toastificationType = ToastificationType.success;
+        break;
+      case ToastType.error:
+        icon = PanopticIcons.error;
+
+        toastificationType = ToastificationType.error;
+        break;
+      case ToastType.warning:
+        icon = PanopticIcons.warning;
+        toastificationType = ToastificationType.warning;
+        break;
+      case ToastType.info:
+        icon = PanopticIcons.info;
+        toastificationType = ToastificationType.info;
+        break;
+    }
+
+    toastification.show(
+      title: Text(
+        message,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+      autoCloseDuration: const Duration(seconds: 2),
+      alignment: PanopticExtension.isWebOrDesktop()
+          ? Alignment.topRight
+          : Alignment.bottomCenter,
+      type: toastificationType,
+      borderRadius: BorderRadius.circular(CoreValues.cornerRadius),
+      closeOnClick: true,
+      applyBlurEffect: true,
+      style: ToastificationStyle.fillColored,
+      icon: PanopticIcon(
+        icon: icon,
+        color: Colors.white,
+        margin: EdgeInsets.zero,
+        size: 28,
+      ),
+      description: subTitle != null
+          ? Text(
+              subTitle,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+              ),
             )
           : null,
     );
