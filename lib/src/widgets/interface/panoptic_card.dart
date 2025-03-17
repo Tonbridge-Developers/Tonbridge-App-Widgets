@@ -78,6 +78,15 @@ class PanopticCard extends StatefulWidget {
 
 class _PanopticCardState extends State<PanopticCard> {
   final _macosHapticFeedback = MacosHapticFeedback();
+  final focusNode = FocusNode(
+    skipTraversal: true,
+    canRequestFocus: false,
+  );
+  final focusNode2 = FocusNode(
+    skipTraversal: true,
+    canRequestFocus: false,
+  );
+
   @override
   void initState() {
     super.initState();
@@ -139,7 +148,9 @@ class _PanopticCardState extends State<PanopticCard> {
       );
 
   Widget _buildContent() => SelectionArea(
+        focusNode: focusNode,
         child: InkWell(
+          focusNode: focusNode2,
           onDoubleTap: widget.onDoublePress,
           onHover: (value) {
             if (widget.onPressed != null || widget.onDoublePress != null) {

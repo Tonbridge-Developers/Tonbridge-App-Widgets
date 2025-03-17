@@ -354,7 +354,7 @@ class PanopticDropdownFormField extends PanopticFormFieldDecoration<dynamic> {
       onChanged: enabled
           ? (value) {
               state.didChange(value);
-              onChanged?.call(value);
+              // onChanged?.call(value);
             }
           : null,
       enableFeedback: true,

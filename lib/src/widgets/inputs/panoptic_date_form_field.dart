@@ -359,7 +359,7 @@ class PanopticDateFormField extends PanopticFormFieldDecoration<DateTime> {
 
     if (picked != null && picked != state.value) {
       state.didChange(picked);
-      state.widget.onChanged?.call(picked);
+      // state.widget.onChanged?.call(picked);
     }
   }
 
