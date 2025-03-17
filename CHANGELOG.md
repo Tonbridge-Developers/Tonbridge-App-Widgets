@@ -1,3 +1,8 @@
+## 2025.3.13
+
+* Added PanopticPageBuilder widget with controller.
+* Added PanopticLinkButton
+
 ## 2025.3.12
 
 * Fixed button colour issue
