@@ -1,3 +1,11 @@
+## 2025.3.12
+
+* Fixed button colour issue
+* Added more tap options to card and buttons
+* Made context optional in the `ShowToast` method
+* Added `showToastWithoutContext`
+  
+
 ## 2025.3.8
 
 * Added Native Hover Events for MacOS

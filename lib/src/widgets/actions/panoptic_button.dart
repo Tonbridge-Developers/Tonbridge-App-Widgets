@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gradient_elevated_button/gradient_elevated_button.dart';
 import 'package:macos_haptic_feedback/macos_haptic_feedback.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
@@ -60,43 +61,46 @@ class _PanopticButtonState extends State<PanopticButton> {
   Widget build(BuildContext context) {
     return Padding(
       padding: widget.margin,
-      child: MaterialButton(
+      child: GradientElevatedButton(
+        onHover: (value) {
+          if (isMacOS) {
+            _macosHapticFeedback.generic();
+          }
+        },
         onPressed:
             widget.isDisabled || widget.isLoading ? null : widget.onPressed,
         onLongPress:
             widget.isDisabled || widget.isLoading ? null : widget.onLongPress,
-        disabledColor: _getButtonColor(),
+        style: GradientElevatedButton.styleFrom(
+          backgroundGradient: widget.gradient ??
+              LinearGradient(
+                colors: [
+                  _getButtonColor(),
+                  PanopticExtension.shiftHue(_getButtonColor(), 15)
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+          disabledBackgroundGradient: widget.gradient ??
+              LinearGradient(
+                colors: [
+                  _getButtonColor(),
+                  PanopticExtension.shiftHue(_getButtonColor(), 15)
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+          foregroundColor: _getTextColor(),
+          elevation: widget.elevation,
+          padding: EdgeInsets.zero,
+          shape: _getShape(),
+        ),
         key: widget.key,
-        color: _getButtonColor(),
-        textColor: _getTextColor(),
-        elevation: widget.elevation,
-        padding: EdgeInsets.zero,
-        shape: _getShape(),
-        child: MouseRegion(
-          onEnter: (event) {
-            if (isMacOS) {
-              _macosHapticFeedback.generic();
-            }
-          },
-          child: Container(
-            padding: widget.padding,
-            decoration: BoxDecoration(
-              gradient: widget.gradient ??
-                  LinearGradient(
-                    colors: [
-                      _getButtonColor(),
-                      PanopticExtension.shiftHue(_getButtonColor(), 15)
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-              borderRadius:
-                  BorderRadius.circular(CoreValues.cornerRadius * 0.8),
-            ),
-            child: widget.isLoading
-                ? _buildLoadingIndicator()
-                : _buildButtonContent(),
-          ),
+        child: Container(
+          padding: widget.padding,
+          child: widget.isLoading
+              ? _buildLoadingIndicator()
+              : _buildButtonContent(),
         ),
       ),
     );
@@ -108,10 +112,7 @@ class _PanopticButtonState extends State<PanopticButton> {
       mainAxisSize: widget.expanded ? MainAxisSize.max : MainAxisSize.min,
       children: [
         Padding(
-          padding: (PanopticExtension.isWebOrDesktop() ||
-                      Theme.of(context).platform == TargetPlatform.macOS ||
-                      Theme.of(context).platform == TargetPlatform.windows) &&
-                  !widget.smaller
+          padding: (PanopticExtension.isWebOrDesktop()) && !widget.smaller
               ? const EdgeInsets.all(10)
               : EdgeInsets.zero,
           child: SizedBox(
@@ -129,8 +130,8 @@ class _PanopticButtonState extends State<PanopticButton> {
 
   Widget _buildButtonContent() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: widget.expanded ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
         if (widget.icon != null) ...[
           PanopticIcon(
@@ -140,12 +141,7 @@ class _PanopticButtonState extends State<PanopticButton> {
             size: 20,
             margin: widget.label != null
                 ? const EdgeInsets.only(left: 10)
-                : (PanopticExtension.isWebOrDesktop() ||
-                            Theme.of(context).platform ==
-                                TargetPlatform.macOS ||
-                            Theme.of(context).platform ==
-                                TargetPlatform.windows) &&
-                        !widget.smaller
+                : (PanopticExtension.isWebOrDesktop()) && !widget.smaller
                     ? const EdgeInsets.all(10)
                     : EdgeInsets.zero,
           ),
@@ -157,11 +153,7 @@ class _PanopticButtonState extends State<PanopticButton> {
         if (widget.expanded)
           Expanded(
             child: Padding(
-              padding: (PanopticExtension.isWebOrDesktop() ||
-                          Theme.of(context).platform == TargetPlatform.macOS ||
-                          Theme.of(context).platform ==
-                              TargetPlatform.windows) &&
-                      !widget.smaller
+              padding: (PanopticExtension.isWebOrDesktop()) && !widget.smaller
                   ? const EdgeInsets.all(10)
                   : EdgeInsets.zero,
               child: Text(
@@ -176,10 +168,7 @@ class _PanopticButtonState extends State<PanopticButton> {
           )
         else if (widget.label != null)
           Padding(
-            padding: (PanopticExtension.isWebOrDesktop() ||
-                        Theme.of(context).platform == TargetPlatform.macOS ||
-                        Theme.of(context).platform == TargetPlatform.windows) &&
-                    !widget.smaller
+            padding: (PanopticExtension.isWebOrDesktop()) && !widget.smaller
                 ? const EdgeInsets.all(10)
                 : EdgeInsets.zero,
             child: Text(
@@ -238,7 +227,7 @@ class _PanopticButtonState extends State<PanopticButton> {
     }
   }
 
-  ShapeBorder _getShape() {
+  OutlinedBorder _getShape() {
     if (ThemeProvider.controllerOf(context)
         .currentThemeId
         .startsWith('white')) {
