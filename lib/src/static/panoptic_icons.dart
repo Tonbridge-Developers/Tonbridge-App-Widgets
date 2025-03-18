@@ -103,6 +103,7 @@ class PanopticIcons {
     bookmarkhome,
     brain,
     breaks,
+    brokenlink,
     caduceus,
     calendar,
     cat,
@@ -336,6 +337,7 @@ class PanopticIcons {
     viewfile,
     warning,
     web,
+    weblink,
     wfh,
     windows,
     worddocument,
@@ -398,6 +400,8 @@ class PanopticIcons {
       PanopticIcons(name: 'brain', path: 'assets/icons_svg/brain.svg');
   static const PanopticIcons breaks =
       PanopticIcons(name: 'breaks', path: 'assets/icons_svg/breaks.svg');
+  static const PanopticIcons brokenlink = PanopticIcons(
+      name: 'brokenlink', path: 'assets/icons_svg/brokenlink.svg');
   static const PanopticIcons caduceus =
       PanopticIcons(name: 'caduceus', path: 'assets/icons_svg/caduceus.svg');
   static const PanopticIcons calendar =
@@ -867,6 +871,8 @@ class PanopticIcons {
       PanopticIcons(name: 'warning', path: 'assets/icons_svg/warning.svg');
   static const PanopticIcons web =
       PanopticIcons(name: 'web', path: 'assets/icons_svg/web.svg');
+  static const PanopticIcons weblink =
+      PanopticIcons(name: 'weblink', path: 'assets/icons_svg/weblink.svg');
   static const PanopticIcons wfh =
       PanopticIcons(name: 'wfh', path: 'assets/icons_svg/wfh.svg');
   static const PanopticIcons windows =
