@@ -26,6 +26,7 @@ export 'src/widgets/actions/panoptic_card_button.dart';
 export 'src/widgets/actions/panoptic_chip.dart';
 export 'src/widgets/actions/panoptic_large_button.dart';
 export 'src/widgets/actions/panoptic_large_button_action.dart';
+export 'src/widgets/actions/panoptic_link_button.dart';
 export 'src/widgets/actions/panoptic_split_button.dart';
 export 'src/widgets/actions/panoptic_split_button_action.dart';
 export 'src/widgets/actions/keyboard_action/keyboard_action.dart';
