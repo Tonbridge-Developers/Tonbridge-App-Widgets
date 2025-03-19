@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -278,6 +279,32 @@ class PanopticGridExtension {
           icon: icon ?? PanopticIcons.tick,
           size: size,
           color: iconColor,
+        ),
+      );
+  static defaultColor(
+    DataGridCell<dynamic> dataGridCell, {
+    Alignment alignment = Alignment.centerLeft,
+    EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 16.0),
+    EdgeInsetsGeometry margin = const EdgeInsets.only(right: 5),
+    double size = 30,
+  }) =>
+      Container(
+        alignment: alignment,
+        padding: padding,
+        child: Row(
+          children: [
+            Container(
+              width: size,
+              height: size,
+              margin: margin,
+              decoration: BoxDecoration(
+                color: dataGridCell.value as Color,
+                borderRadius:
+                    BorderRadius.circular(CoreValues.cornerRadius * 0.3),
+              ),
+            ),
+            Text((dataGridCell.value as Color).toHex(leadingHash: true))
+          ],
         ),
       );
   static defaultStringList(

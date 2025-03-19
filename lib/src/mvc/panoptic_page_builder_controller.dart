@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
-import 'package:panoptic_widgets/src/mvc/panoptic_page_builder_inherited.dart';
 
 abstract class PanopticPageBuilderController<T> extends ChangeNotifier {
   final T model;

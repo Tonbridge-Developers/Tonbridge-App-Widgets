@@ -1,3 +1,8 @@
+## 2025.3.15
+
+* Added more Support for Colours (Extensions and Table Cells)
+
+
 ## 2025.3.13
 
 * Added PanopticPageBuilder widget with controller.

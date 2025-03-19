@@ -111,7 +111,8 @@ class PanopticExtension {
   }
 
   static Color hexToColor(String hex) {
-    return Color(int.parse(hex, radix: 16)).withOpacity(1.0);
+    return Color(int.parse(hex.replaceAll('#', ''), radix: 16))
+        .withOpacity(1.0);
   }
 
   static String colorToHex(Color orig) {
@@ -572,6 +573,10 @@ extension DecimalExtension on num {
     return this / 1.000000000000000000000000000000000;
   }
 
+  String toRadixString(int radix) {
+    return round().toRadixString(radix);
+  }
+
   int roundToNearestEven() {
     int rounded = round();
     // If the rounded number is odd, adjust by 1 towards the nearest even number
@@ -924,9 +929,9 @@ extension ListExtension<T> on List<T> {
 }
 
 extension Unique<E, Id> on List<E> {
-  List<E> unique([Id Function(E element)? id, bool inplace = false]) {
+  List<E> unique([Id Function(E element)? id, bool inPlace = false]) {
     final ids = <dynamic>{};
-    var list = inplace ? this : List<E>.from(this);
+    var list = inPlace ? this : List<E>.from(this);
     list.retainWhere((x) => ids.add(id != null ? id(x) : x as Id));
     return list;
   }
@@ -954,6 +959,22 @@ extension DataGridRowExtension on DataGridRow {
 extension DataGridRowsExtension on List<DataGridRow> {
   List<T> getItems<T>() {
     return cast<PanopticDataGridRow<T>>().map((e) => e.item).toList();
+  }
+}
+
+extension ColorExtension on Color {
+  String toHex({bool leadingHash = true, bool inclAlpha = false}) {
+    final buffer = StringBuffer();
+    if (leadingHash) buffer.write('#');
+    if (inclAlpha) {
+      buffer.write(alpha.toRadixString(16).padLeft(2, '0'));
+    }
+
+    buffer.write(red.toRadixString(16).padLeft(2, '0'));
+    buffer.write(green.toRadixString(16).padLeft(2, '0'));
+    buffer.write(blue.toRadixString(16).padLeft(2, '0'));
+
+    return buffer.toString();
   }
 }
 
