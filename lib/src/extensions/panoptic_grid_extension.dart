@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -41,13 +40,7 @@ class PanopticGridExtension {
                 maxLines: 3,
                 softWrap: true,
                 textAlign: textAlign,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: ThemeProvider.controllerOf(context)
-                            .currentThemeId
-                            .startsWith('white')
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.onPrimary),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold, color: ThemeProvider.controllerOf(context).currentThemeId.startsWith('white') ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onPrimary),
                 overflow: TextOverflow.ellipsis,
               )
             : Tooltip(
@@ -56,19 +49,15 @@ class PanopticGridExtension {
                 preferBelow: true,
                 enableTapToDismiss: true,
                 decoration: BoxDecoration(
-                  color:
-                      Theme.of(context).colorScheme.secondary.withOpacity(0.9),
-                  borderRadius:
-                      BorderRadius.circular(CoreValues.cornerRadius / 2),
+                  color: Theme.of(context).colorScheme.secondary.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(CoreValues.cornerRadius / 2),
                 ),
                 child: AutoSizeText(
                   label,
                   maxLines: 3,
                   softWrap: true,
                   textAlign: textAlign,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onPrimary),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimary),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -141,10 +130,7 @@ class PanopticGridExtension {
         alignment: alignment,
         padding: padding,
         child: SelectableText(
-          dataGridCell.value != null
-              ? (dataGridCell.value as DateTime)
-                  .toFormattedString(format: format)
-              : '-',
+          dataGridCell.value != null ? (dataGridCell.value as DateTime).toFormattedString(format: format) : '-',
           maxLines: maxLines,
           textAlign: textAlign,
           style: style,
@@ -195,8 +181,7 @@ class PanopticGridExtension {
     String label, {
     Alignment alignment = Alignment.center,
     ButtonType buttonType = ButtonType.secondary,
-    EdgeInsetsGeometry padding =
-        const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+    EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
   }) =>
       Container(
         alignment: alignment,
@@ -241,9 +226,7 @@ class PanopticGridExtension {
         child: PanopticIcon(
           margin: margin,
           bw: true,
-          icon: dataGridCell.value as bool
-              ? PanopticIcons.tick
-              : PanopticIcons.cross,
+          icon: dataGridCell.value as bool ? PanopticIcons.tick : PanopticIcons.cross,
           size: size,
         ),
       );
@@ -263,15 +246,7 @@ class PanopticGridExtension {
           size: size,
         ),
       );
-  static defaultCustomIcon(DataGridCell<dynamic> dataGridCell,
-          {Alignment alignment = Alignment.centerLeft,
-          EdgeInsetsGeometry padding =
-              const EdgeInsets.symmetric(horizontal: 16.0),
-          EdgeInsetsGeometry margin = const EdgeInsets.only(right: 5),
-          double size = 40,
-          PanopticIcons? icon,
-          Color? iconColor}) =>
-      Container(
+  static defaultCustomIcon(DataGridCell<dynamic> dataGridCell, {Alignment alignment = Alignment.centerLeft, EdgeInsetsGeometry padding = const EdgeInsets.symmetric(horizontal: 16.0), EdgeInsetsGeometry margin = const EdgeInsets.only(right: 5), double size = 40, PanopticIcons? icon, Color? iconColor}) => Container(
         alignment: alignment,
         padding: padding,
         child: PanopticIcon(
@@ -299,8 +274,7 @@ class PanopticGridExtension {
               margin: margin,
               decoration: BoxDecoration(
                 color: dataGridCell.value as Color,
-                borderRadius:
-                    BorderRadius.circular(CoreValues.cornerRadius * 0.3),
+                borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.3),
               ),
             ),
             Text((dataGridCell.value as Color).toHex(leadingHash: true))
@@ -319,9 +293,7 @@ class PanopticGridExtension {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: (dataGridCell.value as List<String?>)
-                .where((element) => element!.isNotEmpty)
-                .map((value) {
+            children: (dataGridCell.value as List<String?>).where((element) => element!.isNotEmpty).map((value) {
               return PanopticChip(
                 margin: margin,
                 label: value ?? '',
@@ -343,9 +315,7 @@ class PanopticGridExtension {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: (dataGridCell.value as List<T>)
-                .where((element) => element != null)
-                .map((value) {
+            children: (dataGridCell.value as List<T>).where((element) => element != null).map((value) {
               return PanopticChip(
                 margin: margin,
                 label: value.toString(),
@@ -362,10 +332,8 @@ class PanopticDataSource extends DataGridSource {
     return null;
   }
 
-  void Function(dynamic newValue, dynamic oldValue, int rowNumber,
-      String? columnName)? onChanged;
-  void Function(int rowNumber, String? columnName, {dynamic additionalData})?
-      onButtonClicked;
+  void Function(dynamic newValue, dynamic oldValue, int rowNumber, String? columnName)? onChanged;
+  void Function(int rowNumber, String? columnName, {dynamic additionalData})? onButtonClicked;
 
   dynamic newValue;
 
@@ -412,11 +380,7 @@ class PanopticDataSource extends DataGridSource {
 
     filteredRows = dataGridRows.where((row) {
       return row.getCells().any((cell) {
-        return (columnNames.isEmpty || columnNames.contains(cell.columnName)) &&
-            cell.value
-                .toString()
-                .toLowerCase()
-                .contains(query!.trim().toLowerCase());
+        return (columnNames.isEmpty || columnNames.contains(cell.columnName)) && cell.value.toString().toLowerCase().contains(query!.trim().toLowerCase());
       });
     }).toList();
     notifyListeners();
@@ -430,20 +394,13 @@ class PanopticDataSource extends DataGridSource {
   List<DataGridRow> get rows => filteredRows ?? dataGridRows;
 
   @override
-  Widget? buildGroupCaptionCellWidget(
-      RowColumnIndex rowColumnIndex, String summaryValue) {
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
-        child: Text(summaryValue));
+  Widget? buildGroupCaptionCellWidget(RowColumnIndex rowColumnIndex, String summaryValue) {
+    return Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15), child: Text(summaryValue));
   }
 
   @override
-  Future<void> onCellSubmit(DataGridRow dataGridRow,
-      RowColumnIndex rowColumnIndex, GridColumn column) async {
-    DataGridCell<dynamic>? currentCell = dataGridRow
-        .getCells()
-        .firstWhereOrNull((DataGridCell dataGridCell) =>
-            dataGridCell.columnName == column.columnName);
+  Future<void> onCellSubmit(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex, GridColumn column) async {
+    DataGridCell<dynamic>? currentCell = dataGridRow.getCells().firstWhereOrNull((DataGridCell dataGridCell) => dataGridCell.columnName == column.columnName);
 
     if (currentCell != null) {
       dynamic value = currentCell.value;
@@ -452,11 +409,8 @@ class PanopticDataSource extends DataGridSource {
 
       if (newValue == null || value == newValue) {
       } else {
-        var index = dataGridRow.getCells().indexWhere(
-            (DataGridCell dataGridCell) =>
-                dataGridCell.columnName == column.columnName);
-        dataGridRows[dataRowIndex].getCells()[index] =
-            DataGridCell(columnName: column.columnName, value: newValue);
+        var index = dataGridRow.getCells().indexWhere((DataGridCell dataGridCell) => dataGridCell.columnName == column.columnName);
+        dataGridRows[dataRowIndex].getCells()[index] = DataGridCell(columnName: column.columnName, value: newValue);
 
         onChanged?.call(newValue, value, dataRowIndex, column.columnName);
       }
@@ -464,12 +418,8 @@ class PanopticDataSource extends DataGridSource {
   }
 
   @override
-  Widget buildEditWidget(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex,
-      GridColumn column, CellSubmit submitCell) {
-    DataGridCell<dynamic>? currentCell = dataGridRow
-        .getCells()
-        .firstWhereOrNull((DataGridCell dataGridCell) =>
-            dataGridCell.columnName == column.columnName);
+  Widget buildEditWidget(DataGridRow dataGridRow, RowColumnIndex rowColumnIndex, GridColumn column, CellSubmit submitCell) {
+    DataGridCell<dynamic>? currentCell = dataGridRow.getCells().firstWhereOrNull((DataGridCell dataGridCell) => dataGridCell.columnName == column.columnName);
 
     if (currentCell == null) {
       return Container();
@@ -500,11 +450,7 @@ class PanopticDataSource extends DataGridSource {
   }
 
   @override
-  Widget? buildTableSummaryCellWidget(
-      GridTableSummaryRow summaryRow,
-      GridSummaryColumn? summaryColumn,
-      RowColumnIndex rowColumnIndex,
-      String summaryValue) {
+  Widget? buildTableSummaryCellWidget(GridTableSummaryRow summaryRow, GridSummaryColumn? summaryColumn, RowColumnIndex rowColumnIndex, String summaryValue) {
     return Container(
       padding: const EdgeInsets.all(15.0),
       child: Text(summaryValue),

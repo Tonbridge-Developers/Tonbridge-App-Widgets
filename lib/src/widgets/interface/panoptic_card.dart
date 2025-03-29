@@ -39,38 +39,43 @@ class PanopticCard extends StatefulWidget {
   final double cornerRadiusFactor;
   final bool hideShadow;
 
-  PanopticCard(
-      {super.key,
-      required this.child,
-      this.label,
-      this.leading,
-      this.trailing,
-      this.collapsible,
-      this.collapsedLabel,
-      this.margin,
-      this.padding,
-      this.labelPadding,
-      this.onPressed,
-      this.onLongPress,
-      this.onDoublePress,
-      this.onSecondaryPressed,
-      this.onTapDown,
-      this.onSecondaryTapDown,
-      this.border,
-      this.color,
-      this.width,
-      this.height,
-      this.isCollapsed = false,
-      this.scrollable = false,
-      this.alternative = false,
-      this.mainAxisAlignment = MainAxisAlignment.start,
-      this.gradient,
-      this.dottedBorder = false,
-      this.crossAxisAlignment = CrossAxisAlignment.stretch,
-      this.useDarkBorder = false,
-      this.cornerRadiusFactor = 1.0,
-      this.hideShadow = false,
-      this.onCollapse});
+  /// If true, the card will be rendered as a basic card without any additional features.
+  final bool basicCard;
+
+  PanopticCard({
+    super.key,
+    required this.child,
+    this.label,
+    this.leading,
+    this.trailing,
+    this.collapsible,
+    this.collapsedLabel,
+    this.margin,
+    this.padding,
+    this.labelPadding,
+    this.onPressed,
+    this.onLongPress,
+    this.onDoublePress,
+    this.onSecondaryPressed,
+    this.onTapDown,
+    this.onSecondaryTapDown,
+    this.border,
+    this.color,
+    this.width,
+    this.height,
+    this.isCollapsed = false,
+    this.scrollable = false,
+    this.alternative = false,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.gradient,
+    this.dottedBorder = false,
+    this.crossAxisAlignment = CrossAxisAlignment.stretch,
+    this.useDarkBorder = false,
+    this.cornerRadiusFactor = 1.0,
+    this.hideShadow = false,
+    this.onCollapse,
+    this.basicCard = false,
+  });
 
   @override
   State<PanopticCard> createState() => _PanopticCardState();
@@ -94,20 +99,17 @@ class _PanopticCardState extends State<PanopticCard> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.dottedBorder
-        ? DottedBorder(
-            color: Theme.of(context).colorScheme.primary,
-            strokeWidth: 1,
-            borderType: BorderType.RRect,
-            radius: Radius.circular(
-                (CoreValues.cornerRadius * widget.cornerRadiusFactor)),
-            child: _buildCard(widget.collapsible == true
-                ? buildCollapsibleContent()
-                : _buildContent()),
-          )
-        : _buildCard(widget.collapsible == true
-            ? buildCollapsibleContent()
-            : _buildContent());
+    return widget.basicCard
+        ? _buildCard(_basicContent())
+        : widget.dottedBorder
+            ? DottedBorder(
+                color: Theme.of(context).colorScheme.primary,
+                strokeWidth: 1,
+                borderType: BorderType.RRect,
+                radius: Radius.circular((CoreValues.cornerRadius * widget.cornerRadiusFactor)),
+                child: _buildCard(widget.collapsible == true ? buildCollapsibleContent() : _buildContent()),
+              )
+            : _buildCard(widget.collapsible == true ? buildCollapsibleContent() : _buildContent());
   }
 
   Widget _buildCard(Widget child) => Container(
@@ -116,35 +118,33 @@ class _PanopticCardState extends State<PanopticCard> {
         height: widget.height,
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          border: widget.border ??
-              ((widget.useDarkBorder) ||
-                      ThemeProvider.controllerOf(context)
-                          .currentThemeId
-                          .startsWith('white')
-                  ? Border.all(
-                      width: 0.5,
-                      color: Theme.of(context).colorScheme.onSurface)
-                  : null),
-          borderRadius: BorderRadius.circular(
-              (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
-                  (widget.dottedBorder ? 0.9 : 1)),
+          border: widget.border ?? ((widget.useDarkBorder) || ThemeProvider.controllerOf(context).currentThemeId.startsWith('white') ? Border.all(width: 0.5, color: Theme.of(context).colorScheme.onSurface) : null),
+          borderRadius: BorderRadius.circular((CoreValues.cornerRadius * widget.cornerRadiusFactor) * (widget.dottedBorder ? 0.9 : 1)),
           gradient: widget.gradient ??
               LinearGradient(
-                colors: [
-                  widget.color ??
-                      (widget.alternative
-                          ? Theme.of(context).colorScheme.surfaceContainer
-                          : Theme.of(context).colorScheme.surface),
-                  widget.color ??
-                      (widget.alternative
-                          ? Theme.of(context).colorScheme.surfaceContainer
-                          : Theme.of(context).colorScheme.surface)
-                ],
+                colors: [widget.color ?? (widget.alternative ? Theme.of(context).colorScheme.surfaceContainer : Theme.of(context).colorScheme.surface), widget.color ?? (widget.alternative ? Theme.of(context).colorScheme.surfaceContainer : Theme.of(context).colorScheme.surface)],
               ),
         ),
-        margin: widget.margin ??
-            const EdgeInsetsDirectional.only(top: 10, bottom: 10),
+        margin: widget.margin ?? const EdgeInsetsDirectional.only(top: 10, bottom: 10),
         child: child,
+      );
+
+  Widget _basicContent() => InkWell(
+        focusNode: focusNode2,
+        onDoubleTap: widget.onDoublePress,
+        onHover: (value) {
+          if (widget.onPressed != null || widget.onDoublePress != null) {
+            if (isMacOS) {
+              _macosHapticFeedback.generic();
+            }
+          }
+        },
+        onTap: widget.onPressed,
+        onLongPress: widget.onLongPress,
+        onTapDown: widget.onTapDown,
+        onSecondaryTap: widget.onSecondaryPressed,
+        onSecondaryTapDown: widget.onSecondaryTapDown,
+        child: widget.child,
       );
 
   Widget _buildContent() => SelectionArea(
@@ -184,9 +184,7 @@ class _PanopticCardState extends State<PanopticCard> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           MouseRegion(
-            cursor: widget.collapsible == true
-                ? SystemMouseCursors.click
-                : MouseCursor.defer,
+            cursor: widget.collapsible == true ? SystemMouseCursors.click : MouseCursor.defer,
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () => setState(() {
@@ -196,10 +194,7 @@ class _PanopticCardState extends State<PanopticCard> {
                 }
               }),
               child: Padding(
-                padding: widget.labelPadding ??
-                    (!widget.isCollapsed
-                        ? const EdgeInsetsDirectional.only(bottom: 10)
-                        : const EdgeInsets.all(0)),
+                padding: widget.labelPadding ?? (!widget.isCollapsed ? const EdgeInsetsDirectional.only(bottom: 10) : const EdgeInsets.all(0)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -208,23 +203,18 @@ class _PanopticCardState extends State<PanopticCard> {
                       const SizedBox(width: 10),
                     },
                     if (widget.label != null) ...{
-                      if (widget.isCollapsed &&
-                          widget.collapsedLabel != null) ...{
+                      if (widget.isCollapsed && widget.collapsedLabel != null) ...{
                         Expanded(
-                          child: Text(widget.collapsedLabel!,
-                              style: Theme.of(context).textTheme.titleMedium!),
+                          child: Text(widget.collapsedLabel!, style: Theme.of(context).textTheme.titleMedium!),
                         ),
                       } else ...{
                         Expanded(
-                          child: Text(widget.label!,
-                              style: Theme.of(context).textTheme.titleMedium!),
+                          child: Text(widget.label!, style: Theme.of(context).textTheme.titleMedium!),
                         ),
                       }
                     },
                     if (widget.trailing != null) widget.trailing!,
-                    widget.isCollapsed
-                        ? const Icon(Icons.keyboard_arrow_right_rounded)
-                        : const Icon(Icons.keyboard_arrow_down_rounded),
+                    widget.isCollapsed ? const Icon(Icons.keyboard_arrow_right_rounded) : const Icon(Icons.keyboard_arrow_down_rounded),
                   ],
                 ),
               ),

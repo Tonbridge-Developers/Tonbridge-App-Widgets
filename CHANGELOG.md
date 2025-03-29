@@ -1,3 +1,8 @@
+## 2025.3.16
+
+* Added `BasicCard` option to the `PanopticCard`
+
+
 ## 2025.3.15
 
 * Added more Support for Colours (Extensions and Table Cells)
