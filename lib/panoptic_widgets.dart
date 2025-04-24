@@ -10,8 +10,7 @@ export 'package:file_saver/file_saver.dart';
 export 'package:toastification/toastification.dart';
 export 'package:theme_provider/theme_provider.dart';
 export 'package:os_detect/os_detect.dart';
-export 'package:easy_date_timeline/easy_date_timeline.dart'
-    show EasyDatePickerController;
+export 'package:easy_date_timeline/easy_date_timeline.dart' show EasyDatePickerController;
 //extensions
 export 'src/extensions/panoptic_extensions.dart';
 export 'src/extensions/panoptic_grid_extension.dart';
@@ -95,6 +94,7 @@ export 'src/widgets/interface/panoptic_row.dart';
 export 'src/widgets/interface/panoptic_slide_over.dart';
 export 'src/widgets/interface/panoptic_tab.dart';
 export 'src/widgets/interface/panoptic_table.dart';
+export 'src/widgets/interface/panoptic_text_compare.dart';
 export 'src/widgets/interface/panoptic_theme_widget.dart';
 export 'src/widgets/interface/panoptic_wrap.dart';
 

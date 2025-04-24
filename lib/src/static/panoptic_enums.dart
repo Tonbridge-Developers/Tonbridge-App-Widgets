@@ -48,7 +48,9 @@ enum LoadingType {
 
   const LoadingType();
   static LoadingType fromContext(BuildContext context) {
-    return PanopticExtension.getDeviceType(context) == DeviceType.small ? LoadingType.circular : LoadingType.linear;
+    return PanopticExtension.getDeviceType(context) == DeviceType.small
+        ? LoadingType.circular
+        : LoadingType.linear;
   }
 }
 
@@ -549,6 +551,10 @@ enum OversightType {
   fullOversight,
   noOversight,
 }
+
+enum DiffViewMode { all, insertsOnly, deletesOnly, sideBySide }
+
+enum DiffThemeMode { defaultColors, accessible, monochrome, userTheme }
 
 enum ApiVersion {
   v0,

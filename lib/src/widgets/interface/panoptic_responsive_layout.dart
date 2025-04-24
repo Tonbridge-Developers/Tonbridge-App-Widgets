@@ -13,6 +13,7 @@ class PanopticResponsiveLayout extends StatefulWidget {
     this.childrenPadding,
     this.forceColumn = false,
     this.forceRow = false,
+    this.opposite = false,
   });
 
   final List<Widget> children;
@@ -24,10 +25,10 @@ class PanopticResponsiveLayout extends StatefulWidget {
   final MainAxisSize mainAxisSize;
   final bool forceColumn;
   final bool forceRow;
+  final bool opposite;
 
   @override
-  State<PanopticResponsiveLayout> createState() =>
-      _PanopticResponsiveLayoutState();
+  State<PanopticResponsiveLayout> createState() => _PanopticResponsiveLayoutState();
 }
 
 class _PanopticResponsiveLayoutState extends State<PanopticResponsiveLayout> {
@@ -37,7 +38,7 @@ class _PanopticResponsiveLayoutState extends State<PanopticResponsiveLayout> {
       return _buildColumn();
     } else if (widget.forceRow) {
       return _buildRow();
-    } else if (PanopticExtension.getDeviceType(context) == DeviceType.large) {
+    } else if (PanopticExtension.getDeviceType(context) == DeviceType.large && !widget.opposite) {
       return _buildRow();
     } else {
       return _buildColumn();
@@ -45,24 +46,18 @@ class _PanopticResponsiveLayoutState extends State<PanopticResponsiveLayout> {
   }
 
   Widget _buildRow() => PanopticRow(
-        mainAxisAlignment:
-            widget.rowMainAxisAlignment ?? MainAxisAlignment.spaceBetween,
-        crossAxisAlignment:
-            widget.rowCrossAxisAlignment ?? CrossAxisAlignment.center,
+        mainAxisAlignment: widget.rowMainAxisAlignment ?? MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: widget.rowCrossAxisAlignment ?? CrossAxisAlignment.center,
         mainAxisSize: widget.mainAxisSize,
-        padding: widget.childrenPadding ??
-            const EdgeInsets.symmetric(horizontal: 10),
+        padding: widget.childrenPadding ?? const EdgeInsets.symmetric(horizontal: 10),
         children: widget.children,
       );
 
   Widget _buildColumn() => PanopticColumn(
-        mainAxisAlignment:
-            widget.columnMainAxisAlignment ?? MainAxisAlignment.start,
-        crossAxisAlignment:
-            widget.columnCrossAxisAlignment ?? CrossAxisAlignment.center,
+        mainAxisAlignment: widget.columnMainAxisAlignment ?? MainAxisAlignment.start,
+        crossAxisAlignment: widget.columnCrossAxisAlignment ?? CrossAxisAlignment.center,
         mainAxisSize: widget.mainAxisSize,
-        padding:
-            widget.childrenPadding ?? const EdgeInsets.symmetric(vertical: 10),
+        padding: widget.childrenPadding ?? const EdgeInsets.symmetric(vertical: 10),
         children: widget.children,
       );
 }
