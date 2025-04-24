@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/panoptic_widgets.dart';
 
@@ -17,6 +18,9 @@ abstract class PanopticPageBuilderController<T> extends ChangeNotifier {
   Widget? _helpContent;
   int? _filterCount;
   bool _useFilterForm = true;
+  SingleTickerProviderStateMixin? ticker;
+  TabController? tabController;
+  String? errorMessage;
 
   String get pageTitle => _pageTitle;
   PanopticButton? get actionButton => _actionButton;
@@ -79,7 +83,7 @@ abstract class PanopticPageBuilderController<T> extends ChangeNotifier {
     notifyPageChange();
   }
 
-  PanopticPageBuilderController(this.model);
+  PanopticPageBuilderController(this.model, {this.ticker});
 
   final _loadingNotifiers = <String, ValueNotifier<bool>>{
     'content': ValueNotifier<bool>(false),
@@ -222,8 +226,127 @@ abstract class PanopticPageBuilderController<T> extends ChangeNotifier {
     notifyPageChange();
   }
 
+  void generateTabs<J>(
+    List<J> items, {
+    List<PanopticIcons>? icons,
+    bool scrollable = false,
+    TabController? controller,
+    EdgeInsets? padding,
+    Color? indicatorColor,
+    bool automaticIndicatorColorAdjustment = true,
+    double indicatorWeight = 2.0,
+    EdgeInsetsGeometry indicatorPadding = EdgeInsets.zero,
+    Decoration? indicator,
+    TabBarIndicatorSize? indicatorSize,
+    Color? dividerColor,
+    double? dividerHeight,
+    Color? labelColor,
+    TextStyle? labelStyle,
+    EdgeInsetsGeometry? labelPadding,
+    Color? unselectedLabelColor,
+    TextStyle? unselectedLabelStyle,
+    DragStartBehavior dragStartBehavior = DragStartBehavior.start,
+    WidgetStateProperty<Color>? overlayColor,
+    MouseCursor? mouseCursor,
+    bool? enableFeedback,
+    void Function(int)? onTap,
+    ScrollPhysics? physics,
+    InteractiveInkFeatureFactory? splashFactory,
+    BorderRadius? splashBorderRadius,
+    TabAlignment? tabAlignment,
+    TextScaler? textScaler,
+    TabIndicatorAnimation? indicatorAnimation,
+  }) {
+    if (items.isEmpty) {
+      _tabs = null;
+      return;
+    }
+    if (icons != null && items.length != icons.length) {
+      throw Exception(
+          'Cannot generate tabs: Items and icons must be the same length');
+    }
+
+    if (tabController == null) {
+      if (controller != null) {
+        tabController = controller;
+      } else if (ticker != null) {
+        tabController = TabController(
+          length: items.length,
+          vsync: ticker!,
+        );
+      }
+    } else {
+      if (controller != null) {
+        tabController?.dispose();
+        tabController = controller;
+      } else if (ticker != null) {
+        tabController?.dispose();
+        tabController = TabController(
+          length: items.length,
+          vsync: ticker!,
+        );
+      }
+    }
+
+    _tabs = TabBar(
+      controller: tabController,
+      tabs: [
+        for (int i = 0; i < items.length; i++)
+          PanopticTab(
+            coreIcon: icons != null ? icons[i] : null,
+            text: items[i].toString(),
+          ),
+      ],
+      isScrollable: scrollable,
+      padding: padding,
+      indicatorColor: indicatorColor,
+      automaticIndicatorColorAdjustment: automaticIndicatorColorAdjustment,
+      indicatorWeight: indicatorWeight,
+      indicatorPadding: indicatorPadding,
+      indicator: indicator,
+      indicatorSize: indicatorSize,
+      dividerColor: dividerColor,
+      dividerHeight: dividerHeight,
+      labelColor: labelColor,
+      labelStyle: labelStyle,
+      labelPadding: labelPadding,
+      unselectedLabelColor: unselectedLabelColor,
+      unselectedLabelStyle: unselectedLabelStyle,
+      dragStartBehavior: dragStartBehavior,
+      overlayColor: overlayColor,
+      mouseCursor: mouseCursor,
+      enableFeedback: enableFeedback,
+      onTap: onTap,
+      physics: physics,
+      splashFactory: splashFactory,
+      splashBorderRadius: splashBorderRadius,
+      tabAlignment: tabAlignment,
+      textScaler: textScaler,
+      indicatorAnimation: indicatorAnimation,
+    );
+
+    notifyPageChange();
+  }
+
+  void onNetworkError(String url, int errorCode) {
+    errorMessage = 'Network error';
+    debugPrint('Network error: $url returned status code $errorCode');
+    notifyContentChange();
+  }
+
+  void error(String message) {
+    errorMessage = message;
+    notifyContentChange();
+  }
+
+  void clearError() {
+    errorMessage = null;
+    notifyContentChange();
+  }
+
   @override
   void dispose() {
+    tabController?.dispose();
     for (final notifier in _loadingNotifiers.values) {
       notifier.dispose();
     }
