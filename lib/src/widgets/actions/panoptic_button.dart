@@ -67,26 +67,18 @@ class _PanopticButtonState extends State<PanopticButton> {
             _macosHapticFeedback.generic();
           }
         },
-        onPressed:
-            widget.isDisabled || widget.isLoading ? null : widget.onPressed,
-        onLongPress:
-            widget.isDisabled || widget.isLoading ? null : widget.onLongPress,
+        onPressed: widget.isDisabled || widget.isLoading ? null : widget.onPressed,
+        onLongPress: widget.isDisabled || widget.isLoading ? null : widget.onLongPress,
         style: GradientElevatedButton.styleFrom(
           backgroundGradient: widget.gradient ??
               LinearGradient(
-                colors: [
-                  _getButtonColor(),
-                  PanopticExtension.shiftHue(_getButtonColor(), 15)
-                ],
+                colors: [_getButtonColor(), PanopticExtension.shiftHue(_getButtonColor(), 15)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
           disabledBackgroundGradient: widget.gradient ??
               LinearGradient(
-                colors: [
-                  _getButtonColor(),
-                  PanopticExtension.shiftHue(_getButtonColor(), 15)
-                ],
+                colors: [_getButtonColor(), PanopticExtension.shiftHue(_getButtonColor(), 15)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -98,9 +90,7 @@ class _PanopticButtonState extends State<PanopticButton> {
         key: widget.key,
         child: Container(
           padding: widget.padding,
-          child: widget.isLoading
-              ? _buildLoadingIndicator()
-              : _buildButtonContent(),
+          child: widget.isLoading ? _buildLoadingIndicator() : _buildButtonContent(),
         ),
       ),
     );
@@ -131,7 +121,7 @@ class _PanopticButtonState extends State<PanopticButton> {
   Widget _buildButtonContent() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: widget.expanded ? MainAxisSize.max : MainAxisSize.min,
       children: [
         if (widget.icon != null) ...[
           PanopticIcon(
@@ -158,10 +148,7 @@ class _PanopticButtonState extends State<PanopticButton> {
                   : EdgeInsets.zero,
               child: Text(
                 widget.label ?? "",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(color: _getTextColor()),
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: _getTextColor()),
                 textAlign: _getButtonLabelAlignment(),
               ),
             ),
@@ -173,10 +160,7 @@ class _PanopticButtonState extends State<PanopticButton> {
                 : EdgeInsets.zero,
             child: Text(
               widget.label ?? "",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(color: _getTextColor()),
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: _getTextColor()),
               textAlign: _getButtonLabelAlignment(),
             ),
           ),
@@ -189,9 +173,7 @@ class _PanopticButtonState extends State<PanopticButton> {
   }
 
   Color _getButtonColor() {
-    if (ThemeProvider.controllerOf(context)
-        .currentThemeId
-        .startsWith('white')) {
+    if (ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')) {
       return Theme.of(context).colorScheme.surface;
     }
     switch (widget.buttonType) {
@@ -208,9 +190,7 @@ class _PanopticButtonState extends State<PanopticButton> {
   }
 
   Color _getTextColor() {
-    if (ThemeProvider.controllerOf(context)
-        .currentThemeId
-        .startsWith('white')) {
+    if (ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')) {
       return Theme.of(context).colorScheme.primary;
     }
     switch (widget.buttonType) {
@@ -222,15 +202,12 @@ class _PanopticButtonState extends State<PanopticButton> {
         return widget.textColor ?? Theme.of(context).colorScheme.onTertiary;
       case ButtonType.bordered:
       case ButtonType.unselected:
-        return widget.textColor ??
-            (widget.color ?? Theme.of(context).colorScheme.primary);
+        return widget.textColor ?? (widget.color ?? Theme.of(context).colorScheme.primary);
     }
   }
 
   OutlinedBorder _getShape() {
-    if (ThemeProvider.controllerOf(context)
-        .currentThemeId
-        .startsWith('white')) {
+    if (ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')) {
       return RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
         side: BorderSide(color: Theme.of(context).colorScheme.primary),
@@ -240,8 +217,7 @@ class _PanopticButtonState extends State<PanopticButton> {
       case ButtonPosition.right:
         return RoundedRectangleBorder(
           side: widget.buttonType == ButtonType.bordered
-              ? BorderSide(
-                  color: widget.color ?? Theme.of(context).colorScheme.primary)
+              ? BorderSide(color: widget.color ?? Theme.of(context).colorScheme.primary)
               : BorderSide.none,
           borderRadius: const BorderRadius.only(
             bottomRight: Radius.circular(CoreValues.cornerRadius * 0.8),
@@ -251,8 +227,7 @@ class _PanopticButtonState extends State<PanopticButton> {
       case ButtonPosition.left:
         return RoundedRectangleBorder(
           side: widget.buttonType == ButtonType.bordered
-              ? BorderSide(
-                  color: widget.color ?? Theme.of(context).colorScheme.primary)
+              ? BorderSide(color: widget.color ?? Theme.of(context).colorScheme.primary)
               : BorderSide.none,
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(CoreValues.cornerRadius * 0.8),
@@ -263,16 +238,14 @@ class _PanopticButtonState extends State<PanopticButton> {
         return RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(0),
           side: widget.buttonType == ButtonType.bordered
-              ? BorderSide(
-                  color: widget.color ?? Theme.of(context).colorScheme.primary)
+              ? BorderSide(color: widget.color ?? Theme.of(context).colorScheme.primary)
               : BorderSide.none,
         );
       case ButtonPosition.na:
         return RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
           side: widget.buttonType == ButtonType.bordered
-              ? BorderSide(
-                  color: widget.color ?? Theme.of(context).colorScheme.primary)
+              ? BorderSide(color: widget.color ?? Theme.of(context).colorScheme.primary)
               : BorderSide.none,
         );
     }

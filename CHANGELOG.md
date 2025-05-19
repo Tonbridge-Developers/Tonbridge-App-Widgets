@@ -1,3 +1,7 @@
+## 2025.5.1
+
+* Fixed an issue with the buttons force expanding
+
 ## 2025.4.2
 
 * Added `PanopticTextCompare` a widget which shows the before and after of Html and Text. It supports different views and different colours
