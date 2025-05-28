@@ -61,11 +61,10 @@ class _PanopticChipState extends State<PanopticChip> {
         ),
       ),
       backgroundColor: _getBackgroundColor(context),
-      shape: RoundedRectangleBorder(
+      shape: RoundedSuperellipseBorder(
         borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
         side: BorderSide(
-          color: widget.color ??
-              Theme.of(context).colorScheme.primary.withAlpha(60),
+          color: widget.color ?? Theme.of(context).colorScheme.primary.withAlpha(60),
           width: 0.5,
         ),
       ),
@@ -87,11 +86,10 @@ class _PanopticChipState extends State<PanopticChip> {
         ),
       ),
       backgroundColor: _getBackgroundColor(context),
-      shape: RoundedRectangleBorder(
+      shape: RoundedSuperellipseBorder(
         borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
         side: BorderSide(
-          color: widget.color ??
-              Theme.of(context).colorScheme.primary.withAlpha(60),
+          color: widget.color ?? Theme.of(context).colorScheme.primary.withAlpha(60),
           width: 0.5,
         ),
       ),
@@ -116,8 +114,7 @@ class _PanopticChipState extends State<PanopticChip> {
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               color: _getBackgroundColor(context),
-              borderRadius:
-                  BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+              borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
             ),
             child: PanopticRow(
               padding: const EdgeInsets.only(right: 5),
@@ -134,8 +131,7 @@ class _PanopticChipState extends State<PanopticChip> {
                       textAlign: TextAlign.center,
                       widget.label,
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: widget.color ??
-                                Theme.of(context).colorScheme.primary,
+                            color: widget.color ?? Theme.of(context).colorScheme.primary,
                           ),
                     ),
                   ),
@@ -155,9 +151,7 @@ class _PanopticChipState extends State<PanopticChip> {
   }
 
   Color _getBackgroundColor(BuildContext context) {
-    return ThemeProvider.controllerOf(context)
-            .currentThemeId
-            .startsWith('white')
+    return ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')
         ? Theme.of(context).colorScheme.surface
         : (widget.color ?? Theme.of(context).colorScheme.primary).withAlpha(45);
   }

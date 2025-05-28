@@ -259,9 +259,8 @@ Future<DateTime?> showBoardDateTimePicker<T extends BoardDateTimeCommonResult>({
     enableDrag: enableDrag,
     showDragHandle: showDragHandle,
     useSafeArea: useSafeArea,
-    backgroundColor:
-        opt.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
-    shape: RoundedRectangleBorder(
+    backgroundColor: opt.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
+    shape: RoundedSuperellipseBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(radius),
         topRight: Radius.circular(radius),

@@ -17,9 +17,7 @@ class PanopticCheckboxFormField extends PanopticFormFieldDecoration<bool> {
     String? hintText,
     bool fullWidth = false,
   }) : super(
-          autovalidateMode: autoValidate
-              ? AutovalidateMode.always
-              : AutovalidateMode.disabled,
+          autovalidateMode: autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
           builder: (FormFieldState<bool> field) {
             final state = field as PanopticCheckboxFormFieldState;
             return Column(
@@ -60,25 +58,21 @@ class PanopticCheckboxFormField extends PanopticFormFieldDecoration<bool> {
         ),
         Checkbox(
           value: state.value,
-          onChanged:
-              state.widget.enabled ? (value) => state.didChange(value) : null,
-          shape: RoundedRectangleBorder(
+          onChanged: state.widget.enabled ? (value) => state.didChange(value) : null,
+          shape: RoundedSuperellipseBorder(
             borderRadius: BorderRadius.circular(CoreValues.cornerRadius / 4),
           ),
-          activeColor:
-              activeColor ?? Theme.of(state.context).colorScheme.primary,
+          activeColor: activeColor ?? Theme.of(state.context).colorScheme.primary,
         ),
       ],
     );
   }
 
-  static Widget _buildHintIcon(
-      PanopticCheckboxFormFieldState state, String hintText) {
+  static Widget _buildHintIcon(PanopticCheckboxFormFieldState state, String hintText) {
     return Tooltip(
       message: hintText,
       preferBelow: true,
-      triggerMode:
-          PanopticExtension.isWebOrDesktop() ? null : TooltipTriggerMode.tap,
+      triggerMode: PanopticExtension.isWebOrDesktop() ? null : TooltipTriggerMode.tap,
       verticalOffset: 10,
       child: PanopticIcon(
         icon: PanopticIcons.infoRound,
@@ -104,8 +98,8 @@ class PanopticCheckboxFormField extends PanopticFormFieldDecoration<bool> {
   }
 
   @override
-  PanopticFormFieldDecorationState<PanopticCheckboxFormField, bool>
-      createState() => PanopticCheckboxFormFieldState();
+  PanopticFormFieldDecorationState<PanopticCheckboxFormField, bool> createState() =>
+      PanopticCheckboxFormFieldState();
 }
 
 class PanopticCheckboxFormFieldState

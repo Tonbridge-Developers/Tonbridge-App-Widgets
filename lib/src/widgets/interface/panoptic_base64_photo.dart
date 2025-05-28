@@ -74,7 +74,7 @@ class _PanopticBase64PhotoState extends State<PanopticBase64Photo> {
         child: PanopticLoading(
           loadingType: LoadingType.circular,
           isLoading: isLoading,
-          child: ClipRRect(
+          child: ClipRSuperellipse(
             borderRadius: widget.borderRadius,
             clipBehavior: Clip.hardEdge,
             child: image ??

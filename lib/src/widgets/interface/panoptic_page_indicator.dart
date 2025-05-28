@@ -60,9 +60,7 @@ class _PanopticPageIndicatorState extends State<PanopticPageIndicator> {
 
   double _calculatePageButtonListWidth() {
     return (_buttonSize + 2 * _buttonHorizontalMargin) *
-        (_pageCount < widget.visibleButtonCount
-            ? _pageCount
-            : widget.visibleButtonCount);
+        (_pageCount < widget.visibleButtonCount ? _pageCount : widget.visibleButtonCount);
   }
 
   void _animateToIndex(int index) {
@@ -122,8 +120,7 @@ class _PanopticPageIndicatorState extends State<PanopticPageIndicator> {
           selected: false,
           theme: theme,
           disabled: atStart || _loading,
-          onPressed: () async =>
-              await _handleButtonPress(-double.maxFinite.toInt()),
+          onPressed: () async => await _handleButtonPress(-double.maxFinite.toInt()),
         ),
         _buildButton<PanopticIcons>(
           value: PanopticIcons.chevronleft,
@@ -145,8 +142,7 @@ class _PanopticPageIndicatorState extends State<PanopticPageIndicator> {
                   selected: index == _currentIndex,
                   theme: theme,
                   disabled: _loading,
-                  onPressed: () async =>
-                      await _handleButtonPress(index - _currentIndex));
+                  onPressed: () async => await _handleButtonPress(index - _currentIndex));
             },
           ),
         ),
@@ -161,8 +157,7 @@ class _PanopticPageIndicatorState extends State<PanopticPageIndicator> {
             selected: false,
             theme: theme,
             disabled: atEnd || _loading,
-            onPressed: () async =>
-                await _handleButtonPress(double.maxFinite.toInt())),
+            onPressed: () async => await _handleButtonPress(double.maxFinite.toInt())),
       ],
     );
   }
@@ -186,21 +181,19 @@ class _PanopticPageIndicatorState extends State<PanopticPageIndicator> {
       buttonColor = theme.colorScheme.surface;
     } else {
       child = Text(value.toString());
-      buttonColor =
-          selected ? theme.colorScheme.primary : theme.colorScheme.surface;
+      buttonColor = selected ? theme.colorScheme.primary : theme.colorScheme.surface;
     }
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: _buttonHorizontalMargin),
-      constraints:
-          BoxConstraints.tightFor(width: _buttonSize, height: _buttonSize),
+      constraints: BoxConstraints.tightFor(width: _buttonSize, height: _buttonSize),
       child: Center(
         child: MaterialButton(
           height: 50,
           disabledColor: theme.colorScheme.surface,
           onPressed: disabled ? null : onPressed,
           padding: const EdgeInsets.all(0),
-          shape: RoundedRectangleBorder(
+          shape: RoundedSuperellipseBorder(
             borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
           ),
           color: buttonColor,

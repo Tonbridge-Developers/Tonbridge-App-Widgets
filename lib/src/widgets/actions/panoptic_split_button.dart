@@ -60,24 +60,16 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
         children: [
           Expanded(
             child: MaterialButton(
-              onPressed: widget.isDisabled || widget.isLoading
-                  ? null
-                  : widget.onPressed,
-              onLongPress: widget.isDisabled || widget.isLoading
-                  ? null
-                  : widget.onLongPress,
+              onPressed: widget.isDisabled || widget.isLoading ? null : widget.onPressed,
+              onLongPress: widget.isDisabled || widget.isLoading ? null : widget.onLongPress,
               disabledColor: _getColor('button'),
               key: widget.key,
               color: _getColor('button'),
               textColor: _getColor('text'),
               elevation: widget.elevation,
               padding: widget.padding,
-              shape: widget.actions.isEmpty
-                  ? _getShape()
-                  : _getShape(position: 'left'),
-              child: widget.isLoading
-                  ? _buildLoadingIndicator()
-                  : _buildButtonContent(),
+              shape: widget.actions.isEmpty ? _getShape() : _getShape(position: 'left'),
+              child: widget.isLoading ? _buildLoadingIndicator() : _buildButtonContent(),
             ),
           ),
           const SizedBox(width: 2),
@@ -159,17 +151,15 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
   Widget _buildMenuAnchor() {
     return MenuAnchor(
       style: MenuStyle(
-          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(CoreValues.cornerRadius * 0.8)))),
+          shape: WidgetStatePropertyAll(RoundedSuperellipseBorder(
+              borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8)))),
       alignmentOffset: Offset(0, PanopticExtension.isWebOrDesktop() ? 5 : 0),
       childFocusNode: _buttonFocusNode,
       menuChildren: [
         for (var action in widget.actions) ...{
           MenuItemButton(
             leadingIcon: action.icon != null
-                ? PanopticIcon(
-                    icon: action.icon!, size: 20, color: _getColor('action'))
+                ? PanopticIcon(icon: action.icon!, size: 20, color: _getColor('action'))
                 : null,
             onPressed: action.onPressed,
             onHover: (value) {
@@ -196,9 +186,7 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
                   : (PanopticExtension.isWebOrDesktop() ? 57 : 40),
               onPressed: widget.isDisabled
                   ? null
-                  : () => controller.isOpen
-                      ? controller.close()
-                      : controller.open(),
+                  : () => controller.isOpen ? controller.close() : controller.open(),
               disabledColor: _getColor('button'),
               color: _getColor('button'),
               textColor: _getColor('text'),
@@ -251,7 +239,7 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
     return Colors.transparent;
   }
 
-  RoundedRectangleBorder _getShape({String position = 'center'}) {
+  RoundedSuperellipseBorder _getShape({String position = 'center'}) {
     final borderRadius = BorderRadius.circular(CoreValues.cornerRadius * 0.8);
     final side = widget.buttonType == ButtonType.bordered
         ? BorderSide(color: Theme.of(context).colorScheme.primary)
@@ -259,22 +247,20 @@ class _PanopticSplitButtonState extends State<PanopticSplitButton> {
 
     switch (position) {
       case 'left':
-        return RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              bottomLeft: borderRadius.bottomLeft,
-              topLeft: borderRadius.topLeft),
+        return RoundedSuperellipseBorder(
+          borderRadius:
+              BorderRadius.only(bottomLeft: borderRadius.bottomLeft, topLeft: borderRadius.topLeft),
           side: side,
         );
       case 'right':
-        return RoundedRectangleBorder(
+        return RoundedSuperellipseBorder(
           borderRadius: BorderRadius.only(
-              bottomRight: borderRadius.bottomRight,
-              topRight: borderRadius.topRight),
+              bottomRight: borderRadius.bottomRight, topRight: borderRadius.topRight),
           side: side,
         );
       case 'center':
       default:
-        return RoundedRectangleBorder(
+        return RoundedSuperellipseBorder(
           borderRadius: borderRadius,
           side: side,
         );

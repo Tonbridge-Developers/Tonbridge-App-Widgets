@@ -24,8 +24,7 @@ class _PanopticDialogState extends State<PanopticDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      titlePadding:
-          const EdgeInsets.only(left: 10, right: 5, top: 10, bottom: 10),
+      titlePadding: const EdgeInsets.only(left: 10, right: 5, top: 10, bottom: 10),
       title: Row(
         children: [
           Text(widget.title),
@@ -41,7 +40,7 @@ class _PanopticDialogState extends State<PanopticDialog> {
       actions: widget.actions,
       scrollable: widget.scrollable,
       surfaceTintColor: Theme.of(context).dialogBackgroundColor,
-      shape: RoundedRectangleBorder(
+      shape: RoundedSuperellipseBorder(
         borderRadius: BorderRadius.circular(CoreValues.cornerRadius),
       ),
     );

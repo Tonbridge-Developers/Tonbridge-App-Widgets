@@ -63,9 +63,7 @@ class _PanopticPagerState extends State<PanopticPager> {
 
   double _calculatePageButtonListWidth() {
     return (_buttonSize + 2 * _buttonHorizontalMargin) *
-        (_pageCount < widget.visibleButtonCount
-            ? _pageCount
-            : widget.visibleButtonCount);
+        (_pageCount < widget.visibleButtonCount ? _pageCount : widget.visibleButtonCount);
   }
 
   void _animateToIndex(int index) {
@@ -134,8 +132,7 @@ class _PanopticPagerState extends State<PanopticPager> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    bool smallDevice =
-        PanopticExtension.getDeviceType(context) == DeviceType.small;
+    bool smallDevice = PanopticExtension.getDeviceType(context) == DeviceType.small;
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: Row(
@@ -184,13 +181,11 @@ class _PanopticPagerState extends State<PanopticPager> {
             child: DropdownButton<int>(
               // itemHeight: 50,
               isDense: true,
-              borderRadius:
-                  BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+              borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
               value: widget.pageSize,
               items: widget.availableRowsPerPage
-                  .map((e) =>
-                      DropdownMenuItem(value: e, child: Text(e.toString())))
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e.toString())))
                   .toList(),
               onChanged: _handlePageSizeChange,
             ),
@@ -211,8 +206,7 @@ class _PanopticPagerState extends State<PanopticPager> {
           selected: false,
           theme: theme,
           disabled: atStart || _loading,
-          onPressed: () async =>
-              await _handleButtonPress(-double.maxFinite.toInt()),
+          onPressed: () async => await _handleButtonPress(-double.maxFinite.toInt()),
         ),
         _buildButton<PanopticIcons>(
           value: PanopticIcons.chevronleft,
@@ -234,8 +228,7 @@ class _PanopticPagerState extends State<PanopticPager> {
                   selected: index == _currentIndex,
                   theme: theme,
                   disabled: _loading,
-                  onPressed: () async =>
-                      await _handleButtonPress(index - _currentIndex));
+                  onPressed: () async => await _handleButtonPress(index - _currentIndex));
             },
           ),
         ),
@@ -250,8 +243,7 @@ class _PanopticPagerState extends State<PanopticPager> {
             selected: false,
             theme: theme,
             disabled: atEnd || _loading,
-            onPressed: () async =>
-                await _handleButtonPress(double.maxFinite.toInt())),
+            onPressed: () async => await _handleButtonPress(double.maxFinite.toInt())),
       ],
     );
   }
@@ -275,21 +267,19 @@ class _PanopticPagerState extends State<PanopticPager> {
       buttonColor = theme.colorScheme.surface;
     } else {
       child = Text(value.toString());
-      buttonColor =
-          selected ? theme.colorScheme.primary : theme.colorScheme.surface;
+      buttonColor = selected ? theme.colorScheme.primary : theme.colorScheme.surface;
     }
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: _buttonHorizontalMargin),
-      constraints:
-          BoxConstraints.tightFor(width: _buttonSize, height: _buttonSize),
+      constraints: BoxConstraints.tightFor(width: _buttonSize, height: _buttonSize),
       child: Center(
         child: MaterialButton(
           height: 50,
           disabledColor: theme.colorScheme.surface,
           onPressed: disabled ? null : onPressed,
           padding: const EdgeInsets.all(0),
-          shape: RoundedRectangleBorder(
+          shape: RoundedSuperellipseBorder(
             borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
           ),
           color: buttonColor,

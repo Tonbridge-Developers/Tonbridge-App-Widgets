@@ -107,26 +107,42 @@ class _PanopticCardState extends State<PanopticCard> {
                 strokeWidth: 1,
                 borderType: BorderType.RRect,
                 radius: Radius.circular((CoreValues.cornerRadius * widget.cornerRadiusFactor)),
-                child: _buildCard(widget.collapsible == true ? buildCollapsibleContent() : _buildContent()),
+                child: _buildCard(
+                    widget.collapsible == true ? buildCollapsibleContent() : _buildContent()),
               )
             : _buildCard(widget.collapsible == true ? buildCollapsibleContent() : _buildContent());
   }
 
-  Widget _buildCard(Widget child) => Container(
-        padding: widget.padding ?? const EdgeInsets.all(10),
-        width: widget.width,
-        height: widget.height,
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          border: widget.border ?? ((widget.useDarkBorder) || ThemeProvider.controllerOf(context).currentThemeId.startsWith('white') ? Border.all(width: 0.5, color: Theme.of(context).colorScheme.onSurface) : null),
-          borderRadius: BorderRadius.circular((CoreValues.cornerRadius * widget.cornerRadiusFactor) * (widget.dottedBorder ? 0.9 : 1)),
-          gradient: widget.gradient ??
-              LinearGradient(
-                colors: [widget.color ?? (widget.alternative ? Theme.of(context).colorScheme.surfaceContainer : Theme.of(context).colorScheme.surface), widget.color ?? (widget.alternative ? Theme.of(context).colorScheme.surfaceContainer : Theme.of(context).colorScheme.surface)],
-              ),
+  Widget _buildCard(Widget child) => Material(
+        shape: RoundedSuperellipseBorder(
+          borderRadius: BorderRadius.circular(
+              (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                  (widget.dottedBorder ? 0.9 : 1)),
+          side: widget.border != null
+              ? BorderSide(
+                  color: (widget.border as Border?)?.top.color ?? Colors.transparent,
+                  width: (widget.border as Border?)?.top.width ?? 0.5,
+                )
+              : BorderSide(
+                  color: widget.useDarkBorder
+                      ? Theme.of(context).colorScheme.onSurface
+                      : Colors.transparent,
+                  width: 0.5,
+                ),
         ),
-        margin: widget.margin ?? const EdgeInsetsDirectional.only(top: 10, bottom: 10),
-        child: child,
+        color: widget.color ??
+            (widget.alternative
+                ? Theme.of(context).colorScheme.surfaceContainer
+                : Theme.of(context).colorScheme.surface),
+        child: ClipRSuperellipse(
+          child: Container(
+            padding: widget.padding ?? const EdgeInsets.all(10),
+            width: widget.width,
+            height: widget.height,
+            margin: widget.margin ?? const EdgeInsetsDirectional.only(top: 10, bottom: 10),
+            child: child,
+          ),
+        ),
       );
 
   Widget _basicContent() => InkWell(
@@ -194,7 +210,10 @@ class _PanopticCardState extends State<PanopticCard> {
                 }
               }),
               child: Padding(
-                padding: widget.labelPadding ?? (!widget.isCollapsed ? const EdgeInsetsDirectional.only(bottom: 10) : const EdgeInsets.all(0)),
+                padding: widget.labelPadding ??
+                    (!widget.isCollapsed
+                        ? const EdgeInsetsDirectional.only(bottom: 10)
+                        : const EdgeInsets.all(0)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -205,16 +224,20 @@ class _PanopticCardState extends State<PanopticCard> {
                     if (widget.label != null) ...{
                       if (widget.isCollapsed && widget.collapsedLabel != null) ...{
                         Expanded(
-                          child: Text(widget.collapsedLabel!, style: Theme.of(context).textTheme.titleMedium!),
+                          child: Text(widget.collapsedLabel!,
+                              style: Theme.of(context).textTheme.titleMedium!),
                         ),
                       } else ...{
                         Expanded(
-                          child: Text(widget.label!, style: Theme.of(context).textTheme.titleMedium!),
+                          child:
+                              Text(widget.label!, style: Theme.of(context).textTheme.titleMedium!),
                         ),
                       }
                     },
                     if (widget.trailing != null) widget.trailing!,
-                    widget.isCollapsed ? const Icon(Icons.keyboard_arrow_right_rounded) : const Icon(Icons.keyboard_arrow_down_rounded),
+                    widget.isCollapsed
+                        ? const Icon(Icons.keyboard_arrow_right_rounded)
+                        : const Icon(Icons.keyboard_arrow_down_rounded),
                   ],
                 ),
               ),

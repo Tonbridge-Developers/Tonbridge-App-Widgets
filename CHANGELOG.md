@@ -1,3 +1,9 @@
+
+## 2025.5.2
+
+* Added Support for the `RoundedSuperellipse`
+* Added support for Flutter 3.32
+
 ## 2025.5.1
 
 * Fixed an issue with the buttons force expanding

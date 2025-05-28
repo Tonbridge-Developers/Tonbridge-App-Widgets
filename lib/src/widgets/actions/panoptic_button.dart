@@ -208,14 +208,14 @@ class _PanopticButtonState extends State<PanopticButton> {
 
   OutlinedBorder _getShape() {
     if (ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')) {
-      return RoundedRectangleBorder(
+      return RoundedSuperellipseBorder(
         borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
         side: BorderSide(color: Theme.of(context).colorScheme.primary),
       );
     }
     switch (widget.buttonPosition) {
       case ButtonPosition.right:
-        return RoundedRectangleBorder(
+        return RoundedSuperellipseBorder(
           side: widget.buttonType == ButtonType.bordered
               ? BorderSide(color: widget.color ?? Theme.of(context).colorScheme.primary)
               : BorderSide.none,
@@ -225,7 +225,7 @@ class _PanopticButtonState extends State<PanopticButton> {
           ),
         );
       case ButtonPosition.left:
-        return RoundedRectangleBorder(
+        return RoundedSuperellipseBorder(
           side: widget.buttonType == ButtonType.bordered
               ? BorderSide(color: widget.color ?? Theme.of(context).colorScheme.primary)
               : BorderSide.none,
@@ -235,14 +235,14 @@ class _PanopticButtonState extends State<PanopticButton> {
           ),
         );
       case ButtonPosition.center:
-        return RoundedRectangleBorder(
+        return RoundedSuperellipseBorder(
           borderRadius: BorderRadius.circular(0),
           side: widget.buttonType == ButtonType.bordered
               ? BorderSide(color: widget.color ?? Theme.of(context).colorScheme.primary)
               : BorderSide.none,
         );
       case ButtonPosition.na:
-        return RoundedRectangleBorder(
+        return RoundedSuperellipseBorder(
           borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
           side: widget.buttonType == ButtonType.bordered
               ? BorderSide(color: widget.color ?? Theme.of(context).colorScheme.primary)

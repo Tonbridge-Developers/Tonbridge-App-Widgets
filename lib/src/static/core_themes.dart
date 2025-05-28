@@ -6,10 +6,10 @@ import 'package:theme_provider/theme_provider.dart';
 class Themes {
   //Themes
 
-  static final AppTheme defaultLight = AppTheme(
-      id: 'default_light', data: lightTheme, description: 'Red (Default)');
-  static final AppTheme defaultDark = AppTheme(
-      id: 'default_dark', data: darkTheme, description: 'Red (Default)');
+  static final AppTheme defaultLight =
+      AppTheme(id: 'default_light', data: lightTheme, description: 'Red (Default)');
+  static final AppTheme defaultDark =
+      AppTheme(id: 'default_dark', data: darkTheme, description: 'Red (Default)');
 
   static final List<Color> pride = [
     const Color(0xFFff0000),
@@ -906,7 +906,8 @@ class Themes {
           scaffoldBackgroundColor: Colors.white,
           primaryColor: Colors.black,
           popupMenuTheme: const PopupMenuThemeData(color: Colors.white),
-          dialogTheme: const DialogTheme(backgroundColor: Colors.white),
+          dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
+          //dialogTheme: const DialogTheme(backgroundColor: Colors.white),
           timePickerTheme: const TimePickerThemeData(
               inputDecorationTheme: InputDecorationTheme(
                 fillColor: Colors.white,
@@ -934,7 +935,7 @@ class Themes {
           scaffoldBackgroundColor: Colors.black,
           primaryColor: Colors.white,
           popupMenuTheme: const PopupMenuThemeData(color: Colors.black),
-          dialogTheme: const DialogTheme(backgroundColor: Colors.black),
+          dialogTheme: const DialogThemeData(backgroundColor: Colors.black),
           timePickerTheme: const TimePickerThemeData(
               inputDecorationTheme: InputDecorationTheme(
                 fillColor: Colors.black,
@@ -963,7 +964,7 @@ class Themes {
           scaffoldBackgroundColor: Colors.white,
           primaryColor: Colors.black,
           popupMenuTheme: const PopupMenuThemeData(color: Colors.white),
-          dialogTheme: const DialogTheme(backgroundColor: Colors.white),
+          dialogTheme: const DialogThemeData(backgroundColor: Colors.white),
           timePickerTheme: const TimePickerThemeData(
               inputDecorationTheme: InputDecorationTheme(
                 fillColor: Colors.white,
@@ -991,7 +992,7 @@ class Themes {
           scaffoldBackgroundColor: Colors.black,
           primaryColor: Colors.white,
           popupMenuTheme: const PopupMenuThemeData(color: Colors.black),
-          dialogTheme: const DialogTheme(backgroundColor: Colors.black),
+          dialogTheme: const DialogThemeData(backgroundColor: Colors.black),
           timePickerTheme: const TimePickerThemeData(
               inputDecorationTheme: InputDecorationTheme(
                 fillColor: Colors.black,
@@ -1103,10 +1104,8 @@ class Themes {
       brightness: Brightness.light,
       scaffoldBackgroundColor: const Color.fromARGB(255, 226, 232, 240),
       primaryColor: const Color(0xFFDB3034),
-      popupMenuTheme:
-          const PopupMenuThemeData(color: Color.fromARGB(255, 226, 232, 240)),
-      dialogTheme: const DialogTheme(
-          backgroundColor: Color.fromARGB(255, 226, 232, 240)),
+      popupMenuTheme: const PopupMenuThemeData(color: Color.fromARGB(255, 226, 232, 240)),
+      dialogTheme: const DialogThemeData(backgroundColor: Color.fromARGB(255, 226, 232, 240)),
       timePickerTheme: const TimePickerThemeData(
           inputDecorationTheme: InputDecorationTheme(
             fillColor: Color.fromARGB(255, 226, 232, 240),
@@ -1131,10 +1130,8 @@ class Themes {
       brightness: Brightness.dark,
       primaryColor: const Color(0xFFDB3034),
       scaffoldBackgroundColor: const Color.fromARGB(255, 30, 41, 59),
-      popupMenuTheme:
-          const PopupMenuThemeData(color: Color.fromARGB(255, 30, 41, 59)),
-      dialogTheme:
-          const DialogTheme(backgroundColor: Color.fromARGB(255, 30, 41, 59)),
+      popupMenuTheme: const PopupMenuThemeData(color: Color.fromARGB(255, 30, 41, 59)),
+      dialogTheme: const DialogThemeData(backgroundColor: Color.fromARGB(255, 30, 41, 59)),
       timePickerTheme: const TimePickerThemeData(
         inputDecorationTheme: InputDecorationTheme(
           fillColor: Color.fromARGB(255, 30, 41, 59),

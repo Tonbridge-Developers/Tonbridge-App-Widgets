@@ -24,8 +24,7 @@ class PanopticTable extends StatefulWidget {
       this.summaryRows = const [],
       this.allowExpandCollapseGroup = false,
       this.forceSingleLine = false,
-      this.groupCaptionTitleFormat =
-          '{ColumnName} : {Key} - {ItemsCount} Items',
+      this.groupCaptionTitleFormat = '{ColumnName} : {Key} - {ItemsCount} Items',
       this.selectionMode = SelectionMode.single,
       this.desktopColumnWidthMode = ColumnWidthMode.fill,
       this.headerRowHeight = double.nan,
@@ -110,9 +109,7 @@ class _PanopticTableState extends State<PanopticTable> {
     if (widget.autoSize) {
       result = MeasureSizeBuilder(builder: (context, size) {
         updateSize(size);
-        return notExpanded
-            ? _buildTable()
-            : Expanded(flex: widget.flex, child: _buildTable());
+        return notExpanded ? _buildTable() : Expanded(flex: widget.flex, child: _buildTable());
       });
     } else if (widget.expanded) {
       result = Expanded(
@@ -169,9 +166,7 @@ class _PanopticTableState extends State<PanopticTable> {
     clearSelection();
     ThemeData theme = Theme.of(context);
     return Container(
-      margin: widget.paginated
-          ? const EdgeInsets.fromLTRB(5, 5, 5, 0)
-          : const EdgeInsets.all(5),
+      margin: widget.paginated ? const EdgeInsets.fromLTRB(5, 5, 5, 0) : const EdgeInsets.all(5),
       clipBehavior: Clip.antiAlias,
       height: widget.tableHeight,
       decoration: BoxDecoration(
@@ -184,30 +179,26 @@ class _PanopticTableState extends State<PanopticTable> {
           SfTheme(
             data: SfThemeData(
               dataGridThemeData: SfDataGridThemeData(
-                  headerColor: ThemeProvider.controllerOf(context)
-                          .currentThemeId
-                          .startsWith('white')
-                      ? Theme.of(context).colorScheme.surface
-                      : theme.colorScheme.primary.withOpacity(0.7),
-                  sortIconColor: ThemeProvider.controllerOf(context)
-                          .currentThemeId
-                          .startsWith('white')
-                      ? Theme.of(context).colorScheme.primary
-                      : theme.colorScheme.onPrimary,
+                  headerColor:
+                      ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')
+                          ? Theme.of(context).colorScheme.surface
+                          : theme.colorScheme.primary.withOpacity(0.7),
+                  sortIconColor:
+                      ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')
+                          ? Theme.of(context).colorScheme.primary
+                          : theme.colorScheme.onPrimary,
                   selectionColor: theme.colorScheme.primary.withOpacity(0.5),
-                  filterIconColor: ThemeProvider.controllerOf(context)
-                          .currentThemeId
-                          .startsWith('white')
-                      ? Theme.of(context).colorScheme.primary
-                      : theme.colorScheme.onPrimary,
+                  filterIconColor:
+                      ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')
+                          ? Theme.of(context).colorScheme.primary
+                          : theme.colorScheme.onPrimary,
                   frozenPaneLineColor: theme.colorScheme.primary),
             ),
             child: SfDataGrid(
               tableSummaryRows: widget.summaryRows,
               groupCaptionTitleFormat: widget.groupCaptionTitleFormat,
-              checkboxShape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(CoreValues.cornerRadius / 4),
+              checkboxShape: RoundedSuperellipseBorder(
+                borderRadius: BorderRadius.circular(CoreValues.cornerRadius / 4),
               ),
               selectionMode: widget.selectionMode,
               controller: widget.controller,

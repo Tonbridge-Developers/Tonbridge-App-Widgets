@@ -53,7 +53,7 @@ class _PanopticHttpPhotoState extends State<PanopticHttpPhoto> {
       width: width,
       height: height,
       margin: widget.margin,
-      child: ClipRRect(
+      child: ClipRSuperellipse(
         borderRadius: widget.borderRadius,
         clipBehavior: Clip.hardEdge,
         child: ImageNetwork(
@@ -73,8 +73,7 @@ class _PanopticHttpPhotoState extends State<PanopticHttpPhoto> {
               width: width / 2,
               child: CircularProgressIndicator(
                 strokeWidth: 2.0,
-                valueColor: AlwaysStoppedAnimation(
-                    Theme.of(context).colorScheme.primary),
+                valueColor: AlwaysStoppedAnimation(Theme.of(context).colorScheme.primary),
               ),
             ),
           ),

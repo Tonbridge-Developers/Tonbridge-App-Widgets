@@ -253,9 +253,7 @@ class BoardDateTimeHeaderState extends State<BoardDateTimeHeader> {
     bool selected = false,
   }) {
     return Material(
-      color: selected
-          ? widget.activeColor
-          : widget.backgroundColor.withOpacity(0.8),
+      color: selected ? widget.activeColor : widget.backgroundColor.withOpacity(0.8),
       clipBehavior: Clip.antiAlias,
       borderRadius: BorderRadius.circular(4),
       child: InkWell(
@@ -267,9 +265,7 @@ class BoardDateTimeHeaderState extends State<BoardDateTimeHeader> {
             child: Text(
               title,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: selected
-                        ? widget.activeTextColor
-                        : widget.textColor?.withOpacity(0.9),
+                    color: selected ? widget.activeTextColor : widget.textColor?.withOpacity(0.9),
                   ),
             ),
           ),
@@ -324,12 +320,10 @@ class BoardDateTimeNoneButtonHeader extends StatefulWidget {
   final bool modal;
 
   @override
-  State<BoardDateTimeNoneButtonHeader> createState() =>
-      _BoardDateTimeNoneButtonHeaderState();
+  State<BoardDateTimeNoneButtonHeader> createState() => _BoardDateTimeNoneButtonHeaderState();
 }
 
-class _BoardDateTimeNoneButtonHeaderState
-    extends State<BoardDateTimeNoneButtonHeader> {
+class _BoardDateTimeNoneButtonHeaderState extends State<BoardDateTimeNoneButtonHeader> {
   double get buttonSize => widget.wide ? 40 : 36;
 
   @override
@@ -374,8 +368,7 @@ class _BoardDateTimeNoneButtonHeaderState
   }
 
   Widget _title() {
-    if (widget.options.boardTitle == null ||
-        widget.options.boardTitle!.isEmpty) {
+    if (widget.options.boardTitle == null || widget.options.boardTitle!.isEmpty) {
       return const SizedBox();
     }
     return FittedBox(
@@ -437,7 +430,7 @@ class _BoardDateTimeNoneButtonHeaderState
   }) {
     return Material(
       color: bgColor,
-      shape: RoundedRectangleBorder(
+      shape: RoundedSuperellipseBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       clipBehavior: Clip.antiAlias,

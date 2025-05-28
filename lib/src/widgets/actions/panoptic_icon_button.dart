@@ -55,8 +55,7 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
   final _macosHapticFeedback = MacosHapticFeedback();
   @override
   Widget build(BuildContext context) {
-    assert(widget.icon != null || widget.widget != null,
-        "Icon or widget must be provided");
+    assert(widget.icon != null || widget.widget != null, "Icon or widget must be provided");
 
     Widget button = _buildButton();
     if (widget.tooltip?.isNotEmpty == true) {
@@ -65,10 +64,8 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
     if (widget.badge != null) {
       button = Badge(
         alignment: widget.badgeAlignment,
-        backgroundColor:
-            widget.badgeColor ?? Theme.of(context).colorScheme.secondary,
-        textColor:
-            widget.badgeTextColor ?? Theme.of(context).colorScheme.onSecondary,
+        backgroundColor: widget.badgeColor ?? Theme.of(context).colorScheme.secondary,
+        textColor: widget.badgeTextColor ?? Theme.of(context).colorScheme.onSecondary,
         label: widget.badge,
         child: button,
       );
@@ -85,32 +82,28 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
       },
       child: Container(
         margin: widget.margin,
-        constraints:
-            BoxConstraints.tightFor(width: widget.size, height: widget.size),
+        constraints: BoxConstraints.tightFor(width: widget.size, height: widget.size),
         child: MaterialButton(
           disabledColor: _getButtonColor(),
-          onPressed:
-              widget.isDisabled || widget.isLoading ? null : widget.onTap,
+          onPressed: widget.isDisabled || widget.isLoading ? null : widget.onTap,
           padding: const EdgeInsets.all(0),
           elevation: widget.elevation,
-          shape: RoundedRectangleBorder(
+          shape: RoundedSuperellipseBorder(
             borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
             side: widget.borderSide ?? _getBorderSide(),
           ),
           color: _getButtonColor(),
           child: Container(
+            width: widget.size,
+            height: widget.size,
             decoration: BoxDecoration(
               gradient: widget.gradient ??
                   LinearGradient(
-                    colors: [
-                      _getButtonColor(),
-                      PanopticExtension.shiftHue(_getButtonColor(), 15)
-                    ],
+                    colors: [_getButtonColor(), PanopticExtension.shiftHue(_getButtonColor(), 15)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-              borderRadius:
-                  BorderRadius.circular(CoreValues.cornerRadius * 0.8),
+              borderRadius: BorderRadius.circular(CoreValues.cornerRadius * 0.8),
             ),
             child: widget.isLoading
                 ? Center(
@@ -124,10 +117,17 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
                     ),
                   )
                 : widget.icon != null
-                    ? PanopticIcon(
-                        icon: widget.icon!,
-                        color: widget.foregroundColor ?? _getTextColor(),
-                        size: widget.size / 2,
+                    ? Center(
+                        child: SizedBox(
+                          height: widget.size / 2,
+                          width: widget.size / 2,
+                          child: PanopticIcon(
+                            icon: widget.icon!,
+                            color: widget.foregroundColor ?? _getTextColor(),
+                            size: widget.size / 2,
+                            margin: EdgeInsets.zero,
+                          ),
+                        ),
                       )
                     : widget.widget,
           ),
@@ -154,9 +154,7 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
   }
 
   TextStyle? _getTooltipTextStyle() {
-    return ThemeProvider.controllerOf(context)
-            .currentThemeId
-            .startsWith('white')
+    return ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')
         ? TextStyle(color: Theme.of(context).colorScheme.onSurface)
         : null;
   }
@@ -183,9 +181,7 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
   }
 
   Color _getTooltipBackgroundColor() {
-    return ThemeProvider.controllerOf(context)
-            .currentThemeId
-            .startsWith('white')
+    return ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')
         ? Theme.of(context).colorScheme.surface
         : Theme.of(context).colorScheme.secondary.withOpacity(0.9);
   }
@@ -197,9 +193,7 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
   }
 
   Color _getButtonColor() {
-    if (ThemeProvider.controllerOf(context)
-        .currentThemeId
-        .startsWith('white')) {
+    if (ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')) {
       return Theme.of(context).colorScheme.surface;
     }
     switch (widget.buttonType) {
@@ -216,9 +210,7 @@ class _PanopticIconButtonState extends State<PanopticIconButton> {
   }
 
   Color _getTextColor() {
-    if (ThemeProvider.controllerOf(context)
-        .currentThemeId
-        .startsWith('white')) {
+    if (ThemeProvider.controllerOf(context).currentThemeId.startsWith('white')) {
       return Theme.of(context).colorScheme.primary;
     }
     switch (widget.buttonType) {
