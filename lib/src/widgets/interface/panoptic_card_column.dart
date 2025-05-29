@@ -85,6 +85,7 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
   Widget _buildCard(Widget child) => Padding(
       padding: widget.margin ?? const EdgeInsetsDirectional.only(top: 10, bottom: 10),
       child: Material(
+        clipBehavior: Clip.antiAlias,
         shape: widget.border == null
             ? RoundedSuperellipseBorder(
                 borderRadius: BorderRadius.circular(
@@ -116,7 +117,6 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
                             (widget.dottedBorder ? 0.9 : 1)),
                   )
                 : null,
-            padding: widget.padding ?? const EdgeInsets.all(10),
             width: widget.width,
             height: widget.height,
             child: child,
@@ -125,18 +125,21 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
       ));
 
   Widget _buildContent() => SelectionArea(
-        child: widget.scrollable
-            ? PanopticListView(
-                shrinkWrap: true,
-                padding: widget.padding ?? const EdgeInsets.all(10),
-                children: widget.children,
-              )
-            : PanopticColumn(
-                padding: widget.padding ?? const EdgeInsets.all(10),
-                mainAxisAlignment: widget.mainAxisAlignment,
-                crossAxisAlignment: widget.crossAxisAlignment,
-                children: widget.children,
-              ),
+        child: Padding(
+          padding: widget.padding ?? const EdgeInsets.all(10),
+          child: widget.scrollable
+              ? PanopticListView(
+                  shrinkWrap: true,
+                  padding: widget.padding ?? const EdgeInsets.all(10),
+                  children: widget.children,
+                )
+              : PanopticColumn(
+                  padding: widget.padding ?? const EdgeInsets.all(10),
+                  mainAxisAlignment: widget.mainAxisAlignment,
+                  crossAxisAlignment: widget.crossAxisAlignment,
+                  children: widget.children,
+                ),
+        ),
       );
 
   Widget buildCollapsibleContent() => Column(

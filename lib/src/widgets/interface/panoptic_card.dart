@@ -116,6 +116,7 @@ class _PanopticCardState extends State<PanopticCard> {
   Widget _buildCard(Widget child) => Padding(
       padding: widget.margin ?? const EdgeInsetsDirectional.only(top: 10, bottom: 10),
       child: Material(
+        clipBehavior: Clip.antiAlias,
         shape: widget.border == null
             ? RoundedSuperellipseBorder(
                 borderRadius: BorderRadius.circular(
@@ -147,7 +148,6 @@ class _PanopticCardState extends State<PanopticCard> {
                             (widget.dottedBorder ? 0.9 : 1)),
                   )
                 : null,
-            padding: widget.padding ?? const EdgeInsets.all(10),
             width: widget.width,
             height: widget.height,
             child: child,
@@ -156,6 +156,8 @@ class _PanopticCardState extends State<PanopticCard> {
       ));
 
   Widget _basicContent() => InkWell(
+        borderRadius: BorderRadius.circular((CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+            (widget.dottedBorder ? 0.9 : 1)),
         focusNode: focusNode2,
         onDoubleTap: widget.onDoublePress,
         onHover: (value) {
@@ -170,7 +172,10 @@ class _PanopticCardState extends State<PanopticCard> {
         onTapDown: widget.onTapDown,
         onSecondaryTap: widget.onSecondaryPressed,
         onSecondaryTapDown: widget.onSecondaryTapDown,
-        child: widget.child,
+        child: Padding(
+          padding: widget.padding ?? const EdgeInsets.all(10),
+          child: widget.child,
+        ),
       );
 
   Widget _buildContent() => SelectionArea(
@@ -178,6 +183,9 @@ class _PanopticCardState extends State<PanopticCard> {
         child: InkWell(
           focusNode: focusNode2,
           onDoubleTap: widget.onDoublePress,
+          borderRadius: BorderRadius.circular(
+              (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                  (widget.dottedBorder ? 0.9 : 1)),
           onHover: (value) {
             if (widget.onPressed != null || widget.onDoublePress != null) {
               if (isMacOS) {
@@ -190,17 +198,20 @@ class _PanopticCardState extends State<PanopticCard> {
           onTapDown: widget.onTapDown,
           onSecondaryTap: widget.onSecondaryPressed,
           onSecondaryTapDown: widget.onSecondaryTapDown,
-          child: widget.scrollable
-              ? SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Padding(
-                    padding: widget.padding ?? const EdgeInsets.all(10),
+          child: Padding(
+            padding: widget.padding ?? const EdgeInsets.all(10),
+            child: widget.scrollable
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Padding(
+                      padding: widget.padding ?? const EdgeInsets.all(10),
+                      child: widget.child,
+                    ),
+                  )
+                : Center(
                     child: widget.child,
                   ),
-                )
-              : Center(
-                  child: widget.child,
-                ),
+          ),
         ),
       );
 
