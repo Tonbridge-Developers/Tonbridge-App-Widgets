@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:macos_haptic_feedback/macos_haptic_feedback.dart';
 import 'package:os_detect/os_detect.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
-import 'package:theme_provider/theme_provider.dart';
 
 class PanopticCard extends StatefulWidget {
   final Widget child;
@@ -215,75 +214,78 @@ class _PanopticCardState extends State<PanopticCard> {
         ),
       );
 
-  Widget buildCollapsibleContent() => Column(
-        mainAxisAlignment: widget.mainAxisAlignment,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          MouseRegion(
-            cursor: widget.collapsible == true ? SystemMouseCursors.click : MouseCursor.defer,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => setState(() {
-                widget.isCollapsed = !widget.isCollapsed;
-                if (widget.onCollapse != null) {
-                  widget.onCollapse!(widget.isCollapsed);
-                }
-              }),
-              child: Padding(
-                padding: widget.labelPadding ??
-                    (!widget.isCollapsed
-                        ? const EdgeInsetsDirectional.only(bottom: 10)
-                        : const EdgeInsets.all(0)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    if (widget.leading != null) ...{
-                      widget.leading!,
-                      const SizedBox(width: 10),
-                    },
-                    if (widget.label != null) ...{
-                      if (widget.isCollapsed && widget.collapsedLabel != null) ...{
-                        Expanded(
-                          child: Text(widget.collapsedLabel!,
-                              style: Theme.of(context).textTheme.titleMedium!),
-                        ),
-                      } else ...{
-                        Expanded(
-                          child:
-                              Text(widget.label!, style: Theme.of(context).textTheme.titleMedium!),
-                        ),
-                      }
-                    },
-                    if (widget.trailing != null) widget.trailing!,
-                    widget.isCollapsed
-                        ? const Icon(Icons.keyboard_arrow_right_rounded)
-                        : const Icon(Icons.keyboard_arrow_down_rounded),
-                  ],
+  Widget buildCollapsibleContent() => Padding(
+        padding: widget.padding ?? const EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: widget.mainAxisAlignment,
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            MouseRegion(
+              cursor: widget.collapsible == true ? SystemMouseCursors.click : MouseCursor.defer,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => setState(() {
+                  widget.isCollapsed = !widget.isCollapsed;
+                  if (widget.onCollapse != null) {
+                    widget.onCollapse!(widget.isCollapsed);
+                  }
+                }),
+                child: Padding(
+                  padding: widget.labelPadding ??
+                      (!widget.isCollapsed
+                          ? const EdgeInsetsDirectional.only(bottom: 10)
+                          : const EdgeInsets.all(0)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      if (widget.leading != null) ...{
+                        widget.leading!,
+                        const SizedBox(width: 10),
+                      },
+                      if (widget.label != null) ...{
+                        if (widget.isCollapsed && widget.collapsedLabel != null) ...{
+                          Expanded(
+                            child: Text(widget.collapsedLabel!,
+                                style: Theme.of(context).textTheme.titleMedium!),
+                          ),
+                        } else ...{
+                          Expanded(
+                            child: Text(widget.label!,
+                                style: Theme.of(context).textTheme.titleMedium!),
+                          ),
+                        }
+                      },
+                      if (widget.trailing != null) widget.trailing!,
+                      widget.isCollapsed
+                          ? const Icon(Icons.keyboard_arrow_right_rounded)
+                          : const Icon(Icons.keyboard_arrow_down_rounded),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          if (widget.isCollapsed == false)
-            SelectionArea(
-              child: InkWell(
-                onDoubleTap: widget.onDoublePress,
-                onTap: widget.onPressed,
-                onLongPress: widget.onLongPress,
-                onTapDown: widget.onTapDown,
-                onSecondaryTap: widget.onSecondaryPressed,
-                onSecondaryTapDown: widget.onSecondaryTapDown,
-                child: widget.scrollable
-                    ? SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Padding(
-                          padding: widget.padding ?? const EdgeInsets.all(10),
-                          child: widget.child,
-                        ),
-                      )
-                    : widget.child,
+            if (widget.isCollapsed == false)
+              SelectionArea(
+                child: InkWell(
+                  onDoubleTap: widget.onDoublePress,
+                  onTap: widget.onPressed,
+                  onLongPress: widget.onLongPress,
+                  onTapDown: widget.onTapDown,
+                  onSecondaryTap: widget.onSecondaryPressed,
+                  onSecondaryTapDown: widget.onSecondaryTapDown,
+                  child: widget.scrollable
+                      ? SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Padding(
+                            padding: widget.padding ?? const EdgeInsets.all(10),
+                            child: widget.child,
+                          ),
+                        )
+                      : widget.child,
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       );
 }

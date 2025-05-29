@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:panoptic_widgets/src/static/core_values.dart';
 import 'package:panoptic_widgets/src/widgets/interface/panoptic_column.dart';
 import 'package:panoptic_widgets/src/widgets/interface/panoptic_list_view.dart';
-import 'package:theme_provider/theme_provider.dart';
 
 class PanopticCardColumn extends StatefulWidget {
   final List<Widget> children;
