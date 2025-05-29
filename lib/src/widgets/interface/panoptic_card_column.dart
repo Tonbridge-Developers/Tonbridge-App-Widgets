@@ -75,51 +75,54 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
             color: Theme.of(context).colorScheme.primary,
             strokeWidth: 1,
             borderType: BorderType.RRect,
-            radius: Radius.circular(
-                (CoreValues.cornerRadius * widget.cornerRadiusFactor)),
-            child: _buildCard(widget.collapsible == true
-                ? buildCollapsibleContent()
-                : _buildContent()),
+            radius: Radius.circular((CoreValues.cornerRadius * widget.cornerRadiusFactor)),
+            child: _buildCard(
+                widget.collapsible == true ? buildCollapsibleContent() : _buildContent()),
           )
-        : _buildCard(widget.collapsible == true
-            ? buildCollapsibleContent()
-            : _buildContent());
+        : _buildCard(widget.collapsible == true ? buildCollapsibleContent() : _buildContent());
   }
 
-  Widget _buildCard(Widget child) => Container(
-        padding: widget.padding ?? const EdgeInsets.all(10),
-        width: widget.width,
-        height: widget.height,
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          border: ((widget.useDarkBorder) ||
-                  ThemeProvider.controllerOf(context)
-                      .currentThemeId
-                      .startsWith('white')
-              ? Border.all(
-                  width: 0.5, color: Theme.of(context).colorScheme.onSurface)
-              : null),
-          borderRadius: BorderRadius.circular(
-              (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
-                  (widget.dottedBorder ? 0.9 : 1)),
-          gradient: widget.gradient ??
-              LinearGradient(
-                colors: [
-                  widget.color ??
-                      (widget.alternative
-                          ? Theme.of(context).colorScheme.surfaceContainer
-                          : Theme.of(context).colorScheme.surface),
-                  widget.color ??
-                      (widget.alternative
-                          ? Theme.of(context).colorScheme.surfaceContainer
-                          : Theme.of(context).colorScheme.surface)
-                ],
+  Widget _buildCard(Widget child) => Padding(
+      padding: widget.margin ?? const EdgeInsetsDirectional.only(top: 10, bottom: 10),
+      child: Material(
+        shape: widget.border == null
+            ? RoundedSuperellipseBorder(
+                borderRadius: BorderRadius.circular(
+                    (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                        (widget.dottedBorder ? 0.9 : 1)),
+                side: BorderSide(
+                  color: widget.useDarkBorder
+                      ? Theme.of(context).colorScheme.onSurface
+                      : Colors.transparent,
+                  width: 0.5,
+                ),
+              )
+            : RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                    (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                        (widget.dottedBorder ? 0.9 : 1)),
               ),
+        color: widget.color ??
+            (widget.alternative
+                ? Theme.of(context).colorScheme.surfaceContainer
+                : Theme.of(context).colorScheme.surface),
+        child: ClipRSuperellipse(
+          child: Container(
+            decoration: widget.border != null
+                ? BoxDecoration(
+                    border: widget.border,
+                    borderRadius: BorderRadius.circular(
+                        (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                            (widget.dottedBorder ? 0.9 : 1)),
+                  )
+                : null,
+            padding: widget.padding ?? const EdgeInsets.all(10),
+            width: widget.width,
+            height: widget.height,
+            child: child,
+          ),
         ),
-        margin: widget.margin ??
-            const EdgeInsetsDirectional.only(top: 10, bottom: 10),
-        child: child,
-      );
+      ));
 
   Widget _buildContent() => SelectionArea(
         child: widget.scrollable
@@ -142,9 +145,7 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           MouseRegion(
-            cursor: widget.collapsible == true
-                ? SystemMouseCursors.click
-                : MouseCursor.defer,
+            cursor: widget.collapsible == true ? SystemMouseCursors.click : MouseCursor.defer,
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () => setState(() {
@@ -167,8 +168,7 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
                     },
                     if (widget.label != null)
                       Expanded(
-                        child: Text(widget.label!,
-                            style: Theme.of(context).textTheme.titleMedium!),
+                        child: Text(widget.label!, style: Theme.of(context).textTheme.titleMedium!),
                       ),
                     if (widget.trailing != null) widget.trailing!,
                     widget.isCollapsed

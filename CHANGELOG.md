@@ -1,4 +1,8 @@
 
+## 2025.5.3
+
+* Minor Fixes
+
 ## 2025.5.2
 
 * Added Support for the `RoundedSuperellipse`

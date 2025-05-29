@@ -113,37 +113,47 @@ class _PanopticCardState extends State<PanopticCard> {
             : _buildCard(widget.collapsible == true ? buildCollapsibleContent() : _buildContent());
   }
 
-  Widget _buildCard(Widget child) => Material(
-        shape: RoundedSuperellipseBorder(
-          borderRadius: BorderRadius.circular(
-              (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
-                  (widget.dottedBorder ? 0.9 : 1)),
-          side: widget.border != null
-              ? BorderSide(
-                  color: (widget.border as Border?)?.top.color ?? Colors.transparent,
-                  width: (widget.border as Border?)?.top.width ?? 0.5,
-                )
-              : BorderSide(
+  Widget _buildCard(Widget child) => Padding(
+      padding: widget.margin ?? const EdgeInsetsDirectional.only(top: 10, bottom: 10),
+      child: Material(
+        shape: widget.border == null
+            ? RoundedSuperellipseBorder(
+                borderRadius: BorderRadius.circular(
+                    (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                        (widget.dottedBorder ? 0.9 : 1)),
+                side: BorderSide(
                   color: widget.useDarkBorder
                       ? Theme.of(context).colorScheme.onSurface
                       : Colors.transparent,
                   width: 0.5,
                 ),
-        ),
+              )
+            : RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(
+                    (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                        (widget.dottedBorder ? 0.9 : 1)),
+              ),
         color: widget.color ??
             (widget.alternative
                 ? Theme.of(context).colorScheme.surfaceContainer
                 : Theme.of(context).colorScheme.surface),
         child: ClipRSuperellipse(
           child: Container(
+            decoration: widget.border != null
+                ? BoxDecoration(
+                    border: widget.border,
+                    borderRadius: BorderRadius.circular(
+                        (CoreValues.cornerRadius * widget.cornerRadiusFactor) *
+                            (widget.dottedBorder ? 0.9 : 1)),
+                  )
+                : null,
             padding: widget.padding ?? const EdgeInsets.all(10),
             width: widget.width,
             height: widget.height,
-            margin: widget.margin ?? const EdgeInsetsDirectional.only(top: 10, bottom: 10),
             child: child,
           ),
         ),
-      );
+      ));
 
   Widget _basicContent() => InkWell(
         focusNode: focusNode2,
