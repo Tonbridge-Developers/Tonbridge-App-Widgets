@@ -141,47 +141,51 @@ class _PanopticCardColumnState extends State<PanopticCardColumn> {
         ),
       );
 
-  Widget buildCollapsibleContent() => Column(
-        mainAxisAlignment: widget.mainAxisAlignment,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          MouseRegion(
-            cursor: widget.collapsible == true ? SystemMouseCursors.click : MouseCursor.defer,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => setState(() {
-                widget.isCollapsed = !widget.isCollapsed;
-                if (widget.onCollapse != null) {
-                  widget.onCollapse!(widget.isCollapsed);
-                }
-              }),
-              child: Padding(
-                padding: widget.labelPadding ??
-                    (!widget.isCollapsed
-                        ? const EdgeInsetsDirectional.only(bottom: 10)
-                        : const EdgeInsets.all(0)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    if (widget.leading != null) ...{
-                      widget.leading!,
-                      const SizedBox(width: 10),
-                    },
-                    if (widget.label != null)
-                      Expanded(
-                        child: Text(widget.label!, style: Theme.of(context).textTheme.titleMedium!),
-                      ),
-                    if (widget.trailing != null) widget.trailing!,
-                    widget.isCollapsed
-                        ? const Icon(Icons.keyboard_arrow_right_rounded)
-                        : const Icon(Icons.keyboard_arrow_down_rounded),
-                  ],
+  Widget buildCollapsibleContent() => Padding(
+        padding: widget.padding ?? const EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: widget.mainAxisAlignment,
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            MouseRegion(
+              cursor: widget.collapsible == true ? SystemMouseCursors.click : MouseCursor.defer,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => setState(() {
+                  widget.isCollapsed = !widget.isCollapsed;
+                  if (widget.onCollapse != null) {
+                    widget.onCollapse!(widget.isCollapsed);
+                  }
+                }),
+                child: Padding(
+                  padding: widget.labelPadding ??
+                      (!widget.isCollapsed
+                          ? const EdgeInsetsDirectional.only(bottom: 10)
+                          : const EdgeInsets.all(0)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      if (widget.leading != null) ...{
+                        widget.leading!,
+                        const SizedBox(width: 10),
+                      },
+                      if (widget.label != null)
+                        Expanded(
+                          child:
+                              Text(widget.label!, style: Theme.of(context).textTheme.titleMedium!),
+                        ),
+                      if (widget.trailing != null) widget.trailing!,
+                      widget.isCollapsed
+                          ? const Icon(Icons.keyboard_arrow_right_rounded)
+                          : const Icon(Icons.keyboard_arrow_down_rounded),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          if (widget.isCollapsed == false) _buildContent()
-        ],
+            if (widget.isCollapsed == false) _buildContent()
+          ],
+        ),
       );
 }
